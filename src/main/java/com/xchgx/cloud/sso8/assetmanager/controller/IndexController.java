@@ -1,14 +1,18 @@
 package com.xchgx.cloud.sso8.assetmanager.controller;
 
+import com.xchgx.cloud.sso8.assetmanager.domain.Application;
 import com.xchgx.cloud.sso8.assetmanager.domain.Asset;
 import com.xchgx.cloud.sso8.assetmanager.domain.AssetRukudan;
+import com.xchgx.cloud.sso8.assetmanager.repository.ApplicationRepository;
 import com.xchgx.cloud.sso8.assetmanager.repository.AssetRepository;
 import com.xchgx.cloud.sso8.assetmanager.repository.AssetRukudanRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController//Rest风格的控制器
@@ -18,6 +22,8 @@ public class IndexController {//首页控制器
     private AssetRukudanRepository assetRukudanRepository;
     @Autowired
     private AssetRepository assetRepository;//自动注入 资产持久化类
+    @Autowired
+    private ApplicationRepository applicationRepository;
 
     //相当于我们之前分析资产管理系统时候，出现的 网页界面类
     @GetMapping({"/index","/"})//设置访问url网址
@@ -62,5 +68,31 @@ public class IndexController {//首页控制器
         return save;//返回保存后的资产
     }
 
+    @PostMapping("/application/add")
+    public Application applicationAdd(Application application){
+//        Application application = new Application();
+        application.setBeginDate(new Date());
+//        application.setContent("我要一台电脑");
+        application.setStatus("待处理");
+//        application.setType("领用");
+//        application.setUsername("张三");
+        return applicationRepository.save(application);
+    }
+
+    /**
+     * 同意申请
+     * @param applicationId 申请类主键ID
+     * @return 同意后的申请
+     */
+    @GetMapping("/application/agree") //同意申请的访问接口
+    public Application applicationAgree(long applicationId){ //同意申请的功能方法
+        Application application = applicationRepository.findById(applicationId).orElse(null);//查找这个申请ID
+        application.setOpinion("同意"); //设置该申请的处理意见为： 同意。
+        return applicationRepository.save(application);//重新将该申请保存到数据库中（更新数据），并返回到前端
+    }
+    @GetMapping("/application/list")
+    public List<Application> applicationList(){
+        return applicationRepository.findAll();
+    }
 
 }
