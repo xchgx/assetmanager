@@ -16,11 +16,12 @@ public class AssetRuKuDan {
     @GeneratedValue //创建数据表相关代码  自动递增
     private long id; //数据表的主键
     private int amount;//资产数量
+    private int remained;//入库单中资产剩余数量 = 数量 - 出库次数
     private String name;//资产名称
     private String type;//资产类型
     private String readme;//资产说明书
     private float price;//资产单价
-    private String status;//资产状态
+
     private Date scrq;//生产日期
     private String bzq;//保质期
 }
