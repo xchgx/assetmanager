@@ -201,7 +201,7 @@ public class IndexController {//首页控制器
         application.setManager("黄主任");//TODO 应该是当前登录的用户（admin）
         application.setResultContent("黄主任已同意维修");//TODO 如果没有写处理意见呢？
         application.setResultDate(new Date());//处理时间为当前时间
-        //把已经处理的申请单保存到数据库中并返回
+        //把已经处理的申请单保存到数据库中并返回 
         return applicationRepository.save(application);
     }
 
