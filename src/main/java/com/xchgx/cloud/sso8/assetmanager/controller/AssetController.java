@@ -71,4 +71,6 @@ public class AssetController {
         freeAssets.addAll(freeAssets2);//将两个集合合并成1个
         return freeAssets;//返回给前端，让使用者查看并选择哪一个资产作为领用申请单上的资产ID
     }
+
+
 }

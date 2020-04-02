@@ -183,6 +183,26 @@ public class ApplicationController {
         return applicationRepository.save(application);
     }
 
-
+    /**
+     * 同意报废申请
+     * @param applicationId 申请单号
+     * @param result 处理意见
+     * @return
+     */
+    @GetMapping("/agreeScrap")
+    public Application applicationAgreeScrap(long applicationId, String result){
+        Application application = applicationRepository.findById(applicationId).orElse(null);
+        long assetId = application.getAssetId();
+        Asset asset = assetRepository.findById(assetId).orElse(null);
+        if (asset.getStatus() == "已使用") {
+            asset.setStatus("报废");
+            assetRepository.save(asset);
+        }
+        application.setStatus("同意");
+        application.setManager("黄主任");
+        application.setResultDate(new Date());
+        application.setResultContent(result);
+        return applicationRepository.save(application);
+    }
 
 }
