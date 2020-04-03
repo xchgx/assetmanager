@@ -52,7 +52,7 @@ public class AssetController {
 
         return assetRepository.save(asset);//保存并返回资产对象
     }
-    @GetMapping("/listAsset") //访问网址是 http://localhost:8080/list
+    @GetMapping("/list") //访问网址是 http://localhost:8080/list
     public List<Asset> list1(){//列出所有资产
         return assetRepository.findAll();//查询所有资产
     }
@@ -63,13 +63,23 @@ public class AssetController {
      * @param rukudanId 入库单号
      * @return
      */
-    @GetMapping("asset/free") //查询资产来自于空闲状态
+    @GetMapping("/free") //查询资产来自于空闲状态
     public List<Asset> assetFree(long rukudanId){//是不是把所有的空闲资产都查出来？
         //assetRepository; //TODO 先去解决查询数据库的代码然后过来
         List<Asset> freeAssets = assetRepository.findAllByRukudanIdAndStatus(rukudanId, "空闲");
         List<Asset> freeAssets2 = assetRepository.findAllByRukudanIdAndStatus(rukudanId, "预定");
         freeAssets.addAll(freeAssets2);//将两个集合合并成1个
         return freeAssets;//返回给前端，让使用者查看并选择哪一个资产作为领用申请单上的资产ID
+    }
+
+    /**
+     * 通过状态查询资产
+     * @param status 资产状态
+     * @return
+     */
+    @GetMapping("/findByStatus")
+    public List<Asset> findByStatus(String status) {
+        return assetRepository.findAllByStatus(status);
     }
 
 

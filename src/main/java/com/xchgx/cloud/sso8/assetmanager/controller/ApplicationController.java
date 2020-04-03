@@ -31,10 +31,10 @@ public class ApplicationController {
      */
     @PostMapping("/add") //提交申请的接口
     public Application applicationAdd(Application application){
+        System.out.println("application = " + application);
         Asset asset= assetRepository.findById(application.getAssetId()).orElse(null);
         if(asset == null){return null;}//如果没有找到资产就返回null
-        //TODO 注意，我们没有判断该资产是否为空闲
-        if(asset.getStatus()=="空闲" || asset.getStatus()=="预定"){
+         if(asset.getStatus()=="空闲" || asset.getStatus()=="预定"){
             asset.setStatus("预定");//设置申请单中的状态为 预定
             assetRepository.save(asset);//保存到数据库中
             application.setBeginDate(new Date()); //设置申请时间为当前时间
@@ -204,5 +204,34 @@ public class ApplicationController {
         application.setResultContent(result);
         return applicationRepository.save(application);
     }
+
+    /**
+     * 查询相同资产ID的申请单
+     * @param assetId
+     * @return
+     */
+    @GetMapping("/findByAsset")
+    public List<Application> findByAsset(long assetId){
+        return applicationRepository.findAllByAssetId(assetId);
+    }
+    /**
+     * 查询所有指定类型的申请单
+     * @param type 类型名称（领用、维修、报废、借用）
+     * @return
+     */
+    @GetMapping("/findByType")
+    public List<Application> findByType(String type){
+        return applicationRepository.findAllByType(type);
+    }
+    /**
+     * 查询所有指定类型和申请单状态的申请单
+     * @param type 类型名称（领用、维修、报废、借用）
+     * @return
+     */
+    @GetMapping("/findByTypeAndStatus")
+    public List<Application> findAllByTypeAndStatus(String type,String status){
+        return applicationRepository.findAllByTypeAndStatus(type,status);
+    }
+
 
 }

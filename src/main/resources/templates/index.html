@@ -1,61 +1,29 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8">
-    <title>测试资产管理系统的功能</title>
+    <meta charset="UTF-8">
+    <title>所有资产</title>
 </head>
 <body>
-<h1>资产入库</h1>
-资产名称<input type="text" id="assetName"><br>
-资产数量<input type="text" id="assetAmount">
-<button onclick="zichanruku()">资产入库</button>
+<div id="qrs">
+    <table border="1" width="100%">
+        <tr><td>资产ID</td><td>资产名称</td><td>二维码</td></tr>
+        <tr th:each="a : ${assets}">
+            <td th:text="${a.id}"></td>
+            <td th:text="${a.name}"></td>
+            <td><div th:id="${a.id}" class="qr"></div></td>
+        </tr>
+    </table>
+</div>
+<script src="js/jquery.min.js"></script>
+<script src="js/qrcode.min.js"></script>
+<script>
+    var qr = document.getElementsByClassName("qr");
+    for(var i in qr){
+        console.log(qr[i].id)
+        new QRCode(qr[i],"http://xchgx.vicp.net/asset/byId/"+qr[i].id);
+    }
 
-<h1>资产出库</h1>
-入库单ID <input type="text" id="chuku_rukudanId"><br>
-<button onclick="chuku()">资产出库</button>
-
-<h1>检查入库单剩余量</h1>
-<input type="text" id="rukudanId">
-<button onclick="rukudanRemained()">检查入库单剩余量</button>
-
-<h1>查询空闲资产</h1>
-入库单ID<input type="text" id="free_rukudanId"><br>
-<button onclick="freeAssets()">查询空闲资产</button>
-<script type="text/javascript">
-    var global = "http://localhost:8080/";
-    /**
-     * 资产入库
-     */
-    function zichanruku(){
-        var aname = document.getElementById("assetName").value;
-        var amount = document.getElementById("assetAmount").value;
-        var url = global+"add?name="+aname+"&amount="+amount;
-        location.href=url;
-    }
-    /**
-     * 资产出库
-     */
-    function chuku(){
-        var rukudanId = document.getElementById("chuku_rukudanId").value;
-        var url = global+"chuku?rukudanId="+rukudanId;
-        location.href=url;
-    }
-    /**
-     * 资产剩余量查询
-     */
-    function rukudanRemained(){
-        var rukudanId = document.getElementById("rukudanId").value;//获得ID为rukudanId标签的值
-        var url = global+"rukudan/remained?rukudanId="+rukudanId;//访问服务器的网址url接口
-        location.href=url;
-    }
-    /**
-     * 查询空闲资产
-     */
-    function freeAssets(){
-        var rukudanId = document.getElementById("free_rukudanId").value;//获得ID为rukudanId标签的值
-        var url = global+"asset/free?rukudanId="+rukudanId;//访问服务器的网址url接口
-        location.href=url;
-    }
 </script>
 </body>
 </html>
