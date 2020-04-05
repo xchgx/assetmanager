@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title th:text="${asset.name}"></title>
+</head>
+<body>
+<h1 th:text="${asset.name}"></h1>
+<h2 th:text="'入库单号:'+${asset.rukudanId}"></h2>
+使用者:
+图片：
+
+<script>
+var current = new Date();//当前时间
+console.log(current.toLocaleDateString());
+var datestr = Date.parse("2020-4-1");//从字符串中解析日期
+console.log(datestr);
+var when = new Date(datestr);//指定时间
+console.log(when.toLocaleDateString());
+var cha = current - when;
+console.log(cha+"ms");
+var day = cha/1000/60/60/24;
+console.log(day+"天");
+day = Math.floor(day);
+console.log(day+"天");
+
+
+
+</script>
+</body>
+</html>
+
+

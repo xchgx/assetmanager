@@ -205,4 +205,31 @@ public class ApplicationController {
         return applicationRepository.save(application);
     }
 
+    @GetMapping("/findByAsset") //默认访问是 /application
+    public List<Application> findByAsset(long assetId){
+        return applicationRepository.findAllByAssetId(assetId);
+    }
+
+    /**
+     * 通过申请单类型查询申请单
+     * @param type 申请单类型
+     * @return
+     */
+    @GetMapping("/findByType")
+    public List<Application> findByType(String  type){
+        return applicationRepository.findAllByType(type);
+    }
+
+    /**
+     * 通过状态和类型查询申请单
+     * //http://localhost:8080/application/findByTypeAndStatus?type=领用&status=待处理
+     * @param type 类型
+     * @param status 状态
+     * @return
+     */
+    @GetMapping("/findByTypeAndStatus")
+    public List<Application> findByTypeAndStatus(String type, String status) {
+        return applicationRepository.findAllByTypeAndStatus(type,status);
+    }
+
 }

@@ -17,7 +17,7 @@ import java.util.List;
  * 资产控制器
  */
 @RestController
-@RequestMapping("/asset")
+@RequestMapping("/asset") //访问网址前缀 /asset
 public class AssetController {
     //导入数据库持久化对象
     @Autowired //自动注入，理解为自动导入类对象
@@ -63,7 +63,7 @@ public class AssetController {
      * @param rukudanId 入库单号
      * @return
      */
-    @GetMapping("asset/free") //查询资产来自于空闲状态
+    @GetMapping("/free") //查询资产来自于空闲状态
     public List<Asset> assetFree(long rukudanId){//是不是把所有的空闲资产都查出来？
         //assetRepository; //TODO 先去解决查询数据库的代码然后过来
         List<Asset> freeAssets = assetRepository.findAllByRukudanIdAndStatus(rukudanId, "空闲");
@@ -71,6 +71,18 @@ public class AssetController {
         freeAssets.addAll(freeAssets2);//将两个集合合并成1个
         return freeAssets;//返回给前端，让使用者查看并选择哪一个资产作为领用申请单上的资产ID
     }
+
+    /**
+     * 通过状态查询资产
+     * http://localhost:8080/asset/findByStatus?status=已使用
+     * @param status 状态
+     * @return
+     */
+    @GetMapping("/findByStatus")
+    public List<Asset> findByStatus(String status) {
+        return assetRepository.findAllByStatus(status);
+    }
+
 
 
 }
