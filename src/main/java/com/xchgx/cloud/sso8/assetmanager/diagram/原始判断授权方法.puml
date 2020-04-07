@@ -1,0 +1,49 @@
+@startuml
+start
+:我要做点事情;
+
+fork
+if (你有权限吗) then (我有)
+:看所有申请单;
+else (没有)
+stop
+endif
+
+fork again
+if (你有权限吗) then (我有)
+:看待处理的申请单;
+else (没有)
+stop
+endif
+
+fork again
+if (你有权限吗) then (我有)
+:同意领用申请单;
+else (没有)
+stop
+endif
+
+fork again
+if (你有权限吗) then (我有)
+:资产入库;
+else (没有)
+stop
+endif
+
+fork again
+if (你有权限吗) then (我有)
+:改变资产状态;
+else (没有)
+stop
+endif
+
+fork again
+if (你有权限吗) then (我有)
+:改变资产状态;
+else (没有)
+stop
+endif
+endfork
+
+stop
+@enduml

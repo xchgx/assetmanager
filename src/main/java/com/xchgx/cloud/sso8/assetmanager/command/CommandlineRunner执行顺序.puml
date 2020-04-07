@@ -1,0 +1,8 @@
+@startuml
+autonumber
+启动类 ->启动类:启动
+启动类 -> CommandRunner1:执行command1
+CommandRunner1 -> CommandRunner2: 按顺序执行
+CommandRunner2 -> CommandRunnern: 按顺序执行
+CommandRunnern -> 等待: 启动完成，等待访问
+@enduml

@@ -1,0 +1,41 @@
+@startuml
+actor 用户
+autonumber
+用户 -> 过滤器: 访问登录页/login/
+过滤器->过滤器: /login/这个网址不给我管，放行
+过滤器->登录控制器: 执行/login/
+过滤器 --> 用户: 显示用户登录页
+
+用户 -> 过滤器: 查看所有申请单/application/list
+activate 过滤器
+过滤器 -> 过滤器: /application/list这个我要管，给我检查用户登录了没
+过滤器 -->用户: 没有登录就去登录
+note left: 显示登录页面/login/
+过滤器 -> 申请单持久化: 登录了，就转到查询所有申请单
+'登录控制器 -> 申请单持久化: 查询所有申请单
+activate 申请单持久化
+return 所有的申请单
+return 显示所有申请单视图
+
+用户 -> 过滤器: 显示登录页面/login/
+note right: 这个放行
+用户 -> 过滤器: 执行登录检查/login/doLogin
+note right: 这个放行
+用户 -> 过滤器: 查看首页/index
+note right: 这个放行
+用户 -> 过滤器: 访问单个资产页/assetById
+note right: 这个放行
+
+用户->过滤器:  /application/findByStatus
+note right: 这个我要检查
+用户->过滤器:  /application/list
+note right: 这个我要检查
+用户->过滤器:  /asset/list
+note right: 这个我要检查
+用户->过滤器:  /rukudan/add
+note right: 这个我要检查
+用户->过滤器:  /asset/findByStatus
+note right: 这个我要检查
+
+activate 过滤器
+@enduml

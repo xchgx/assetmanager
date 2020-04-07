@@ -1,0 +1,33 @@
+@startuml
+start
+:我要做点事情;
+
+if (你有权限吗) then (我有)
+fork
+:看所有申请单;
+
+fork again
+:看待处理的申请单;
+
+fork again
+:同意领用申请单;
+
+fork again
+:资产入库;
+
+fork again
+:改变资产状态;
+
+fork again
+:改变资产状态;
+endfork
+
+else (没有)
+:那你只能访问一些免登录的页面了;
+:显示首页;
+:显示登录页;
+:显示资产基本信息页面;
+endif
+
+stop
+@enduml

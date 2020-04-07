@@ -1,0 +1,13 @@
+@startuml
+|用户|
+start
+:访问登录页/login/;
+|LoginController|
+:不作处理，直接返回 login 视图;
+|用户|
+:输入登录信息;
+:提交登录请求;
+|LoginController|
+->执行登录流程;
+(A)
+@enduml

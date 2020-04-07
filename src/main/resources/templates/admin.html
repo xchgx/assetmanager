@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title></title>
+</head>
+<body>
+<h1>管理员后台</h1>
+<table border="1" width="100%">
+    <tr><th>资产ID</th><th>资产名称</th><th>二维码</th></tr>
+    <tr th:each="ast : ${assets}">
+        <td th:text="${ast.id}"></td>
+        <td th:text="${ast.name}"></td>
+        <td><div class="qr" th:id="${ast.id}"></div></td>
+    </tr>
+</table>
+<script src="js/jquery.min.js"></script>
+<script src="js/qrcode.min.js"></script>
+<script>
+    var qrs = document.getElementsByClassName("qr");
+    for(var i in qrs){
+        new QRCode(qrs[i],"http://xchgx.vicp.net/asset/byId?assetId="+qrs[i].id);
+    }
+</script>
+</body>
+</html>

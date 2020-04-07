@@ -52,8 +52,8 @@ public class AssetController {
 
         return assetRepository.save(asset);//保存并返回资产对象
     }
-    @GetMapping("/listAsset") //访问网址是 http://localhost:8080/list
-    public List<Asset> list1(){//列出所有资产
+    @GetMapping("/list") //访问网址是 http://localhost:8080/list
+    public List<Asset> list(){//列出所有资产
         return assetRepository.findAll();//查询所有资产
     }
 

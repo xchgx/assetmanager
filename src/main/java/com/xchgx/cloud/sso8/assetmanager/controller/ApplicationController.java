@@ -57,6 +57,10 @@ public class ApplicationController {
      */
     @GetMapping("/list")//查询所有申请的接口
     public List<Application> applicationList(){
+        //判断用户是否登录
+        //从session里面获得当前登录的用户对象
+
+
         return applicationRepository.findAll();
     }
 
@@ -205,6 +209,11 @@ public class ApplicationController {
         return applicationRepository.save(application);
     }
 
+    /**
+     * 通过资产查询申请单
+     * @param assetId
+     * @return
+     */
     @GetMapping("/findByAsset") //默认访问是 /application
     public List<Application> findByAsset(long assetId){
         return applicationRepository.findAllByAssetId(assetId);

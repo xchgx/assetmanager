@@ -1,0 +1,37 @@
+@startuml
+|用户|
+:我要看申请单;
+-> 访问/application/list;
+|资产管理系统|
+:门卫警戒;
+note right
+这一步是由过滤器filter
+检查该请求是否已经登录。
+end note
+if (你访问的是受保护的资源吗) then (不是的)
+|用户|
+:显示资源页;
+stop
+
+endif
+|资产管理系统|
+-> 是的;
+if (检查这个用户的登录标记) then (标记还在)
+:放行;
+:把/application/list的资源给他;
+|用户|
+:显示资源信息;
+stop
+
+else (no)
+|资产管理系统|
+:没有权限啊;
+:过来，做个登记;
+note right
+显示登录页
+end note
+endif
+|用户|
+:进入到登录流程;
+stop
+@enduml
