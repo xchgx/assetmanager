@@ -1,0 +1,19 @@
+@startuml
+(C)
+->省略进入过程，和获得资产对象的过程;
+:获得当前登录用户;
+:创建List集合对象list;
+if (如果当前用户是管理员用户admin) then (Yes)
+:创建操作项对象 new Operation("/asset/set?status=空闲&assetId="+asset.getId(), "收回");
+:创建操作项对象 new Operation("/asset/set?status=维修&assetId="+asset.getId(), "维修");
+:创建操作项对象 new Operation("/asset/set?status=报废&assetId="+asset.getId(), "报废");
+:将上面三个分别加入到list集合中;
+else (No)
+:创建操作项对象 new Operation("/application/addQuick?type=领用&assetId="+asset.getId(), "提交领用申请");//走快速通道，快速提交领用申请
+:创建操作项对象 new Operation("/application/addQuick?type=维修&assetId="+asset.getId(), "提交维修申请");//走快速通道，快速提交维修申请
+:创建操作项对象 new Operation("/application/addQuick?type=报废&assetId="+asset.getId(), "提交报废申请");//走快速通道，快速提交报废申请
+:将上面三个分别加入到list集合中;
+endif
+->省略将list加入到模型数据和返回视图的过程;
+(D)
+@enduml

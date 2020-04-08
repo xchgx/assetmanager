@@ -1,0 +1,15 @@
+@startuml
+start
+:导入 jquery.js;
+:导入 qrcode.js;
+:在HTML中添加id属性的标签;
+note right: 比如:  <div id="qr"></div>
+
+:通过js获得标签对象;
+note right: var qr = document.getElementById("qr");
+
+:通过QRCode构造函数创建二维码;
+note right:  new QRCode(localQr, location.href);
+
+stop
+@enduml

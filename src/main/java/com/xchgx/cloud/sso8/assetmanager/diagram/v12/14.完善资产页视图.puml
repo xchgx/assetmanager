@@ -1,0 +1,13 @@
+@startuml
+(C)
+while (op模型中有操作项吗？)
+->有;
+:从op中拿出来一个，保存在o变量中;
+:创建一个超链接;
+:设置超链接的href属性设置为 o.url值;
+:设置超链接的文本内容为 o.content值;
+endwhile (没有了)
+-> 循环生成多个超链接;
+:<a href="/application/add操作网址">操作内容</a>;
+(D)
+@enduml

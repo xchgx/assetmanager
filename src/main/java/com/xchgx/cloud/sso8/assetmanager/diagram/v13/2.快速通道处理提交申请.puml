@@ -1,0 +1,53 @@
+@startuml
+'2.快速通道处理提交申请.puml
+start
+:
+{{
+salt
+{#
+  操作名称       |哪个资产|什么类型的申请单|调用接口
+  [提交领用申请] |assetId=4|type=领用    | /application/addQuick?type=领用&assetId=4
+  [提交维修申请] |assetId=4|type=维修    | /application/addQuick?type=维修&assetId=4
+  [提交报废申请] |assetId=4|type=报废    | /application/addQuick?type=报废&assetId=4
+}
+}}
+快速通道处理提交申请
+;
+:/application/addQuick?type=报废&assetId=4;
+:/application;
+partition 控制器 {
+:去往哪个控制器;
+:申请单控制器;
+:ApplicationController;
+}
+:/addQuick;
+partition 方法 {
+:去往哪个方法;
+:addQuick();
+}
+
+:?type=报废&assetId=4;
+partition 参数 {
+:接收2个参数;
+fork
+:type=报废;
+:设置申请单的类型为“报废”;
+fork again
+:assetId=4;
+:当前资产ID为4;
+end fork
+}
+:
+{{
+salt
+{^新增申请单
+    资产ID  | "4        "
+    资产名称| "电脑       "
+    资产状态| { ^报废^ }
+    处理状态| { ()同意 |()拒绝 |(X)待处理}
+    [提交申请]
+}
+}}
+;
+stop
+@enduml

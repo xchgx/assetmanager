@@ -6,10 +6,18 @@
 </head>
 <body>
 <h1>登录</h1>
+<h2>访问本页：<div id="localQr"></div></h2>
 <form action="/login/doLogin" method="post">
     用户名：<input type="text" name="username"><br>
     密码：<input type="password" name="password"><br>
     <input type="submit" value="登录">
 </form>
+
+<script src="/js/jquery.min.js"></script>
+<script src="/js/qrcode.min.js"></script>
+<script>
+    var localQr = document.getElementById("localQr");
+    new QRCode(localQr, location.href);
+</script>
 </body>
 </html>

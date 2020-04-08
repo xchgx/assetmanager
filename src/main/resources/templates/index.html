@@ -3,23 +3,38 @@
 <head>
     <meta charset="utf-8">
     <title></title>
+    <style>
+        .asset{
+            width: 256px;
+            height: 350px;
+            float: left;
+            margin: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+            box-shadow: 2px 2px 2px #999;
+        }
+    </style>
 </head>
 <body>
-<table border="1" width="100%">
-    <tr><th>资产ID</th><th>资产名称</th><th>二维码</th></tr>
-    <tr th:each="ast : ${assets}">
-        <td th:text="${ast.id}"></td>
-        <td th:text="${ast.name}"></td>
-        <td><div class="qr" th:id="${ast.id}"></div></td>
-    </tr>
-</table>
-<script src="js/jquery.min.js"></script>
-<script src="js/qrcode.min.js"></script>
+<h1 th:text="'当前登录的用户:'+${session.get('user')?.name}" th:if="${session.get('user')}"></h1>
+<h2>访问本页：<div id="localQr"></div></h2>
+<div class="asset" th:each="ast : ${assets}">
+    <div class="qr" th:id="${ast.id}"></div>
+    <div><h1 th:text="'资产名称：'+${ast.name}+'('+${ast.id}+')'"></h1></div>
+    <div><h1 th:text="'使用者：'+${ast.username}"></h1></div>
+</div>
+
+<script src="/js/jquery.min.js"></script>
+<script src="/js/qrcode.min.js"></script>
 <script>
     var qrs = document.getElementsByClassName("qr");
-    for(var i in qrs){
-        new QRCode(qrs[i],"http://xchgx.vicp.net/asset/byId?assetId="+qrs[i].id);
+    var localQr = document.getElementById("localQr");
+    if (qrs.length) {
+        for(var i in qrs){
+            new QRCode(qrs[i],"http://xchgx.vicp.net/assetById?assetId="+qrs[i].id);
+        }
     }
+    new QRCode(localQr, location.href);
 </script>
 </body>
 </html>

@@ -1,0 +1,14 @@
+@startuml
+start
+:谁需要二维码;
+
+fork
+:登录页;
+fork again
+:首页;
+fork again
+:查看单个资产页;
+end fork
+
+stop
+@enduml

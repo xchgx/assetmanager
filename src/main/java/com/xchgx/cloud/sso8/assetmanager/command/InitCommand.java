@@ -23,8 +23,8 @@ public class InitCommand implements CommandLineRunner {
 
             User admin = new User();
             admin.setName("李四");
-            admin.setUsername("admin");
-            admin.setPassword("123456789");
+            admin.setUsername("admin");//user
+            admin.setPassword("123456789");//123456
             admin.setRole("admin");
             userRepository.save(admin);
             System.out.println("李四admin的账号添加完成");

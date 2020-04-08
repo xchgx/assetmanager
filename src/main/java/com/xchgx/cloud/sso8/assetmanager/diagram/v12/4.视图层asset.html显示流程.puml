@@ -1,0 +1,44 @@
+@startuml
+|用户|
+start
+:扫码访问单个资产 /assetById?assetId=4 ;
+->转到控制器处理->处理完毕后来到asset视图;
+(B)
+detach
+|asset视图|
+start
+:在templates文件夹中新建asset.html模板文件;
+note left: 我们之前创建过，如果存在就不要重复创建
+
+:修改标题为资产名称;
+note left: <title th:text="${asset.name}"></title>
+
+:显示资产名称;
+note left: <h1 th:text="${asset.name}"></h1>
+
+:显示资产来自于哪个批次（入库单号）;
+note left: <h2 th:text="'入库单号:'+${asset.rukudanId}"></h2>
+
+:显示可操作项;
+|系统|
+:从模型中获得当前用户的操作项集合 op;
+note right: 根据用户角色权限显示，来自首页控制器接口/assetById 的模型数据
+
+|asset视图|
+while (op模型中有操作项吗？)
+note left
+ 这个循环的条件是操作项中必须有内容，才能循环。
+ 如果是未登录用户，操作项为空，就不循环，不循环就表示没有任何操作可以显示。
+ 如果是使用者（普通用户）用户，操作项就是使用者的操作项，此时就显示使用者的按钮
+ 如果是管理员用户，操作项就是管理员的。
+ 所以这里的逻辑适合三中类型的用户（包含未登录用户）。
+end note
+->有;
+:从op中拿出来一个，保存在o变量中;
+:创建一个按钮，把按钮的名字设置为 o 变量的值;
+endwhile (没有了)
+
+
+
+stop
+@enduml

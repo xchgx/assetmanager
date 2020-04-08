@@ -88,6 +88,8 @@ public class ApplicationController {
             return null;//不作处理，直接返回空
         }
         asset.setStatus("已使用"); //设置为已使用
+        asset.setUsername(application.getUsername());//设置使用者
+        assetRepository.save(asset);//BUG 修改资产状态要持久化到数据库
         //以下是同意的处理流程
         application.setStatus("同意");//设置申请单状态为 同意
         application.setManager("黄主任");//TODO 应该是当前登录的用户（admin）

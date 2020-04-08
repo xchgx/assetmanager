@@ -1,0 +1,54 @@
+@startuml
+'1.快速通道处理资产状态
+start
+:
+{{
+salt
+{#
+  操作名称            |哪个资产|什么状态|调用接口
+  [设置资产状态为报废] |assetId|报废    | /asset/set?status=报废&assetId=4
+  [设置资产状态为维修] |assetId|维修    | /asset/set?status=维修&assetId=4
+  [设置资产状态为空闲] |assetId|空闲    | /asset/set?status=空闲&assetId=4
+
+}
+}}
+快速通道处理资产状态
+;
+:/asset/set?status=报废&assetId=4;
+:/asset;
+partition 控制器 {
+:去往哪个控制器;
+:资产控制器;
+:AssetController;
+}
+:/set;
+partition 方法 {
+:去往哪个方法;
+:set();
+}
+
+:?status=报废&assetId=4;
+partition 参数 {
+:接收2个参数;
+fork
+:status=报废;
+:新的资产状态为“报废”;
+fork again
+:assetId=4;
+:当前资产ID为4;
+end fork
+}
+:
+{{
+salt
+{^更新资产状态
+    资产ID  | "4        "
+    资产名称| "电脑       "
+    资产状态| { ^报废^ }
+    资产售后| { ()一年 |()二年 |(X)三年}
+    [确定保存]
+}
+}}
+;
+stop
+@enduml

@@ -6,21 +6,28 @@
 </head>
 <body>
 <h1>使用者页面</h1>
-<table border="1" width="100%">
-    <tr><th>资产ID</th><th>资产名称</th><th>二维码</th></tr>
-    <tr th:each="ast : ${assets}">
-        <td th:text="${ast.id}"></td>
-        <td th:text="${ast.name}"></td>
-        <td><div class="qr" th:id="${ast.id}"></div></td>
-    </tr>
-</table>
-<script src="js/jquery.min.js"></script>
-<script src="js/qrcode.min.js"></script>
+
+<div>
+    <h1 th:text="'当前登录的用户:'+${session.get('user')?.name}"></h1>
+    <h2>访问本页：<div id="localQr"></div></h2>
+    <table border="1" width="100%">
+        <tr><th>资产ID</th><th>资产名称</th><th>二维码</th></tr>
+        <tr th:each="ast : ${assets}">
+            <td th:text="${ast.id}"></td>
+            <td th:text="${ast.name}"></td>
+            <td><div class="qr" th:id="${ast.id}"></div></td>
+        </tr>
+    </table>
+</div>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/qrcode.min.js"></script>
 <script>
     var qrs = document.getElementsByClassName("qr");
+    var localQr = document.getElementById("localQr");
     for(var i in qrs){
-        new QRCode(qrs[i],"http://xchgx.vicp.net/asset/byId?assetId="+qrs[i].id);
+        new QRCode(qrs[i],"http://xchgx.vicp.net/assetById?assetId="+qrs[i].id);
     }
+    new QRCode(localQr, location.href);
 </script>
 </body>
 </html>

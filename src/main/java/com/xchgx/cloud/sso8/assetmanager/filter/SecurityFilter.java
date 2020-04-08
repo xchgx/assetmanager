@@ -36,6 +36,7 @@ public class SecurityFilter implements Filter {
             response.sendRedirect("/login/");//进入到登录页
             return;
         }
+
         filterChain.doFilter(servletRequest, servletResponse);//放行
     }
 

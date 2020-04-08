@@ -1,0 +1,37 @@
+@startuml
+|技术咨询|
+start
+:如何扫码访问本页;
+note left
+我想在网页中显示该网页的网址二维码，
+只要扫描二维码就能访问我这个页面。
+能解决吗？
+end note
+
+|javascript|
+:你有jquery.js吗？;
+|技术咨询|
+:有;
+
+|javascript|
+:你有qrcode.js吗？;
+
+|技术咨询|
+:有，下载好了;
+
+|javascript|
+:你了解 location.href 吗？;
+
+|技术咨询|
+:本地链接吗？;
+
+|javascript|
+:对，就是本页的网址，并且包含参数在内的完整url网址;
+
+|技术咨询|
+:哦，把location.href当做网址放入QRCode中就可以了吗？;
+
+|javascript|
+:是的;
+stop
+@enduml

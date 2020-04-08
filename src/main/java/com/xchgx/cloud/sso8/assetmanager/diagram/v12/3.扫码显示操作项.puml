@@ -1,0 +1,45 @@
+@startuml
+'3.扫码显示操作项
+
+|用户|
+(B)
+:扫码访问;
+->/assetById?assetId=4;
+|首页控制器-/assetById接口|
+:网址对应的方法();
+|资产持久化对象|
+:通过资产ID(assetId=4)查询资产;
+|首页控制器-/assetById接口|
+:将资产对象放入asset模型中(M层);
+:获得当前登录用户user;
+if (user==null) then (yes)
+:返回 asset 资产视图，此时模型中只有资产信息;
+stop
+endif
+
+if (user用户的角色权限是admin吗？) then (Yes)
+:创建字符串集合List<String>;
+:把“收回”加入到list集合中;
+:把“报废”加入到list集合中;
+:把“分配”加入到list集合中;
+:最终把list放入到模型中，命名为 op;
+note left
+  意思是operation（操作项的意思）
+  model.addAttribute("op", list);//动态显示操作项
+end note
+:返回 asset 资产视图，此时模型中有资产信息和管理员的操作项;
+stop
+endif
+
+:创建字符串集合List<String>;
+:把“领用”加入到list集合中;
+:把“维修”加入到list集合中;
+:把“报废”加入到list集合中;
+:最终把list放入到模型中，命名为 op;
+note left
+  意思是operation（操作项的意思）
+  model.addAttribute("op", list);//动态显示操作项
+end note
+:返回 asset 资产视图，此时模型中有资产信息和普通使用者用户的操作项;
+stop
+@enduml

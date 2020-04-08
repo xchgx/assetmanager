@@ -1,0 +1,17 @@
+@startmindmap
+* <&flag>操作项数据组成
+++ HTML标签
++++_ 超链接标签<a>
++++_ 按钮标签<button>
+++ 标签内容
++++_ 领用
++++_ 维修
++++_ 报废
++++_ 收回
++++_ 等等
+++ 访问网址接口
++++_ 申请单接口 /application/*
++++_ 资产接口 /asset/*
++++_ 入库单接口 /rukudan/*
++++_ web视图接口 /index, /assetById
+@endmindmap
