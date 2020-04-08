@@ -1,0 +1,32 @@
+@startuml
+|开发人员|
+:我要测试下三个功能;
+fork
+:/asset/set?status=空闲&assetId=yyy;
+fork again
+:/asset/set?status=维修&assetId=yyy;
+fork again
+:/asset/set?status=报废&assetId=yyy;
+endfork
+
+    |系统|
+    :你准备把测试按钮放哪里？;<
+
+|开发人员|
+:当然是扫码的资产页了;
+
+    |系统|
+    :你放一个试试;<
+
+|开发人员|
+:<a href="url">资产名称</a>;
+
+    |系统|
+    :太抽象，还要具体一点;<
+
+|开发人员|
+:<a th:href="'/asset/set?status=空闲&assetId='+${asset.id}" th:text="${asset.name}"></a>;
+
+    |系统|
+    :不错就是这样;<
+@enduml

@@ -52,6 +52,7 @@ public class AssetController {
 
         return assetRepository.save(asset);//保存并返回资产对象
     }
+
     @GetMapping("/list") //访问网址是 http://localhost:8080/list
     public List<Asset> list(){//列出所有资产
         return assetRepository.findAll();//查询所有资产
@@ -84,5 +85,21 @@ public class AssetController {
     }
 
 
+    /**
+     * 快速通道，直接设置资产的状态（由管理员执行）
+     * @param status 新的状态，无视前置状态
+     * @param assetId 资产实体对象
+     * @return
+     */
+    @GetMapping("/set")
+    public Asset set(String status, long assetId){
+        Asset asset = assetRepository.findById(assetId).orElse(null); //通过资产ID查询资产对象
+        //TODO 这里应该判断一下是否存在该资产
+        if (asset == null) {
+            return null;//如果不存在该资产，则不进行状态更新操作。
+        }
+        asset.setStatus(status);//设置资产状态为status参数1值
+        return assetRepository.save(asset);//赶紧保存到数据库中
+    }
 
 }

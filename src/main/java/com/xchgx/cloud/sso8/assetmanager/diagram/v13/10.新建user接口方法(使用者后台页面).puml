@@ -1,0 +1,15 @@
+@startuml
+scale 2
+title 10.新建/user接口方法(使用者后台页面)
+note left: 该方法为普通用户后台页面
+
+start
+:查询所有资产;
+note left
+    使用者不就是要使用资产嘛
+    所以，这个资产肯定要给使用者看看的。
+end note
+:把查询的所有资产集合放入模型中;
+:返回 user 视图;
+stop
+@enduml

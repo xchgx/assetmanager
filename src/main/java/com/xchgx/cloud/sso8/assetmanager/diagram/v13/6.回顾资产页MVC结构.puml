@@ -1,0 +1,15 @@
+@startuml
+scale 2
+title 回顾资产页MVC结构
+participant 浏览器 order 1
+participant asset视图 order 2
+participant 过滤器 order 3
+participant 首页控制器 order 4
+participant 资产持久化 order 5
+
+浏览器 -> 首页控制器: 查看资产/assetById?assetId=xxx
+首页控制器 -> 资产持久化: 查询资产对象
+资产持久化 -> 首页控制器: 放入模型中 model.addAttribute("asset",asset);
+首页控制器 -> asset视图: 视图开始渲染模型中的数据
+
+@enduml

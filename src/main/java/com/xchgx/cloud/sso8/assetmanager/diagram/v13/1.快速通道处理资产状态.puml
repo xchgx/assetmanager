@@ -1,5 +1,6 @@
 @startuml
 '1.快速通道处理资产状态
+scale 2
 start
 :
 {{

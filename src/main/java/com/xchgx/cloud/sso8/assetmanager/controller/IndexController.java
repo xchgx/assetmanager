@@ -1,8 +1,6 @@
 package com.xchgx.cloud.sso8.assetmanager.controller;
 
-import com.xchgx.cloud.sso8.assetmanager.domain.Asset;
-import com.xchgx.cloud.sso8.assetmanager.domain.Operation;
-import com.xchgx.cloud.sso8.assetmanager.domain.User;
+import com.xchgx.cloud.sso8.assetmanager.domain.*;
 import com.xchgx.cloud.sso8.assetmanager.repository.ApplicationRepository;
 import com.xchgx.cloud.sso8.assetmanager.repository.AssetRepository;
 import com.xchgx.cloud.sso8.assetmanager.repository.AssetRuKuDanRepository;
@@ -25,7 +23,8 @@ public class IndexController {//首页控制器
     private AssetRuKuDanRepository assetRuKuDanRepository;
     @Autowired //自动注入 申请单持久化对象
     private ApplicationRepository applicationRepository;
-
+    @Autowired
+    private RukudanController rukudanController;
 
     //相当于我们之前分析资产管理系统时候，出现的 网页界面类
      @GetMapping({"/index","/"})//设置访问url网址
@@ -79,5 +78,30 @@ public class IndexController {//首页控制器
         //姓名:张三,年龄:28
         model.addAttribute("op", list);//动态显示操作项,operation=op
         return "asset";//返回资产asset视图,数据自动进入到视图
+    }
+
+    @GetMapping("/user")
+    public String user(Model model){
+
+        List<Asset> assets = assetRepository.findAll();
+        model.addAttribute("assets",assets);//在模型中添加数据
+
+        List<AssetRuKuDan> assetRuKuDans = rukudanController.list2();
+        model.addAttribute("rukudans", assetRuKuDans);
+        return "user";
+    }
+    @GetMapping("/admin")
+    public String admin(Model model){
+
+
+        List<Asset> assets = assetRepository.findAll();
+        model.addAttribute("assets",assets);//在模型中添加数据
+
+        List<AssetRuKuDan> assetRuKuDans = rukudanController.list2();
+        model.addAttribute("rukudans", assetRuKuDans);
+
+        List<Application> applications = applicationRepository.findAll();
+        model.addAttribute("applications", applications);
+        return "admin";
     }
 }

@@ -1,0 +1,52 @@
+@startuml
+scale 2
+title 过滤器规则更新
+|浏览器|
+start
+:
+我问一下哦，现在过滤器拦截什么？
+过滤器现在的规则是什么？
+我要访问使用者后台 /user
+我还要访问管理员后台 /admin
+过滤器管不管？
+;
+
+    |过滤器规则|
+    :SecurityFilter类 现在的规则
+    {{
+    salt
+    {#
+        匹配规则 urlPatterns
+         /rukudan/*
+         /asset/*
+         /application/*
+    }
+    }}
+    ;
+
+|浏览器|
+:那我访问/user，不就出错了吗
+岂不是谁都可以访问，那怎么行
+赶紧更新;
+
+     |过滤器规则|
+    :SecurityFilter类 现在的规则
+    {{
+    salt
+    {#
+        匹配规则 urlPatterns
+         /rukudan/*
+         /asset/*
+         /application/*
+         /user
+         /admin
+    }
+    }}
+    ;
+
+|浏览器|
+:好了，没问题了;
+|浏览器|
+
+stop
+@enduml

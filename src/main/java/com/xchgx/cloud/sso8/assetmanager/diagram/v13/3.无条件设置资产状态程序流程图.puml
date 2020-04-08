@@ -1,0 +1,26 @@
+@startuml
+title 3.无条件设置资产状态程序流程图
+scale 2
+|资产控制器|
+start
+fork
+:接收资产状态参数;
+->status;
+fork again
+:接收资产ID参数;
+->assetId;
+end fork
+|资产持久化|
+:通过资产ID查询资产对象;
+->asset;
+if (asset==null) then (true)
+stop
+else (false)
+endif
+#ff0:设置资产状态为形参status的值;
+|资产持久化|
+#ff0:调用save(asset)更新到数据库中;
+|资产控制器|
+:返回 asset 对象;
+stop
+@enduml

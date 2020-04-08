@@ -1,5 +1,6 @@
 @startuml
-'2.快速通道处理提交申请.puml
+title 2.快速通道处理提交申请
+scale 1
 start
 :
 {{
@@ -16,6 +17,8 @@ salt
 :/application/addQuick?type=报废&assetId=4;
 :/application;
 partition 控制器 {
+title 快速通道处理提交申请
+scale 2
 :去往哪个控制器;
 :申请单控制器;
 :ApplicationController;

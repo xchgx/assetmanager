@@ -1,0 +1,63 @@
+@startuml
+scale 2
+title 4.快速提交申请程序流程图
+|申请单控制器|
+start
+->/application/addQuick;
+
+fork
+:接收申请单类型参数;
+->type;
+fork again
+:接收申请单指定的资产ID;
+->assetId;
+fork again
+:接收请求对象;
+->request;
+end fork
+
+    |request|
+    :获得当前登录用户;
+    ->user;
+
+|申请单控制器|
+:保存当前登录用户对象user;
+
+        |资产持久化|
+        ->接下来查询资产;
+        :通过assetId查询资产;
+
+|申请单控制器|
+->asset;
+if (asset == null) then (true)
+stop
+endif
+->false;
+
+partition 申请单 {
+    :创建新的申请单对象;
+    :设置申请单请求的资产数量为 1;
+    #ff9:设置申请单请求的申请内容;
+    note right:该申请为快速申请单，由扫码提交
+    #afa:设置申请单请求的类型为参数type;
+    :设置申请单请求的提交日期;
+    note right:当前日期new Date()
+    #afa:设置申请单请求的申请人为 user.getUsername();
+    :设置申请单请求的资产名称为 asset.getName();
+    :设置申请单请求的资产ID为 assetId;
+    note right: 既可以是assetId也可以是asset.getId()
+    :设置申请单请求的状态为“待处理”;
+    note right: 申请单的状态只有三个“同意”、“拒绝”、“待处理”
+    :设置申请单请求的处理人为 null;
+    note right:这是新的申请单，没有处理人
+    :设置申请单请求的处理日期 null;
+    note right:这是新的申请单，没有处理日期
+    :设置申请单请求的处理意见;
+    note right:这是新的申请单，没有处理意见
+}
+            |申请单持久化|
+            :调用save(application)保存申请单;
+            ->返回申请单对象;
+|申请单控制器|
+stop
+@enduml

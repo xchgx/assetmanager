@@ -1,33 +1,106 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="utf-8">
-    <title></title>
-</head>
+<head th:replace="temp :: head"></head>
 <body>
-<h1>使用者页面</h1>
 
-<div>
-    <h1 th:text="'当前登录的用户:'+${session.get('user')?.name}"></h1>
-    <h2>访问本页：<div id="localQr"></div></h2>
-    <table border="1" width="100%">
-        <tr><th>资产ID</th><th>资产名称</th><th>二维码</th></tr>
-        <tr th:each="ast : ${assets}">
-            <td th:text="${ast.id}"></td>
-            <td th:text="${ast.name}"></td>
-            <td><div class="qr" th:id="${ast.id}"></div></td>
-        </tr>
-    </table>
-</div>
-<script src="/js/jquery.min.js"></script>
+<!-- Fixed navbar -->
+<nav class="navbar navbar-default navbar-fixed-top" th:replace="temp::nav"></nav>
+
+<div class="container" style="margin-top: 80px;">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="alert alert-success" role="alert" th:text="'当前登录用户：'+${session.get('user')}"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="list-group">
+                <button type="button" class="list-group-item active">功能测试</button>
+                <button type="button" class="list-group-item">资产入库</button>
+                <button type="button" class="list-group-item">资产出库</button>
+                <button type="button" class="list-group-item">申请单</button>
+                <button type="button" class="list-group-item">资产</button>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="headingOne">
+                        <h4 class="panel-title">
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                提交申请
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                        <div class="panel-body">
+                            <form action="/application/add" method="get" id="addForm">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">资产ID</label>
+                                    <select name="assetId" id="exampleInputEmail1">
+                                        <option th:each="ast : ${assets}" th:value="${ast.id}" th:text="|${ast.name}(${ast.id})|"></option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputPassword1">申请资产数量</label>
+                                    <input name="amount" id="exampleInputPassword1" value="1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputPassword2">申请理由</label>
+                                    <textarea name="content" id="exampleInputPassword2"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary" onclick="addApplication()">提交申请</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="headingThree">
+                        <h4 class="panel-title">
+                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                Collapsible Group Item #3
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                        <div class="panel-body">
+                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> <!-- /container -->
+
+
+
+<footer th:replace="temp :: footer"></footer>
+
+<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+<script src="/js/jquery-1.10.2.min.js"></script>
+<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+<script src="/js/bootstrap.min.js"></script>
 <script src="/js/qrcode.min.js"></script>
+
 <script>
     var qrs = document.getElementsByClassName("qr");
     var localQr = document.getElementById("localQr");
-    for(var i in qrs){
-        new QRCode(qrs[i],"http://xchgx.vicp.net/assetById?assetId="+qrs[i].id);
+    if (qrs.length) {
+        for(var i in qrs){
+            new QRCode(qrs[i],"http://xchgx.vicp.net/assetById?assetId="+qrs[i].id);
+        }
     }
     new QRCode(localQr, location.href);
+
+
+    function addApplication() {
+
+        $.getJSON("/application/add",$("#addForm").serialize(),function (res) {
+            location.href=location.href;
+        });
+
+    }
 </script>
 </body>
 </html>

@@ -1,22 +1,57 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>原型模型</title>
-</head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="temp :: head"></head>
 <body>
-<h1>登录</h1>
-<h2>访问本页：<div id="localQr"></div></h2>
-<form action="/login/doLogin" method="post">
-    用户名：<input type="text" name="username"><br>
-    密码：<input type="password" name="password"><br>
-    <input type="submit" value="登录">
-</form>
 
-<script src="/js/jquery.min.js"></script>
+<!-- Fixed navbar -->
+<nav class="navbar navbar-default navbar-fixed-top" th:replace="temp::nav"></nav>
+
+<div class="container" style="margin-top: 80px;">
+    <div class="jumbotron">
+        <h1>登录后台</h1>
+        <p>
+        <form action="/login/doLogin" method="post">
+            <div class="form-group">
+                <label for="exampleInputEmail1">用户名</label>
+                <input type="text" class="form-control" name="username" id="exampleInputEmail1" placeholder="用户名" list="usernameList">
+                <datalist id="usernameList">
+                    <option label="张三" value="user1"></option>
+                    <option label="李四" value="user2"></option>
+                    <option label="管理员" value="admin"></option>
+                </datalist>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword1">密码</label>
+                <input type="password" class="form-control" name="password" id="exampleInputPassword1" placeholder="密码">
+            </div>
+            <div>(测试账号  user1:123456,  user2:123456,  admin:123456)</div>
+            <button type="submit" class="btn btn-primary">登录</button>
+        </form>
+        </p>
+        <p class="text-center">
+            <a href="/login/"><div id="localQr"></div></a>
+        </p>
+    </div>
+</div> <!-- /container -->
+
+
+
+<footer th:replace="temp :: footer"></footer>
+
+<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+<script src="/js/jquery-1.10.2.min.js"></script>
+<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+<script src="/js/bootstrap.min.js"></script>
 <script src="/js/qrcode.min.js"></script>
+
 <script>
+    var qrs = document.getElementsByClassName("qr");
     var localQr = document.getElementById("localQr");
+    if (qrs.length) {
+        for(var i in qrs){
+            new QRCode(qrs[i],"http://xchgx.vicp.net/assetById?assetId="+qrs[i].id);
+        }
+    }
     new QRCode(localQr, location.href);
 </script>
 </body>

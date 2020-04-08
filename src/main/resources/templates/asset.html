@@ -1,23 +1,63 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="utf-8">
-    <title th:text="${asset.name}"></title>
-    <style>
-    </style>
-</head>
+<head th:replace="temp :: head"></head>
 <body>
-<h1 th:text="${asset.name}"></h1>
-<h2 th:text="'入库单号:'+${asset.rukudanId}"></h2>
-使用者:
-图片:
-<div>
-<!--    model.addAttribute("op",list);-->
-<!--    o=Operation的实例 o.url o.content-->
-<a th:each="o : ${op}" class="item" th:text="${o.content}" th:href="${o.url}"></a>
-</div>
 
+<!-- Fixed navbar -->
+<nav class="navbar navbar-default navbar-fixed-top" th:replace="temp::nav"></nav>
+
+<div class="container" style="margin-top: 80px;">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="jumbotron">
+                <h1 th:text="${asset.name}"></h1>
+                <p th:text="${asset.getReadme()}"></p>
+                <p th:text="'入库单号:'+${asset.rukudanId}"></p>
+                <p th:text="'使用者:'+${asset.username}"></p>
+                <p th:text="'状态:'+${asset.status}"></p>
+                <p>
+                    <a class="btn btn-lg btn-primary item" th:each="o : ${op}" th:text="${o.content}" th:href="${o.url}"></a>
+                </p>
+                <p>
+                    <a th:href="|/application/addQuick?type=领用&assetId=${asset.id}|" type="button" class="btn btn-primary">领用申请</a>
+                    <a th:href="|/application/addQuick?type=维修&assetId=${asset.id}|" type="button" class="btn btn-primary">维修申请</a>
+                    <a th:href="|/application/addQuick?type=报废&assetId=${asset.id}|" type="button" class="btn btn-primary">报废申请</a>
+                    <a th:href="|/asset/set?status=空闲&assetId=${asset.id}|" type="button" class="btn btn-success">设置空闲</a>
+                    <a th:href="|/asset/set?status=维修&assetId=${asset.id}|" type="button" class="btn btn-success">设置维修</a>
+                    <a th:href="|/asset/set?status=报废&assetId=${asset.id}|" type="button" class="btn btn-success">设置报废</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div> <!-- /container -->
+
+
+
+<footer th:replace="temp :: footer"></footer>
+
+<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+<script src="/js/jquery-1.10.2.min.js"></script>
+<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/qrcode.min.js"></script>
+
+<script>
+    var qrs = document.getElementsByClassName("qr");
+    var localQr = document.getElementById("localQr");
+    if (qrs.length) {
+        for(var i in qrs){
+            new QRCode(qrs[i],"http://xchgx.vicp.net/assetById?assetId="+qrs[i].id);
+        }
+    }
+    new QRCode(localQr, location.href);
+</script>
 </body>
 </html>
+
+
+
+
+
+
 
 

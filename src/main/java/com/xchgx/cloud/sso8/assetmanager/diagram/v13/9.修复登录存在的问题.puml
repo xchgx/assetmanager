@@ -1,0 +1,46 @@
+@startuml
+scale 2
+title 登录存在的问题
+|登录页/login/|
+start
+:提交表单;
+fork
+:用户名;
+->username;
+fork again
+:密码;
+->password;
+end fork
+
+    ->/doLogin,POST;
+    note left
+    这个在下面解决。
+    end note
+    |LoginController|
+    :接收到的参数保存在user对象中;
+
+        |UserRepository|
+        :findByUsername(username);
+        ->用户对象;
+
+    |LoginController|
+    #FF0:经过判断后，准备<s>返回视图</s>重定向;
+    -><s>返回 user 视图 或者 返回 admin 视图</s>;
+    note left:重定向，跳走，再也不来了。
+    #FF0:"redirect:/"+user.getRole();
+    note left
+        重定向相当于在浏览器中重新输入网址按回车后访问。
+        这里重定向表示进入到另一个网址
+        这个网址又会经过->过滤器->控制器->方法等一系列流程
+    end note
+    #FF0:重定向后去哪;
+    fork
+    #FF0:"redirect:/"+"user";
+    ->进入 /user 网址接口;
+    fork again
+    #FF0:"redirect:/"+"admin;
+    ->进入 /admin 网址接口;
+    end fork
+    #FF0:赶紧去创建上面两个网址接口;
+stop
+@enduml

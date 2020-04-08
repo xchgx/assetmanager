@@ -1,0 +1,36 @@
+@startuml
+scale 2
+title 12.user视图渲染资产集合数据
+
+start
+:使用者主要是提交申请
+所以这里要在前端展示一个
+申请表单;
+:加入一个form表单;
+note left: <form id="addForm">
+
+:添加资产下拉框 select;
+note left
+让用户选择<select>，而不是让用户输入
+id是隐晦的，难以理解的，能避免则避免
+end note
+
+:在select中添加下拉选项;
+note left: <select name="assetId">
+
+while (资产集合中还有资产嘛？)
+->有 true;
+:从集合中拿一个出来ast;
+:拼装组成下拉选项;
+:按照如下格式填充资产数据
+<option value="资产ID">资产名称</option>;
+endwhile
+
+:添加申请理由输入框 textarea;
+note left : <textarea name="content"></textarea>
+
+:添加提交申请按钮;
+note left : <button onclick="addApplication()">提交申请</button>
+->表单添加完毕;
+stop
+@enduml

@@ -2,6 +2,7 @@ package com.xchgx.cloud.sso8.assetmanager.controller;
 
 import com.xchgx.cloud.sso8.assetmanager.domain.Application;
 import com.xchgx.cloud.sso8.assetmanager.domain.Asset;
+import com.xchgx.cloud.sso8.assetmanager.domain.User;
 import com.xchgx.cloud.sso8.assetmanager.repository.ApplicationRepository;
 import com.xchgx.cloud.sso8.assetmanager.repository.AssetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 
@@ -243,4 +245,33 @@ public class ApplicationController {
         return applicationRepository.findAllByTypeAndStatus(type,status);
     }
 
+    /**
+     * 这是快速提交申请，所以该申请是新增的，不是修改申请，这里需要创建申请单对象。
+     * @param type 申请单类型：维修、报废、领用、借用等
+     * @param assetId 资产ID,申请单上填写的资产
+     * @return 申请单
+     */
+    @GetMapping("/addQuick")
+    public Application addQuick(String type, long assetId, HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("user"); //获得当前登录用户
+        Asset asset = assetRepository.findById(assetId).orElse(null); //通过资产ID查询资产对象
+        if (asset == null) {//如果资产ID不存在，则直接返回，不处理。
+            return null;
+        }
+
+        Application application = new Application(); //创建新的申请单对象
+        application.setAmount(1);//默认为1个资产
+        application.setContent("该申请为快速申请，由扫码提交。"); //设置申请内容-申请理由。
+        application.setType(type);//设置申请单类型为参数type的值
+        application.setBeginDate(new Date());//设置当前时间为申请单的创建时间
+        application.setUsername(user.getUsername());//设置申请单的发起人=申请人
+        application.setAssetName(asset.getName());//申请单的资产名称来自资产对象的名称
+        application.setAssetId(assetId); // 申请单的资产ID既可以是形式参数assetId，也可以是资产对象的id属性=asset.getId();
+        application.setStatus("待处理");//申请单的状态是“同意”、“拒绝”、“待处理”三种，并不是资产的状态，要区分。
+        application.setManager(null);//这是新提交的申请，肯定是没有处理人的，所以这里要确保处理人为空
+        application.setResultDate(null);//同上
+        application.setResultContent(null);//同上
+
+        return applicationRepository.save(application); //保存申请单对象并返回申请单
+    }
 }

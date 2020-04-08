@@ -14,7 +14,7 @@ import java.io.IOException;
  *  http://localhost:8080/asset/add
  *  http://localhost:8080/asset1/add //不检查，因为不匹配
  */
-@WebFilter(filterName = "loginFilter", urlPatterns = {"/rukudan/*","/asset/*","/application/*"})
+@WebFilter(filterName = "loginFilter", urlPatterns = {"/rukudan/*","/asset/*","/application/*","/admin","/user"})
 public class SecurityFilter implements Filter {
 
     /**
@@ -31,12 +31,12 @@ public class SecurityFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         User user = (User) request.getSession().getAttribute("user");
         System.out.println("SecurityFilter.doFilter");
-        System.out.println("user = " + user);
         if(user == null){
+            System.out.println("user = " + user);
             response.sendRedirect("/login/");//进入到登录页
             return;
         }
-
+        System.out.println(user);
         filterChain.doFilter(servletRequest, servletResponse);//放行
     }
 

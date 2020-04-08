@@ -1,0 +1,18 @@
+@startwbs
+scale 2
+title thymeleaf语法
++ thymeleaf语法
+++ 使用位置
++++ 标签属性中
+++ 功能说明
+--- th:text
++++ 标签内容 [ th:text="'固定内容' + ${变量}" ]
+--- th:each
++++ 循环遍历集合
+--- th:href
++++ 动态设置 href 属性
+--- th:value
++++ 动态设置 value 属性
+--- th:id
++++ 动态设置 id 属性
+@endwbs

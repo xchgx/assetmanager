@@ -1,0 +1,37 @@
+@startuml
+scale 2
+title 登录存在的问题
+|登录页/login/|
+start
+:提交表单;
+fork
+:用户名;
+->username;
+fork again
+:密码;
+->password;
+end fork
+
+    ->/doLogin,POST;
+    note left
+    问题来了,只能POST才能访问 /doLogin 接口,
+    也就是说输入网址是无法进入到这个方法的.
+    想刷新一下都不可能了。
+    end note
+    |LoginController|
+    :接收到的参数保存在user对象中;
+
+        |UserRepository|
+        :findByUsername(username);
+        ->用户对象;
+
+    |LoginController|
+    :经过判断后，准备返回视图;
+    ->返回 user 视图 或者 返回 admin 视图;
+    note right:问题来了，直接进入视图了，没有别的入口了;
+
+            |视图层|
+            :开始渲染页面;
+
+stop
+@enduml
