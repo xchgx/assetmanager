@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+<form action="/application/add" method="get" id="addForm">
+
+        <select name="assetId" id="exampleInputEmail1">
+            <option th:each="ast : ${assets}" th:value="${ast.id}" th:text="|${ast.name}(${ast.id})|"></option>
+        </select>
+
+
+        <label for="exampleInputPassword1">申请资产数量</label>
+        <input name="amount" id="exampleInputPassword1" value="1">
+
+
+        <label for="exampleInputPassword2">申请理由</label>
+        <textarea name="content" id="exampleInputPassword2"></textarea>
+
+    <button type="submit" class="btn btn-primary" onclick="addApplication()">提交申请</button>
+</form>
+
+
+</body>
+</html>

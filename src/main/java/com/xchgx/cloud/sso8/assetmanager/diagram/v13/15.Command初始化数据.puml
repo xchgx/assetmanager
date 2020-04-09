@@ -1,0 +1,25 @@
+@startuml
+scale 2
+skinparam titleBackgroundColor Aqua-CadetBlue
+skinparam titleBorderThickness 0
+title 15.Command初始化数据
+start
+:在CommandLineRunner接口实现类中
+初始化数据库数据;
+if (用户表为空) then (Yes)
+:创建用户 张三,user1,123456,user 角色;
+:创建用户 李四,user2,123456,user 角色;
+:创建用户 管理员,admin,123456,admin 角色;
+endif
+
+if (入库单为空) then (Yes)
+:创建入库单 电脑,32台,3000元/台,2015年4月8日生产,...;
+:创建入库单 手机,22台,2000元/台,2018年4月8日生产,...;
+:创建入库单 A4打印纸,100包,400元/包,2019年4月8日生产,...;
+
+:出库一台电脑资产;
+:出库一台手机资产;
+endif
+
+stop
+@enduml

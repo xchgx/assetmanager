@@ -80,26 +80,39 @@ public class IndexController {//首页控制器
         return "asset";//返回资产asset视图,数据自动进入到视图
     }
 
+    /**
+     * 使用者后台
+     * 通过登录成功后，跳转重定向到 redirect:/user 使用GET的方式访问
+     * @param model
+     * @return
+     */
     @GetMapping("/user")
     public String user(Model model){
 
-        List<Asset> assets = assetRepository.findAll();
+        List<Asset> assets = assetRepository.findAll();//查询所有的资产
         model.addAttribute("assets",assets);//在模型中添加数据
 
-        List<AssetRuKuDan> assetRuKuDans = rukudanController.list2();
-        model.addAttribute("rukudans", assetRuKuDans);
         return "user";
     }
-    @GetMapping("/admin")
+
+    /**
+     * 管理员者后台
+     * 通过登录成功后，跳转（重定向）到 redirect:/admin
+     * 实际上，访问的就是 /admin
+     * @param model
+     * @return
+     */
+    @GetMapping("/admin") //IndexController控制器没有前缀网址
     public String admin(Model model){
 
-
-        List<Asset> assets = assetRepository.findAll();
+        List<Asset> assets = assetRepository.findAll();//查询了所有的资产
         model.addAttribute("assets",assets);//在模型中添加数据
 
-        List<AssetRuKuDan> assetRuKuDans = rukudanController.list2();
+        //查询 了所有的入库单
+        List<AssetRuKuDan> assetRuKuDans = assetRuKuDanRepository.findAll();
         model.addAttribute("rukudans", assetRuKuDans);
 
+        //查询了所有的申请单
         List<Application> applications = applicationRepository.findAll();
         model.addAttribute("applications", applications);
         return "admin";

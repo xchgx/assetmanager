@@ -82,10 +82,10 @@
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-xs-3" th:each="ast : ${assets}">
-                                    <div th:id="${ast.id}" class="qr"></div>
-                                    <h1 th:text="|${ast.name}(${ast.id})|"></h1>
-                                    <p th:text="'入库单号：'+${ast.rukudanId}"></p>
-                                </div>
+                                <div th:id="${ast.id}" class="qr" ></div>
+                                <h1 th:text="|${ast.name}(${ast.id})|"></h1>
+                                <p th:text="'入库单号：'+${ast.rukudanId}"></p>
+                            </div>
                             </div>
                         </div>
                     </div>
@@ -148,13 +148,14 @@
     }
     new QRCode(localQr, location.href);
     
-    function ruku() {
+    function ruku() { //资产入库
         console.log($("#rukuForm").serialize());
+        //?name=张三&assetId=4;
         $.getJSON("/rukudan/add",$("#rukuForm").serialize(), function (res) {
             location.href = location.href;//刷新
         })
     }
-    function chuku() {
+    function chuku() {//出库
         $.getJSON("/asset/chuku",$("#chukuForm").serialize(), function (res) {
             location.href = location.href;//刷新
         })

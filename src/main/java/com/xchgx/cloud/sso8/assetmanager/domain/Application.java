@@ -13,17 +13,14 @@ public class Application { //申请单类
     @Id   //表示该字段（属性）为主键
     @GeneratedValue //自动递增 整型数字自动保持不重复
     private long id;//主键
-
     //申请人用户名，要使用唯一特性的字段
     private String username;
     //资产来源，属于那一批采购的资产，引用入库单Id
 //    private long rukudanId; //入库单
     private long assetId;//资产实体的ID
     private String assetName;//资产名称
-    //提交申请的时间,应该由系统自动生成
-    private Date beginDate;
-    //处理时间，该申请已经得到管理员的批示
-    private Date resultDate;
+    private Date beginDate; //提交申请的时间,应该由系统自动生成
+    private Date resultDate; //处理时间，该申请已经得到管理员的批示
     private int amount;//申请资产的个数
     private String content;//申请单中书写的内容，描述资产用途
     private String manager;//管理员的用户名，具有唯一特性的值

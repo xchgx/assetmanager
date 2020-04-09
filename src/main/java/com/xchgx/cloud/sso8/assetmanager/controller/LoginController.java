@@ -42,17 +42,18 @@ public class LoginController {
         User u = userRepository.findByUsername(user.getUsername());
         if (u == null) {
             model.addAttribute("error","用户名不存在");
-            return "login";
+            return "login";//用户名不存在，还是返回到登录视图。
         }
         if (!u.getPassword().equals(user.getPassword())) {
             model.addAttribute("error", "密码错误");
-            return "login";
+            return "login"; //密码错误，还是返回到登录视图。
         }
         request.getSession().setAttribute("user",u);//记录下登录成功的标记。
         //返回的视图名称，由用户的权限决定
         //如果用户是user权限（普通用户），那么就返回user视图
         //如果用户是admin权限（管理员），那么就返回admin视图
         return "redirect:/"+u.getRole();//返回角色视图，准备好user.html视图和admin.html视图
+        //采用重定向之后，模型失效。
     }
 
 
