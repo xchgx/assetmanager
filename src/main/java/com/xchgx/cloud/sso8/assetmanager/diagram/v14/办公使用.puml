@@ -1,0 +1,32 @@
+@startgantt
+scale 2
+'printscale weekly
+Project starts the 2020/02/24
+saturday are closed
+sunday are closed
+2020/03/16 to 2020/03/20 is closed
+[2018级计算机软件专业-《UML统一建模语言》] as [A] lasts 3 weeks and is 100% completed
+[2018级计算机软件专业-《软件工程》] as [B] lasts 6 weeks
+[A]->[B]
+[B] is 50% completed
+
+[2018级工程造价专业-《工程造价控制与管理》] as [C] lasts 5 weeks
+[2018级工程造价专业-《建筑工程项目管理》] as [D] lasts 5 weeks
+[D] starts 7 days after [C]'s end
+[C] is colored in #faa
+[D] is colored in #faa
+
+[2019级工程造价专业-《建筑法规》] as [E] lasts 5 weeks
+[2019级工程造价专业-《建筑工程项目管理》] as [F] lasts 5 weeks
+[F] starts 7 days after [E]'s end
+
+[2019级计算机应用技术专业-《计算机网络基础》] as [g] lasts 31 days
+[2019级计算机应用技术专业-《Windows基础知识》] as [h] lasts 16 days
+[h] starts 7 days after [g]'s end
+
+[2019级软件技术专业-《计算机网络基础》] as [i] lasts 31 days
+[2019级软件技术专业-《Windows基础知识》] as [j] lasts 16 days
+[j] starts 7 days after [i]'s end
+
+[2019级物网技术专业-《电工电子基础》] as [k] lasts 15 weeks
+@endgantt
