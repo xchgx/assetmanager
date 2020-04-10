@@ -26,5 +26,7 @@ public class Application { //申请单类
     private String manager;//管理员的用户名，具有唯一特性的值
     private String resultContent;//处理结果，处理意见、处理批示，已经没有电脑可用了
     private String status;//申请单的状态 同意、拒绝、待处理
+    private String start;//资产开始状态、起始状态
+    private String stop;//资产停止状态、目标状态
     private String type;//申请单类型 领用申请、维修申请、报废申请、借用申请、归还申请。
 }

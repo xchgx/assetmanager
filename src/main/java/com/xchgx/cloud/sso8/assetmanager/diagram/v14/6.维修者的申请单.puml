@@ -1,0 +1,45 @@
+@startuml
+scale 2
+title 处理维修者申请-双状态
+
+start
+fork
+    partition 维修 {
+    :<&person>我是维修者;
+    :提交维修成功申请;
+    :记录开始状态（维修）;
+    :记录停止状态（已使用）;
+    }
+fork again
+    partition 维修 {
+    :<&person>我是维修者;
+    :提交维修成功申请;
+    :记录开始状态（维修）;
+    :记录停止状态（借用）;
+    }
+fork again
+    partition 维修 {
+    :<&person>我是维修者;
+    :提交维修失败申请;
+    :记录开始状态（维修）;
+    :记录停止状态（报废）;
+    }
+end fork
+
+->提交归还申请;
+:收到归还申请;
+:等待管理员处理;
+if (同意处理) then (同意)
+    :把资产状态设置为申请单的停止状态;
+note
+    资产状态 = 申请单停止状态
+end note
+
+else (拒绝)
+    :资产状态 = 申请单开始状态;
+endif
+
+
+
+stop
+@enduml

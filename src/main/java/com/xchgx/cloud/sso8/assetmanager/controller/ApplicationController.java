@@ -32,24 +32,48 @@ public class ApplicationController {
      * @return
      */
     @PostMapping("/add") //提交申请的接口
-    public Application applicationAdd(Application application){
+    public Application applicationAdd(Application application,HttpServletRequest request){
         Asset asset= assetRepository.findById(application.getAssetId()).orElse(null);
         if(asset == null){return null;}//如果没有找到资产就返回null
-        //TODO 注意，我们没有判断该资产是否为空闲
-        if(asset.getStatus()=="空闲" || asset.getStatus()=="预定"){
-            asset.setStatus("预定");//设置申请单中的状态为 预定
-            assetRepository.save(asset);//保存到数据库中
-            application.setBeginDate(new Date()); //设置申请时间为当前时间
-            application.setUsername("张三");//TODO 应该存放当前登录的用户
-            application.setStatus("待处理");//任何人提交申请都应该是 待处理状态
-            application.setResultContent("");//待处理状态下，是没有处理结果的
-            application.setManager("");//提交申请，默认进入无管理员处理
-            application.setAssetId(asset.getId());//记录下申请单上指定的资产ID
-            application.setAssetName(asset.getName());//申请单上的资产名称应该和入库单资产名称一致
-            application.setResultDate(null);//提交申请后，没有处理时间
-            return applicationRepository.save(application);
+        //版本14.0 新增内容 begin
+        User user = (User) request.getSession().getAttribute("user");
+        if (user == null) {
+            return null;//未登录，则不作处理
         }
-        return null; //否则就返回null
+        //版本14.0 新增内容 end
+
+//        //作废
+//        if(asset.getStatus()=="空闲" || asset.getStatus()=="预定"){
+//            asset.setStatus("预定");//设置申请单中的状态为 预定
+//            assetRepository.save(asset);//保存到数据库中
+//            application.setBeginDate(new Date()); //设置申请时间为当前时间
+//            application.setUsername("张三");// 应该存放当前登录的用户
+//            application.setStatus("待处理");//任何人提交申请都应该是 待处理状态
+//            application.setResultContent("");//待处理状态下，是没有处理结果的
+//            application.setManager("");//提交申请，默认进入无管理员处理
+//            application.setAssetId(asset.getId());//记录下申请单上指定的资产ID
+//            application.setAssetName(asset.getName());//申请单上的资产名称应该和入库单资产名称一致
+//            application.setResultDate(null);//提交申请后，没有处理时间
+//            return applicationRepository.save(application);
+//        }
+//        return null; //否则就返回null
+
+
+        //版本14.0 新增内容 begin
+        application.setStart(asset.getStatus());//资产的状态不能让参数决定，应该是由系统内的读取数据为准。
+        application.setStop(application.getType().equals("领用")?"已使用":application.getType()); //TODO 建议申请单的类型和资产保持同步
+        application.setBeginDate(new Date());
+        application.setUsername(user.getUsername()); //当前登录用户名
+        application.setAssetName(asset.getName());
+        application.setAssetId(asset.getId());
+        application.setStatus("待处理"); //刚开始应该是待处理
+
+        application.setManager(null); //管理员，处理该申请单的人
+        application.setResultDate(null); //处理时间
+        application.setResultContent(null); //处理意见
+        return applicationRepository.save(application);
+        //版本14.0 新增内容 end
+
     }
 
 
@@ -61,8 +85,6 @@ public class ApplicationController {
     public List<Application> applicationList(){
         //判断用户是否登录
         //从session里面获得当前登录的用户对象
-
-
         return applicationRepository.findAll();
     }
 
@@ -73,11 +95,17 @@ public class ApplicationController {
      * @param applicationId 申请单ID
      */
     @GetMapping("/agree")
-    public Application applicationAgree(long applicationId,String result){//处理同意申请单的方法
+    public Application applicationAgree(long applicationId,String result,HttpServletRequest request){//处理同意申请单的方法
         //从数据库中查询申请单对象
         Application application = applicationRepository.findById(applicationId).orElse(null);
-        //TODO 这个申请是不是待处理状态？ 只能是待处理状态才可以同意。
-        //处理资产状态
+        //版本14.0 新增内容 begin
+        User user = (User) request.getSession().getAttribute("user");
+        if (user == null) {
+            return null;//用户未登录
+        }
+        //版本14.0 新增内容 end
+
+        // 处理资产状态
         //只有资产状态一定是预定的，才可以同意。
         long assetId = application.getAssetId();
         //从数据库中寻找资产
@@ -85,20 +113,31 @@ public class ApplicationController {
         if(asset == null){//没有找到资产
             return  null;
         }
-        String status = asset.getStatus();//获得资产当前状态
-        if(status != "预定"){//你没有预定就直接同意，不合适
-            return null;//不作处理，直接返回空
-        }
-        asset.setStatus("已使用"); //设置为已使用
+
+        //版本14.0 新增内容 begin
+        asset.setStatus(application.getStop()); //设置为申请单的停止状态
+        //版本14.0 新增内容 end
         asset.setUsername(application.getUsername());//设置使用者
         assetRepository.save(asset);//BUG 修改资产状态要持久化到数据库
+//过期
+
+//        String status = asset.getStatus();//获得资产当前状态
+//        if(status != "预定"){//你没有预定就直接同意，不合适
+//            return null;//不作处理，直接返回空
+//        }
+
+
         //以下是同意的处理流程
         application.setStatus("同意");//设置申请单状态为 同意
-        application.setManager("黄主任");//TODO 应该是当前登录的用户（admin）
-        application.setResultContent(result);//TODO 如果没有写处理意见呢？
+        //版本14.0 新增内容 begin
+        application.setManager(user.getUsername());//当前登录的用户（admin）
+        application.setResultContent(result==null?"管理员很懒，没有填写处理意见。":result);//如果没有写处理意见呢？
+        //版本14.0 新增内容 end
         application.setResultDate(new Date());//处理时间为当前时间
         //把已经处理的申请单保存到数据库中并返回
         return applicationRepository.save(application);
+
+
     }
     //TODO 管理员可以直接修改资产状态
 
@@ -116,6 +155,7 @@ public class ApplicationController {
         if (asset == null) {
             return null;//没有找到资产
         }
+
         String status = asset.getStatus();//获得资产状态
         String type = application.getType();//获得申请单的类型
         if(type != "维修"){
@@ -144,7 +184,13 @@ public class ApplicationController {
      * @param applicationId 申请单ID
      */
     @GetMapping("/refuse")
-    public Application applicationRefuse(long applicationId,String result){//处理同意申请单的方法
+    public Application applicationRefuse(long applicationId,String result,HttpServletRequest request){//处理同意申请单的方法
+        //版本14.0 新增内容 begin
+        User user = (User) request.getSession().getAttribute("user");
+        if (user == null) {
+            return null;//用户未登录
+        }
+        //版本14.0 新增内容 end
         //从数据库中查询申请单对象
         Application application = applicationRepository.findById(applicationId).orElse(null);
         if (application == null) { //查无此申请单
@@ -157,14 +203,18 @@ public class ApplicationController {
             return null;
         }
 //        String status = asset.getStatus();//获得资产的状态
-        if (asset.getStatus() == "预定") { //是不是预定状态 ,如果是，就回到空闲
-            asset.setStatus("空闲"); //设置资产的状态为 空闲
-        }
+//        if (asset.getStatus() == "预定") { //是不是预定状态 ,如果是，就回到空闲
+//            asset.setStatus("空闲"); //设置资产的状态为 空闲
+//        }
 //新增代码 2020-4-2 09:24:21 end
 
-        application.setStatus("拒绝");//设置申请单状态为 同意
-        application.setManager("黄主任");//TODO 应该是当前登录的用户（admin）
-        application.setResultContent(result);//TODO 如果没有写处理意见呢？
+        //版本14.0 新增内容 begin
+        asset.setStatus(application.getStart());
+        assetRepository.save(asset);
+        application.setStatus("拒绝");//设置申请单状态为 拒绝
+        application.setManager(user.getUsername());//当前登录的用户（admin）
+        application.setResultContent(result==null?"管理员很懒，没有填写处理意见。":result);//如果没有写处理意见呢？
+        //版本14.0 新增内容 end
         application.setResultDate(new Date());//处理时间为当前时间
         //把已经处理的申请单保存到数据库中并返回
         return applicationRepository.save(application);
@@ -268,10 +318,16 @@ public class ApplicationController {
         application.setAssetName(asset.getName());//申请单的资产名称来自资产对象的名称
         application.setAssetId(assetId); // 申请单的资产ID既可以是形式参数assetId，也可以是资产对象的id属性=asset.getId();
         application.setStatus("待处理");//申请单的状态是“同意”、“拒绝”、“待处理”三种，并不是资产的状态，要区分。
+        //版本14.0 新增内容 begin
+        application.setStart(asset.getStatus());
+        application.setStop(type.equals("领用")?"已使用":type);
+        //版本14.0 新增内容 end
+
         application.setManager(null);//这是新提交的申请，肯定是没有处理人的，所以这里要确保处理人为空
         application.setResultDate(null);//同上
         application.setResultContent(null);//同上
 
         return applicationRepository.save(application); //保存申请单对象并返回申请单
     }
+
 }

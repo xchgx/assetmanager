@@ -97,7 +97,7 @@ public class InitCommand implements CommandLineRunner {
             asset.setRukudanId(rukudan.getId());
             asset.setName(rukudan.getName());
             asset.setUsername(null);
-            asset.setStatus(null);
+            asset.setStatus("空闲");
             assetRepository.save(asset);
 
             Asset asset2 = new Asset();
@@ -109,8 +109,21 @@ public class InitCommand implements CommandLineRunner {
             asset2.setRukudanId(rukudan2.getId());
             asset2.setName(rukudan2.getName());
             asset2.setUsername(null);
-            asset2.setStatus(null);
+            asset2.setStatus("空闲");
             assetRepository.save(asset2);
+
+            Asset asset3 = new Asset();
+            asset3.setType(rukudan3.getType());
+            asset3.setReadme(rukudan3.getReadme());
+            asset3.setScrq(rukudan3.getScrq());
+            asset3.setBzq(rukudan3.getBzq());
+            asset3.setPrice(rukudan3.getPrice());
+            asset3.setRukudanId(rukudan3.getId());
+            asset3.setName(rukudan3.getName());
+            asset3.setUsername(null);
+            asset3.setStatus("空闲");
+            assetRepository.save(asset3);
+
 
         }
 

@@ -114,8 +114,8 @@
                                         <span>(</span>
                                         <span th:text="${app.assetId}"></span>
                                         <span>)</span>
-                                        <a href="#" class="pull-right btn btn-danger btn-xs">拒绝</a>
-                                        <a href="#" class="pull-right btn btn-success btn-xs">同意</a>
+                                        <a th:href="|/application/refuse?applicationId=${app.id}|" class="pull-right btn btn-danger btn-xs" th:if="${app.status} eq '待处理'">拒绝</a>
+                                        <a th:href="|/application/agree?applicationId=${app.id}|" class="pull-right btn btn-success btn-xs" th:if="${app.status} eq '待处理'">同意</a>
                                     </li>
                                 </ul>
                             </div>

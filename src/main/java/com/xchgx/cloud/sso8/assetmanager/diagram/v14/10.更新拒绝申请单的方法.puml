@@ -1,0 +1,36 @@
+@startuml
+scale 2
+title 更新拒绝申请单的方法
+start
+fork
+:获得申请单ID参数;
+->applicationId;
+fork again
+:获得处理意见;
+->result;
+fork again
+:获得请求对象;
+->request;
+end fork
+:获得当前登录用户;
+->user;
+:获得申请单;
+->application;
+:获得资产;
+->asset;
+
+partition 资产设置 {
+    :设置资产状态为 申请单开始状态;
+    :保存资产;
+}
+
+partition 申请单设置 {
+    :设置申请单状态为 “拒绝”;
+    :设置申请单处理人 user.username;
+    :设置处理意见 result;
+    :设置处理日期 new Date();
+    :保存申请单;
+}
+
+stop
+@enduml

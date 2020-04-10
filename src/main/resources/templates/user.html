@@ -107,10 +107,9 @@
 
     function addApplication() {
 
-        $.getJSON("/application/add",$("#addForm").serialize(),function (res) {
+        $.post("/application/add",$("#addForm").serialize(),function (res) {
             location.href=location.href;
         });
-
     }
 </script>
 </body>

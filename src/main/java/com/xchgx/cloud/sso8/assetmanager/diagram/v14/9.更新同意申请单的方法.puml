@@ -1,0 +1,39 @@
+@startuml
+scale 2
+title 更新同意申请单的方法
+start
+fork
+:获得申请单ID;
+->applicationId;
+fork again
+:获得处理意见;
+->result;
+fork again
+:获得请求对象;
+->request;
+end fork
+:获得申请单对象;
+->application;
+:获得当前登录用户;
+->user;
+#f00:判断用户是否为空;
+:从申请单中获得资产ID;
+->assetId;
+:查找资产对象;
+->asset;
+#f00:判断资产是否为空;
+partition 设置资产 {
+  :设置资产状态为 申请单的停止状态;
+  :设置资产使用者为 申请单的申请人;
+  :更新资产到数据库;
+}
+
+partition 设置申请单 {
+    :设置申请单状态 同意;
+    :设置申请单处理人 当前登录用户;
+    :设置申请单处理意见 result;
+    :设置申请单处理日期 new Date();
+    :保存申请单;
+}
+stop
+@enduml

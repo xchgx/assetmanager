@@ -1,0 +1,28 @@
+@startuml
+scale 2
+title 修改更新提交申请方法
+start
+fork
+:接收application申请单对象参数1;
+fork again
+:接收请求对象request参数2;
+end fork
+->得到申请单中的资产ID;
+:查询资产对象;
+#f00:如果资产找不到就直接返回;
+:通过request获得当前登录用户;
+#f00:没有登录就返回null;
+
+partition 申请单设置 {
+    :设置申请单的开始状态为资产当前状态;
+    :设置申请单的停止状态为申请单类型;
+    note
+    单独处理领用类型
+    end note
+    :设置申请单的申请人为当前用户;
+    :设置申请单的状态为“待处理”;
+    :其它设置略;
+
+}
+stop
+@enduml

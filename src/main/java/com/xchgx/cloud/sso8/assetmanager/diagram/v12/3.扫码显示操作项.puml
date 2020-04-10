@@ -15,7 +15,7 @@
 if (user==null) then (yes)
 :返回 asset 资产视图，此时模型中只有资产信息;
 stop
-endif
+else (No)
 
 if (user用户的角色权限是admin吗？) then (Yes)
 :创建字符串集合List<String>;
@@ -29,7 +29,7 @@ note left
 end note
 :返回 asset 资产视图，此时模型中有资产信息和管理员的操作项;
 stop
-endif
+else (No)
 
 :创建字符串集合List<String>;
 :把“领用”加入到list集合中;
