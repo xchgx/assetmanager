@@ -4,6 +4,7 @@ import com.xchgx.cloud.sso8.assetmanager.domain.*;
 import com.xchgx.cloud.sso8.assetmanager.repository.ApplicationRepository;
 import com.xchgx.cloud.sso8.assetmanager.repository.AssetRepository;
 import com.xchgx.cloud.sso8.assetmanager.repository.AssetRuKuDanRepository;
+import com.xchgx.cloud.sso8.assetmanager.service.ApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,14 +26,18 @@ public class IndexController {//首页控制器
     private ApplicationRepository applicationRepository;
     @Autowired
     private RukudanController rukudanController;
+    //版本15.0 新增内容 begin
+    @Autowired
+    private ApplicationService applicationService;
+    //版本15.0 新增内容 end
 
     //相当于我们之前分析资产管理系统时候，出现的 网页界面类
-     @GetMapping({"/index","/"})//设置访问url网址
+    @GetMapping({"/index","/"})//设置访问url网址
     public String index(Model model){//定义首页方法
         //返回视图名称
-         List<Asset> assets = assetRepository.findAll();
-         model.addAttribute("assets",assets);//在模型中添加数据
-         return "index";//这了返回的视图名称为index
+        List<Asset> assets = assetRepository.findAll();
+        model.addAttribute("assets",assets);//在模型中添加数据
+        return "index";//这了返回的视图名称为index
     }
 
     /**
@@ -112,8 +117,11 @@ public class IndexController {//首页控制器
         List<AssetRuKuDan> assetRuKuDans = assetRuKuDanRepository.findAll();
         model.addAttribute("rukudans", assetRuKuDans);
 
+        //版本15.0 更新内容 begin
         //查询了所有的申请单
-        List<Application> applications = applicationRepository.findAll();
+        List<Application> applications = applicationService.allApplication();
+        //版本15.0 更新内容 end
+
         model.addAttribute("applications", applications);
         return "admin";
     }

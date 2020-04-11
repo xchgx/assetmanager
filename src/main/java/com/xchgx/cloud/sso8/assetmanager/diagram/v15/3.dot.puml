@@ -1,0 +1,90 @@
+@startdot
+'digraph foo {
+'  node [style=rounded]
+'  node1 [shape=box]
+'  node2 [fillcolor=yellow,style="rounded,filled",shape=diamond]
+'  node3 [shape=record, label="{a | b| c}"]
+'  node1 -> node2 ->node3
+'
+'}
+
+'简单图
+'graph foo2 {
+'  a -- b;
+'  b -- c;
+'  b -- d;
+'  d -- a;
+'}
+
+'无向图，从左到右
+'graph foo3 {
+'  rankdir=LR;
+'  a -- b;
+'  b -- c;
+'  b -- d;
+'  d -- a;
+'}
+
+'有向图
+'digraph foo4 {
+'  a -> b;
+'  b -> c;
+'  b -> d;
+'  d -> a;
+'}
+
+'带标签的简单有向图
+'digraph foo5 {
+'T[label="Teacher"] //node T
+'P [label="Student"] //node P
+'T->P[label="Instructions",fontcolor=darkgreen] //edge T->p
+'}
+'带标签的简单有向图，同上，颜色不同
+digraph foo5 {
+node [fontname="fangsong"]
+T[label="同意操作",fontname="Microsoft YaHei",color=blue, fontcolor=red, fontsize=24,shape=box] //node T
+P [label="Student",color=Blue,fontcolor=red,fontsize=24,shape=box] //node P
+T->P[label="Instructions",fontcolor=darkgreen] //edge T->p
+}
+'这儿你可以选择的形状有: box, polygon, ellipse, oval, circle, point, egg, triangle, plaintext, diamond, trapezium, parallelogram, house, pentagon, hexagon, septagon, octagon, doublecircle, doubleoctagon, tripleoctagon 更多的形状看这里
+
+
+@enddot
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

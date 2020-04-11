@@ -101,23 +101,20 @@
                     <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
                         <div class="panel-body">
                             <div class="row">
-
-                                <ul class="list-group" th:each="app : ${applications}">
-                                    <li class="list-group-item">
-                                        <span th:text="${app.username}"></span>
-                                        <span>想要</span>
-                                        <span th:text="${app.assetName}"></span>
-                                        <span>，理由是：</span>
-                                        <span th:text="${app.content}"></span>
-                                        <span>。类型：</span>
-                                        <span th:text="${app.type}"></span>
-                                        <span>(</span>
-                                        <span th:text="${app.assetId}"></span>
-                                        <span>)</span>
-                                        <a th:href="|/application/refuse?applicationId=${app.id}|" class="pull-right btn btn-danger btn-xs" th:if="${app.status} eq '待处理'">拒绝</a>
-                                        <a th:href="|/application/agree?applicationId=${app.id}|" class="pull-right btn btn-success btn-xs" th:if="${app.status} eq '待处理'">同意</a>
-                                    </li>
-                                </ul>
+                                <table border="1" width="100%" class="table table-bordered table-hover table-striped">
+                                    <tr><th>序号</th><th>申请人</th><th>资产名称</th><th>申请理由</th><th>申请单类型</th><th>开始状态</th><th>结束状态</th><th>申请单状态</th><th>操作项</th></tr>
+                                    <tr th:each="app : ${applications}">
+                                        <td th:text="${appStat.index+1}"></td>
+                                        <td th:text="${app.username}"></td>
+                                        <td th:text="${app.assetName}"></td>
+                                        <td th:text="${app.content}"></td>
+                                        <td th:text="${app.type}"></td>
+                                        <td th:text="${app.start}"></td>
+                                        <td th:text="${app.stop}"></td>
+                                        <td th:text="${app.status}"></td>
+                                        <td th:utext="${app.operation}"></td>
+                                    </tr>
+                                </table>
                             </div>
                         </div>
                     </div>

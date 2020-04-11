@@ -1,0 +1,30 @@
+@startuml
+scale 2
+title 7.获得所有带管理员操作项的申请单流程图
+|申请单服务-allApplication()|
+start
+:先把申请单从数据库里拿出来;
+->调用持久化.findAll();
+
+    |申请单持久化-findAll()|
+    :查询所有申请单;
+
+|申请单服务-allApplication()|
+:把数据库里获得的申请单放入集合中;
+while (集合中还有申请单吗？)
+->有;
+:从申请单中获得资产对象;
+if (申请单的处理状态==待处理) then (Yes)
+:申请单的 operation 设置为第1种：同意、拒绝;
+:application.operation = "<button>同意</button><button>拒绝</button>";
+elseif (资产状态==维修)
+:申请单的 operation 设置为第2种：维修成功、维修失败;
+:application.operation = "<button>维修成功</button><button>维修失败</button>";
+else
+:申请单的 operation 设置为第3种：处理结束;
+:application.operation = "处理结束";
+endif
+end while
+stop
+
+@enduml

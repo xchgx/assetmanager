@@ -1,0 +1,13 @@
+@startuml
+scale 2
+title 4-1.管理员查看所有申请单（原始）
+actor 管理员
+管理员 -> 浏览器: 进入后台查看所有申请单
+box 系统边界
+浏览器 -> 过滤器: 登录检查通过，放行
+过滤器 -> 控制器: 获得所有申请单 /application/list
+end box
+box 后端处理
+控制器 -> 申请单持久化: select * from 申请单数据表
+end box
+@enduml

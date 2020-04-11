@@ -29,4 +29,7 @@ public class Application { //申请单类
     private String start;//资产开始状态、起始状态
     private String stop;//资产停止状态、目标状态
     private String type;//申请单类型 领用申请、维修申请、报废申请、借用申请、归还申请。
+    //版本15.0 新增内容 begin
+    private String operation;//管理员操作项
+    //版本15.0 新增内容 end
 }

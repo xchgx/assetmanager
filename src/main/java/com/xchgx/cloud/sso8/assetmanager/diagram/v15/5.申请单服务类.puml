@@ -1,0 +1,31 @@
+@startuml
+scale 2
+title 5.申请单服务类
+package com.xchgx.cloud.sso8.assetmanager.controller #dbd {
+    class ApplicationController{
+        -申请单服务对象
+        +获得所有申请单()
+    }
+}
+package com.xchgx.cloud.sso8.assetmanager.service #ddd {
+    class ApplicationService{
+        -申请单持久化对象
+        +获得所有带操作项的申请单()
+    }
+}
+package com.xchgx.cloud.sso8.assetmanager.repository #fcc {
+    class ApplicationRepository{
+        +findAll()
+    }
+}
+package com.xchgx.cloud.sso8.assetmanager.domain #3cc {
+    class Application{
+        -申请单类型
+        -申请单名称
+        ...
+    }
+}
+ApplicationController --> ApplicationService: 调用
+ApplicationService --> ApplicationRepository: 查询
+ApplicationRepository --> Application: 封装
+@enduml

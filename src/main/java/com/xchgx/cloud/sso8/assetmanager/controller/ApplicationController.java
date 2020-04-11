@@ -5,6 +5,7 @@ import com.xchgx.cloud.sso8.assetmanager.domain.Asset;
 import com.xchgx.cloud.sso8.assetmanager.domain.User;
 import com.xchgx.cloud.sso8.assetmanager.repository.ApplicationRepository;
 import com.xchgx.cloud.sso8.assetmanager.repository.AssetRepository;
+import com.xchgx.cloud.sso8.assetmanager.service.ApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,6 +26,8 @@ public class ApplicationController {
     private AssetRepository assetRepository;//资产持久化对象
     @Autowired
     private ApplicationRepository applicationRepository;//申请单持久化对象
+    @Autowired
+    private ApplicationService applicationService;
 
     /**
      * //提交申请单的操作
@@ -83,9 +86,14 @@ public class ApplicationController {
      */
     @GetMapping("/list")//查询所有申请的接口
     public List<Application> applicationList(){
+        //作废 begin
         //判断用户是否登录
         //从session里面获得当前登录的用户对象
-        return applicationRepository.findAll();
+//        return applicationRepository.findAll();
+        //作废 end
+        //版本 15.0 更新内容 begin
+        return applicationService.allApplication();
+        //版本 15.0 更新内容 end
     }
 
 
@@ -329,5 +337,115 @@ public class ApplicationController {
 
         return applicationRepository.save(application); //保存申请单对象并返回申请单
     }
+
+
+    /**
+     * //点击“维修成功”后进入到这里
+     * 处理维修成功。
+     *
+     * @param applicationId 申请单ID
+     * @version //版本15.0 新增内容 begin
+     */
+    @GetMapping("/repairOk")
+    public Application applicationRepairOk(long applicationId,HttpServletRequest request){
+        //从数据库中查询申请单对象
+        Application application = applicationRepository.findById(applicationId).orElse(null);
+        if (application == null) {
+            return null;
+        }
+        User user = (User) request.getSession().getAttribute("user");
+        if (user == null) {
+            return null;//用户未登录
+        }
+        long assetId = application.getAssetId();
+        //从数据库中寻找资产
+        Asset asset = assetRepository.findById(assetId).orElse(null);
+        if(asset == null){//没有找到资产
+            return  null;
+        }
+
+        //留着下一个版本再更新 begin
+        application.setStatus("维修成功");
+        application.setManager(user.getUsername());
+        application.setResultDate(new Date());
+        application.setResultContent("这是维修成功的流程，系统挂自动填写");
+        application.setOperation("维修结束");
+        applicationRepository.save(application);
+        //留着下一个版本再更新 end
+
+        Application repairOkApplication = new Application();
+        repairOkApplication.setStart(asset.getStatus());
+        repairOkApplication.setStop(application.getStart());
+        repairOkApplication.setBeginDate(new Date());
+        repairOkApplication.setStatus("待处理");
+
+        repairOkApplication.setUsername(application.getUsername());
+        repairOkApplication.setAssetId(application.getAssetId());
+        repairOkApplication.setAssetName(application.getAssetName());
+        repairOkApplication.setContent(application.getContent());
+        repairOkApplication.setType(application.getType());
+
+        repairOkApplication.setResultDate(null);
+        repairOkApplication.setResultContent(null);
+        repairOkApplication.setManager(null);
+
+        applicationRepository.save(repairOkApplication);
+        return repairOkApplication;
+    }
+
+    /**
+     * //点击“维修失败”后进入到这里
+     * 处理维修失败。
+     *
+     * @param applicationId 申请单ID
+     * @version //版本15.0 新增内容 begin
+     */
+    @GetMapping("/repairFail")
+    public Application applicationRepairFail(long applicationId,HttpServletRequest request){
+        //从数据库中查询申请单对象
+        Application application = applicationRepository.findById(applicationId).orElse(null);
+        if (application == null) {
+            return null;
+        }
+        User user = (User) request.getSession().getAttribute("user");
+        if (user == null) {
+            return null;//用户未登录
+        }
+        long assetId = application.getAssetId();
+        //从数据库中寻找资产
+        Asset asset = assetRepository.findById(assetId).orElse(null);
+        if(asset == null){//没有找到资产
+            return  null;
+        }
+
+        //留着下一个版本再更新 begin
+        application.setStatus("维修失败");
+        application.setManager(user.getUsername());
+        application.setResultDate(new Date());
+        application.setResultContent("这是维修成功的流程，系统挂自动填写");
+        application.setOperation("维修结束");
+        applicationRepository.save(application);
+//留着下一个版本再更新 end
+
+        Application repairOkApplication = new Application();
+        repairOkApplication.setStart(asset.getStatus());
+        repairOkApplication.setStop("报废");
+        repairOkApplication.setBeginDate(new Date());
+        repairOkApplication.setStatus("待处理");
+
+        repairOkApplication.setUsername(application.getUsername());
+        repairOkApplication.setAssetId(application.getAssetId());
+        repairOkApplication.setAssetName(application.getAssetName());
+        repairOkApplication.setContent(application.getContent());
+        repairOkApplication.setType(application.getType());
+
+        repairOkApplication.setResultDate(null);
+        repairOkApplication.setResultContent(null);
+        repairOkApplication.setManager(null);
+
+        applicationRepository.save(repairOkApplication);
+        return repairOkApplication;
+    }
+
 
 }
