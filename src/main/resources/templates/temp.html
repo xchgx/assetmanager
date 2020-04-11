@@ -61,7 +61,7 @@
                 <!--                </li>-->
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a th:href="|/${session.get('user')?.role}|" th:text="'当前登录的用户:'+${session.get('user')?.name}" th:if="${session.get('user')}"></a></li>
+                <li><a th:href="|/${session.get('user')?.role}/index|" th:text="'当前登录的用户:'+${session.get('user')?.name}" th:if="${session.get('user')}"></a></li>
                 <li><a href="/login/" th:unless="${session.get('user')}" class="text-warning">您没有登录</a></li>
                 <!--                <li class="active"><a href="./">Fixed top <span class="sr-only">(current)</span></a></li>-->
             </ul>
@@ -89,6 +89,17 @@
     </div>
 </div> <!-- /container -->
 
+<!--侧边功能导航 start-->
+<div class="col-md-4" th:fragment="leftNav">
+    <div class="list-group">
+        <a href="/admin/index" type="button" class="list-group-item list-group-item-success  btn">功能测试</a>
+        <a href="/admin/applications" type="button" class="list-group-item list-group-item-danger btn">申请单</a>
+        <button type="button" class="list-group-item btn">资产出库</button>
+        <button type="button" class="list-group-item btn">申请单</button>
+        <button type="button" class="list-group-item btn">资产</button>
+    </div>
+</div>
+<!--侧边功能导航 end-->
 
 <!--底部 begin-->
 <footer role="contentinfo" class="manager_footer" th:fragment="footer">

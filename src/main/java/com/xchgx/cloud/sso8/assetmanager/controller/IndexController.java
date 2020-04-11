@@ -87,28 +87,28 @@ public class IndexController {//首页控制器
 
     /**
      * 使用者后台
-     * 通过登录成功后，跳转重定向到 redirect:/user 使用GET的方式访问
+     * 通过登录成功后，跳转重定向到 redirect:/user/index 使用GET的方式访问
      * @param model
      * @return
      */
-    @GetMapping("/user")
+    @GetMapping("/user/index")
     public String user(Model model){
 
         List<Asset> assets = assetRepository.findAll();//查询所有的资产
         model.addAttribute("assets",assets);//在模型中添加数据
 
-        return "user";
+        return "user/index";
     }
 
     /**
      * 管理员者后台
-     * 通过登录成功后，跳转（重定向）到 redirect:/admin
-     * 实际上，访问的就是 /admin
+     * 通过登录成功后，跳转（重定向）到 redirect:/admin/index
+     * 实际上，访问的就是 /admin/index
      * @param model
      * @return
      */
-    @GetMapping("/admin") //IndexController控制器没有前缀网址
-    public String admin(Model model){
+    @GetMapping("/admin/index") //IndexController控制器没有前缀网址
+    public String adminIndex(Model model){
 
         List<Asset> assets = assetRepository.findAll();//查询了所有的资产
         model.addAttribute("assets",assets);//在模型中添加数据
@@ -119,10 +119,35 @@ public class IndexController {//首页控制器
 
         //版本15.0 更新内容 begin
         //查询了所有的申请单
+//        List<Application> applications = applicationService.allApplication();
+        //版本15.0 更新内容 end
+
+//        model.addAttribute("applications", applications);
+        return "admin/index";
+    }
+    /**
+     * 管理员者后台
+     * 通过登录成功后，跳转（重定向）到 redirect:/admin/index
+     * 实际上，访问的就是 /admin/index
+     * @param model
+     * @return
+     */
+    @GetMapping("/admin/applications") //IndexController控制器没有前缀网址
+    public String adminApplications(Model model){
+
+//        List<Asset> assets = assetRepository.findAll();//查询了所有的资产
+//        model.addAttribute("assets",assets);//在模型中添加数据
+
+//        //查询 了所有的入库单
+//        List<AssetRuKuDan> assetRuKuDans = assetRuKuDanRepository.findAll();
+//        model.addAttribute("rukudans", assetRuKuDans);
+
+        //版本15.0 更新内容 begin
+        //查询了所有的申请单
         List<Application> applications = applicationService.allApplication();
         //版本15.0 更新内容 end
 
         model.addAttribute("applications", applications);
-        return "admin";
+        return "admin/applications";
     }
 }

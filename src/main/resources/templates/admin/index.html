@@ -13,15 +13,8 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-4">
-            <div class="list-group">
-                <button type="button" class="list-group-item active">功能测试</button>
-                <button type="button" class="list-group-item">资产入库</button>
-                <button type="button" class="list-group-item">资产出库</button>
-                <button type="button" class="list-group-item">申请单</button>
-                <button type="button" class="list-group-item">资产</button>
-            </div>
-        </div>
+        <div class="col-md-4" th:replace="temp :: leftNav"></div>
+
         <div class="col-md-8">
             <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                 <div class="panel panel-default">
