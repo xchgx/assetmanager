@@ -312,30 +312,7 @@ public class ApplicationController {
     @GetMapping("/addQuick")
     public Application addQuick(String type, long assetId, HttpServletRequest request) {
         User user = (User) request.getSession().getAttribute("user"); //获得当前登录用户
-        Asset asset = assetRepository.findById(assetId).orElse(null); //通过资产ID查询资产对象
-        if (asset == null) {//如果资产ID不存在，则直接返回，不处理。
-            return null;
-        }
-
-        Application application = new Application(); //创建新的申请单对象
-        application.setAmount(1);//默认为1个资产
-        application.setContent("该申请为快速申请，由扫码提交。"); //设置申请内容-申请理由。
-        application.setType(type);//设置申请单类型为参数type的值
-        application.setBeginDate(new Date());//设置当前时间为申请单的创建时间
-        application.setUsername(user.getUsername());//设置申请单的发起人=申请人
-        application.setAssetName(asset.getName());//申请单的资产名称来自资产对象的名称
-        application.setAssetId(assetId); // 申请单的资产ID既可以是形式参数assetId，也可以是资产对象的id属性=asset.getId();
-        application.setStatus("待处理");//申请单的状态是“同意”、“拒绝”、“待处理”三种，并不是资产的状态，要区分。
-        //版本14.0 新增内容 begin
-        application.setStart(asset.getStatus());
-        application.setStop(type.equals("领用")?"已使用":type);
-        //版本14.0 新增内容 end
-
-        application.setManager(null);//这是新提交的申请，肯定是没有处理人的，所以这里要确保处理人为空
-        application.setResultDate(null);//同上
-        application.setResultContent(null);//同上
-
-        return applicationRepository.save(application); //保存申请单对象并返回申请单
+        return applicationService.addQuick(type, assetId,user.getUsername());
     }
 
 
@@ -364,6 +341,8 @@ public class ApplicationController {
             return  null;
         }
 
+        asset.setStatus(application.getStart());
+        assetRepository.save(asset);
         //留着下一个版本再更新 begin
         application.setStatus("维修成功");
         application.setManager(user.getUsername());
@@ -372,25 +351,26 @@ public class ApplicationController {
         application.setOperation("维修结束");
         applicationRepository.save(application);
         //留着下一个版本再更新 end
-
-        Application repairOkApplication = new Application();
-        repairOkApplication.setStart(asset.getStatus());
-        repairOkApplication.setStop(application.getStart());
-        repairOkApplication.setBeginDate(new Date());
-        repairOkApplication.setStatus("待处理");
-
-        repairOkApplication.setUsername(application.getUsername());
-        repairOkApplication.setAssetId(application.getAssetId());
-        repairOkApplication.setAssetName(application.getAssetName());
-        repairOkApplication.setContent(application.getContent());
-        repairOkApplication.setType(application.getType());
-
-        repairOkApplication.setResultDate(null);
-        repairOkApplication.setResultContent(null);
-        repairOkApplication.setManager(null);
-
-        applicationRepository.save(repairOkApplication);
-        return repairOkApplication;
+//版本15.0 维修失败，直接报废，不再创建新的申请单  start
+//        Application repairOkApplication = new Application();
+//        repairOkApplication.setStart(asset.getStatus());
+//        repairOkApplication.setStop(application.getStart());
+//        repairOkApplication.setBeginDate(new Date());
+//        repairOkApplication.setStatus("待处理");
+//
+//        repairOkApplication.setUsername(application.getUsername());
+//        repairOkApplication.setAssetId(application.getAssetId());
+//        repairOkApplication.setAssetName(application.getAssetName());
+//        repairOkApplication.setContent(application.getContent());
+//        repairOkApplication.setType(application.getType());
+//
+//        repairOkApplication.setResultDate(null);
+//        repairOkApplication.setResultContent(null);
+//        repairOkApplication.setManager(null);
+//
+//        applicationRepository.save(repairOkApplication);
+        //版本15.0 维修失败，直接报废，不再创建新的申请单  end
+        return application;
     }
 
     /**
@@ -419,32 +399,37 @@ public class ApplicationController {
         }
 
         //留着下一个版本再更新 begin
+        asset.setStatus("报废");
+//        asset.setUsername();
+        assetRepository.save(asset);
+
         application.setStatus("维修失败");
         application.setManager(user.getUsername());
         application.setResultDate(new Date());
         application.setResultContent("这是维修成功的流程，系统挂自动填写");
-        application.setOperation("维修结束");
+        application.setOperation("处理结束");
         applicationRepository.save(application);
 //留着下一个版本再更新 end
-
-        Application repairOkApplication = new Application();
-        repairOkApplication.setStart(asset.getStatus());
-        repairOkApplication.setStop("报废");
-        repairOkApplication.setBeginDate(new Date());
-        repairOkApplication.setStatus("待处理");
-
-        repairOkApplication.setUsername(application.getUsername());
-        repairOkApplication.setAssetId(application.getAssetId());
-        repairOkApplication.setAssetName(application.getAssetName());
-        repairOkApplication.setContent(application.getContent());
-        repairOkApplication.setType(application.getType());
-
-        repairOkApplication.setResultDate(null);
-        repairOkApplication.setResultContent(null);
-        repairOkApplication.setManager(null);
-
-        applicationRepository.save(repairOkApplication);
-        return repairOkApplication;
+//版本15.0 维修失败，直接报废，不再创建新的申请单  start
+//        Application repairOkApplication = new Application();
+//        repairOkApplication.setStart(asset.getStatus());
+//        repairOkApplication.setStop("报废");
+//        repairOkApplication.setBeginDate(new Date());
+//        repairOkApplication.setStatus("待处理");
+//
+//        repairOkApplication.setUsername(application.getUsername());
+//        repairOkApplication.setAssetId(application.getAssetId());
+//        repairOkApplication.setAssetName(application.getAssetName());
+//        repairOkApplication.setContent(application.getContent());
+//        repairOkApplication.setType(application.getType());
+//
+//        repairOkApplication.setResultDate(null);
+//        repairOkApplication.setResultContent(null);
+//        repairOkApplication.setManager(null);
+//
+//        applicationRepository.save(repairOkApplication);
+        //版本15.0 维修失败，直接报废，不再创建新的申请单 end
+        return application;
     }
 
 

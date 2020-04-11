@@ -7,6 +7,7 @@ import com.xchgx.cloud.sso8.assetmanager.repository.ApplicationRepository;
 import com.xchgx.cloud.sso8.assetmanager.repository.AssetRepository;
 import com.xchgx.cloud.sso8.assetmanager.repository.AssetRuKuDanRepository;
 import com.xchgx.cloud.sso8.assetmanager.repository.UserRepository;
+import com.xchgx.cloud.sso8.assetmanager.service.ApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -23,6 +24,8 @@ public class InitCommand implements CommandLineRunner {
     private AssetRepository assetRepository;
     @Autowired
     private ApplicationRepository applicationRepository;
+    @Autowired
+    private ApplicationService applicationService;
 
     @Override
     public void run(String... args) throws Exception {
@@ -52,9 +55,9 @@ public class InitCommand implements CommandLineRunner {
             userRepository.save(admin);
             System.out.println("管理员 admin 的账号添加完成");
 
-        }
+//        }
         //初始化入库单
-        if(ruKuDanRepository.count()==0){
+//        if(ruKuDanRepository.count()==0){
             AssetRuKuDan rukudan = new AssetRuKuDan();
             rukudan.setType("办公用品");
             rukudan.setScrq(new Date(2019,3,1));
@@ -124,6 +127,10 @@ public class InitCommand implements CommandLineRunner {
             asset3.setStatus("空闲");
             assetRepository.save(asset3);
 
+            applicationService.addQuick("使用",asset.getId(),user1.getUsername());
+            applicationService.addQuick("使用",asset.getId(),user2.getUsername());
+            applicationService.addQuick("使用",asset2.getId(),user2.getUsername());
+            applicationService.addQuick("使用",asset3.getId(),user1.getUsername());
 
         }
 

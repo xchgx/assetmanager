@@ -41,8 +41,8 @@
 '}
 '带标签的简单有向图，同上，颜色不同
 digraph foo5 {
-node [fontname="fangsong"]
-T[label="同意操作",fontname="Microsoft YaHei",color=blue, fontcolor=red, fontsize=24,shape=box] //node T
+node [fontname="Microsoft Yahei"]
+T[label="同意操作",color=blue, fontcolor=red, fontsize=24,shape=box] //node T
 P [label="Student",color=Blue,fontcolor=red,fontsize=24,shape=box] //node P
 T->P[label="Instructions",fontcolor=darkgreen] //edge T->p
 }
