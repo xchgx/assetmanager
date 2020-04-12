@@ -18,32 +18,27 @@
         <div class="col-md-8">
             <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                 <div class="panel panel-default">
-                    <div class="panel-heading" role="tab" id="headingOne">
+                    <div class="panel-heading" role="tab" id="headingTwo">
                         <h4 class="panel-title">
-                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                资产入库
+                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                资产出库
                             </a>
                         </h4>
                     </div>
-                    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                    <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
                         <div class="panel-body">
-                            <form id="rukuForm">
+                            <form id="chukuForm">
                                 <div class="form-group">
-                                    <label for="exampleInputEmail1">资产名称</label>
-                                    <input type="text" name="name" class="form-control" id="exampleInputEmail1" placeholder="资产名称">
-                                </div>
-                                <div class="form-group">
-                                    <label for="exampleInputPassword1">资产数量</label>
-                                    <input type="number" name="amount" class="form-control" id="exampleInputPassword1" placeholder="">
+                                    <label for="rukudanId">入库单ID</label>
+                                    <select name="rukudanId" id="rukudanId">
+                                        <option th:each="rkd : ${rukudans}" th:value="${rkd.id}" th:text="${rkd.name}"></option>
+                                    </select>
                                 </div>
                             </form>
-                            <button type="button" class="btn btn-primary" onclick="ruku()">提交入库</button>
+                            <button type="button" class="btn btn-primary" onclick="chuku()">出库</button>
                         </div>
                     </div>
                 </div>
-
-
-
             </div>
         </div>
     </div>
@@ -60,10 +55,8 @@
 <script src="/js/qrcode.min.js"></script>
 
 <script>
-    function ruku() { //资产入库
-        console.log($("#rukuForm").serialize());
-        //?name=张三&assetId=4;
-        $.getJSON("/rukudan/add",$("#rukuForm").serialize(), function (res) {
+    function chuku() {//出库
+        $.getJSON("/asset/chuku",$("#chukuForm").serialize(), function (res) {
             location.href = location.href;//刷新
         })
     }

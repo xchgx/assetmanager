@@ -6,7 +6,7 @@
 <!-- Fixed navbar -->
 <nav class="navbar navbar-default navbar-fixed-top" th:replace="temp::nav"></nav>
 
-<div class="container" style="margin-top: 80px;">
+<div class="container-fluid" style="margin-top: 80px;">
     <div class="row">
         <div class="col-xs-12">
             <div class="alert alert-success" role="alert" th:text="'当前登录用户：'+${session.get('user')}"></div>
@@ -29,16 +29,19 @@
                         <div class="panel-body">
                             <div class="row">
                                 <table border="1" width="100%" class="table table-bordered table-hover table-striped">
-                                    <tr><th>序号</th><th>申请人</th><th>资产名称</th><th>申请理由</th><th>申请单类型</th><th>开始状态</th><th>结束状态</th><th>申请单状态</th><th>操作项</th></tr>
+                                    <tr><th>序号</th><th>申请人</th><th>资产名称</th><th>申请理由</th><th>申请时间/th><th>申请单类型</th><th>开始状态</th><th>结束状态</th><th>申请单状态</th><th>处理意见</th><th>处理日期</th><th>操作项</th></tr>
                                     <tr th:each="app : ${applications}">
                                         <td th:text="${appStat.index+1}"></td>
                                         <td th:text="${app.username}"></td>
                                         <td th:text="${app.assetName}"></td>
                                         <td th:text="${app.content}"></td>
+                                        <td th:text="${app.beginDate}"></td>
                                         <td th:text="${app.type}"></td>
                                         <td th:text="${app.start}"></td>
                                         <td th:text="${app.stop}"></td>
                                         <td th:text="${app.status}"></td>
+                                        <td th:text="${app.resultContent}"></td>
+                                        <td th:text="${app.resultDate}"></td>
                                         <td th:utext="${app.operation}"></td>
                                     </tr>
                                 </table>
@@ -62,27 +65,7 @@
 <script src="/js/qrcode.min.js"></script>
 
 <script>
-    var qrs = document.getElementsByClassName("qr");
-    var localQr = document.getElementById("localQr");
-    if (qrs.length) {
-        for(var i in qrs){
-            new QRCode(qrs[i],"http://xchgx.vicp.net/assetById?assetId="+qrs[i].id);
-        }
-    }
-    new QRCode(localQr, location.href);
 
-    function ruku() { //资产入库
-        console.log($("#rukuForm").serialize());
-        //?name=张三&assetId=4;
-        $.getJSON("/rukudan/add",$("#rukuForm").serialize(), function (res) {
-            location.href = location.href;//刷新
-        })
-    }
-    function chuku() {//出库
-        $.getJSON("/asset/chuku",$("#chukuForm").serialize(), function (res) {
-            location.href = location.href;//刷新
-        })
-    }
 </script>
 </body>
 </html>

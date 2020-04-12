@@ -15,7 +15,7 @@
     <div class="row">
         <div class="col-md-4">
             <div class="list-group">
-                <button type="button" class="list-group-item active">功能测试</button>
+                <button type="button" class="list-group-item active">申请资产</button>
                 <button type="button" class="list-group-item">资产入库</button>
                 <button type="button" class="list-group-item">资产出库</button>
                 <button type="button" class="list-group-item">申请单</button>
@@ -34,8 +34,6 @@
                     </div>
                     <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
                         <div class="panel-body">
-
-
 
                             <form action="/application/add" method="get" id="addForm">
                                 <div class="form-group">
@@ -56,12 +54,6 @@
                             </form>
 
 
-
-
-
-
-
-
                         </div>
                     </div>
                 </div>
@@ -69,13 +61,22 @@
                     <div class="panel-heading" role="tab" id="headingThree">
                         <h4 class="panel-title">
                             <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                Collapsible Group Item #3
+                                可用空闲资产列表
                             </a>
                         </h4>
                     </div>
-                    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                    <div id="collapseThree" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingThree">
                         <div class="panel-body">
-                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                            <div class="row">
+                                <div class="col-xs-3" th:each="ast : ${assets}">
+                                    <div th:id="${ast.id}" class="qr" ></div>
+                                    <h1 th:text="|${ast.name}(${ast.id})|"></h1>
+                                    <p th:text="'入库单号：'+${ast.rukudanId}"></p>
+                                    <a th:href="|/application/addQuick?type=使用&assetId=${ast.id}|" type="button" class="btn btn-primary btn-xs">使用申请</a><br>
+                                    <a th:href="|/application/addQuick?type=维修&assetId=${ast.id}|" type="button" class="btn btn-primary btn-xs">维修申请</a><br>
+                                    <a th:href="|/application/addQuick?type=报废&assetId=${ast.id}|" type="button" class="btn btn-primary btn-xs">报废申请</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -143,7 +143,16 @@ public class ApplicationController {
         //版本14.0 新增内容 end
         application.setResultDate(new Date());//处理时间为当前时间
         //把已经处理的申请单保存到数据库中并返回
-        return applicationRepository.save(application);
+        Application save = applicationRepository.save(application);
+
+        //版本product2.0 该资产的其它申请单都要拒绝
+//        List<Application> allByAssetId = applicationRepository.findAllByAssetIdAndStatus(assetId,"待处理");
+//        allByAssetId.stream().forEach(application1 -> {
+//            application1.setStatus("拒绝");
+//            application1.setResultDate(new Date());
+//            application1.setResultContent("自动拒绝，该资产"+asset.getId()+"，已经");
+//        });
+        return save;
 
 
     }
@@ -152,6 +161,7 @@ public class ApplicationController {
     /**
      * //同意维修申请，面向使用者的，使用者提出申请，一定是资产是他自己的。
      * 同意维修申请
+     * @deprecated 见/application/agree
      * @return
      */
     @GetMapping("/agreeRepair")
@@ -232,6 +242,7 @@ public class ApplicationController {
      * 拒绝维修申请单
      * @param applicationId 维修申请单号
      * @param result 拒绝申请的处理意见
+     * @deprecated 见/application/refuse
      * @return
      */
     @GetMapping("/refuseRepair")//拒绝维修申请单的URL网址接口
@@ -253,6 +264,7 @@ public class ApplicationController {
      * 同意报废申请
      * @param applicationId 申请单号
      * @param result 处理意见
+     * @deprecated 见/application/agree
      * @return
      */
     @GetMapping("/agreeScrap")
