@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="temp :: head"></head>
+<body>
+
+<!-- Fixed navbar -->
+<nav class="navbar navbar-default navbar-fixed-top" th:replace="temp::nav"></nav>
+
+<div class="container" style="margin-top: 80px;">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="alert alert-success" role="alert" th:text="'当前登录用户：'+${session.get('user')}"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="list-group">
+                <button type="button" class="list-group-item active">功能测试</button>
+                <button type="button" class="list-group-item">资产入库</button>
+                <button type="button" class="list-group-item">资产出库</button>
+                <button type="button" class="list-group-item">申请单</button>
+                <button type="button" class="list-group-item">资产</button>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="headingOne">
+                        <h4 class="panel-title">
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                资产入库
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                        <div class="panel-body">
+                            <form id="rukuForm">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">资产名称</label>
+                                    <input type="text" name="name" class="form-control" id="exampleInputEmail1" placeholder="资产名称">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputPassword1">资产数量</label>
+                                    <input type="number" name="amount" class="form-control" id="exampleInputPassword1" placeholder="">
+                                </div>
+                            </form>
+                            <button type="button" class="btn btn-primary" onclick="ruku()">提交入库</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="headingTwo">
+                        <h4 class="panel-title">
+                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                资产出库
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                        <div class="panel-body">
+                            <form id="chukuForm">
+                                <div class="form-group">
+                                    <label for="rukudanId">入库单ID</label>
+                                    <select name="rukudanId" id="rukudanId">
+                                        <option th:each="rkd : ${rukudans}" th:value="${rkd.id}" th:text="${rkd.name}"></option>
+                                    </select>
+                                </div>
+                            </form>
+                            <button type="button" class="btn btn-primary" onclick="chuku()">出库</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="headingThree">
+                        <h4 class="panel-title">
+                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                资产列表
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-3" th:each="ast : ${assets}">
+                                <div th:id="${ast.id}" class="qr" ></div>
+                                <h1 th:text="|${ast.name}(${ast.id})|"></h1>
+                                <p th:text="'入库单号：'+${ast.rukudanId}"></p>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="headingFour">
+                        <h4 class="panel-title">
+                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                申请单
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseFour" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingThree">
+                        <div class="panel-body">
+                            <div class="row">
+                                <table border="1" width="100%" class="table table-bordered table-hover table-striped">
+                                    <tr><th>序号</th><th>申请人</th><th>资产名称</th><th>申请理由</th><th>申请单类型</th><th>开始状态</th><th>结束状态</th><th>申请单状态</th><th>操作项</th></tr>
+                                    <tr th:each="app : ${applications}">
+                                        <td th:text="${appStat.index+1}"></td>
+                                        <td th:text="${app.username}"></td>
+                                        <td th:text="${app.assetName}"></td>
+                                        <td th:text="${app.content}"></td>
+                                        <td th:text="${app.type}"></td>
+                                        <td th:text="${app.start}"></td>
+                                        <td th:text="${app.stop}"></td>
+                                        <td th:text="${app.status}"></td>
+                                        <td th:utext="${app.operation}"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div> <!-- /container -->
+
+
+
+<footer th:replace="temp :: footer"></footer>
+
+<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+<script src="/js/jquery-1.10.2.min.js"></script>
+<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/qrcode.min.js"></script>
+
+<script>
+    var qrs = document.getElementsByClassName("qr");
+    var localQr = document.getElementById("localQr");
+    if (qrs.length) {
+        for(var i in qrs){
+            new QRCode(qrs[i],"http://xchgx.vicp.net/assetById?assetId="+qrs[i].id);
+        }
+    }
+    new QRCode(localQr, location.href);
+    
+    function ruku() { //资产入库
+        console.log($("#rukuForm").serialize());
+        //?name=张三&assetId=4;
+        $.getJSON("/rukudan/add",$("#rukuForm").serialize(), function (res) {
+            location.href = location.href;//刷新
+        })
+    }
+    function chuku() {//出库
+        $.getJSON("/asset/chuku",$("#chukuForm").serialize(), function (res) {
+            location.href = location.href;//刷新
+        })
+    }
+</script>
+</body>
+</html>
