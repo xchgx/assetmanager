@@ -1,6 +1,7 @@
 package com.xchgx.cloud.sso8.assetmanager.filter;
 
 import com.xchgx.cloud.sso8.assetmanager.domain.User;
+import org.springframework.core.annotation.Order;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -15,6 +16,7 @@ import java.io.IOException;
  *  http://localhost:8080/asset1/add //不检查，因为不匹配
  */
 @WebFilter(filterName = "loginFilter", urlPatterns = {"/rukudan/*","/asset/*","/application/*","/admin","/user"})
+@Order(1)
 public class SecurityFilter implements Filter {
 
     /**

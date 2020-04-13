@@ -32,4 +32,5 @@ public class Application { //申请单类
     //版本15.0 新增内容 begin
     private String operation;//管理员操作项
     //版本15.0 新增内容 end
+    private long parentId;//上一级申请单
 }

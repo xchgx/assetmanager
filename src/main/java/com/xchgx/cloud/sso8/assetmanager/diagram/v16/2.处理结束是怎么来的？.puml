@@ -1,0 +1,27 @@
+@startuml
+scale 2
+title 2.处理结束是怎么来的
+
+start
+fork
+:同意申请单后;
+:处理结束;
+fork again
+:已使用==>维修;
+:同意申请单后;
+#fdd:维修成功、维修失败;
+fork again
+:维修==>已使用;
+:拒绝申请单后;
+#fdd:维修成功、维修失败;
+fork again
+:维修==>已使用;
+:同意申请单后;
+:处理结束;
+fork again
+:已使用==>维修;
+:拒绝申请单后;
+:处理结束;
+end fork
+stop
+@enduml

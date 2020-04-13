@@ -145,8 +145,8 @@ public class ApplicationController {
         //把已经处理的申请单保存到数据库中并返回
         return applicationRepository.save(application);
 
-
     }
+
     //TODO 管理员可以直接修改资产状态
 
     /**
@@ -217,7 +217,7 @@ public class ApplicationController {
 //新增代码 2020-4-2 09:24:21 end
 
         //版本14.0 新增内容 begin
-        asset.setStatus(application.getStart());
+        asset.setStatus(application.getStart());//测试一下，不修改资产状态
         assetRepository.save(asset);
         application.setStatus("拒绝");//设置申请单状态为 拒绝
         application.setManager(user.getUsername());//当前登录的用户（admin）
@@ -374,7 +374,7 @@ public class ApplicationController {
         //留着下一个版本再更新 end
 
         Application repairOkApplication = new Application();
-        repairOkApplication.setStart(asset.getStatus());
+        repairOkApplication.setStart(application.getStop());
         repairOkApplication.setStop(application.getStart());
         repairOkApplication.setBeginDate(new Date());
         repairOkApplication.setStatus("待处理");
@@ -418,17 +418,28 @@ public class ApplicationController {
             return  null;
         }
 
-        //留着下一个版本再更新 begin
+
         application.setStatus("维修失败");
         application.setManager(user.getUsername());
         application.setResultDate(new Date());
         application.setResultContent("这是维修成功的流程，系统挂自动填写");
         application.setOperation("维修结束");
         applicationRepository.save(application);
-//留着下一个版本再更新 end
+
+        long parentId = application.getParentId();//获得上一级申请单
+        Application parentApp = null;
+        while(parentId>0){
+            Application application1 = applicationRepository.findById(parentId).orElse(null);
+            if(application1.getParentId()>0){
+                parentId = application1.getParentId();
+            }else{
+                parentId = application1.getId();
+            }
+        }
+
 
         Application repairOkApplication = new Application();
-        repairOkApplication.setStart(asset.getStatus());
+        repairOkApplication.setStart(application.getStart());
         repairOkApplication.setStop("报废");
         repairOkApplication.setBeginDate(new Date());
         repairOkApplication.setStatus("待处理");
@@ -442,6 +453,7 @@ public class ApplicationController {
         repairOkApplication.setResultDate(null);
         repairOkApplication.setResultContent(null);
         repairOkApplication.setManager(null);
+        repairOkApplication.setParentId(application.getId());
 
         applicationRepository.save(repairOkApplication);
         return repairOkApplication;

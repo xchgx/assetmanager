@@ -1,0 +1,5 @@
+@startmindmap
+* ID=1提交维修申请，同意申请
+** ID=2维修成功或失败
+*** ID=3同意成功或拒绝成功
+@endmindmap

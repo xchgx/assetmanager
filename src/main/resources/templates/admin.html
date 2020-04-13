@@ -82,7 +82,7 @@
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-xs-3" th:each="ast : ${assets}">
-                                <div th:id="${ast.id}" class="qr" ></div>
+                                    <a th:href="|/assetById?assetId=${ast.id}|"><div th:id="${ast.id}" class="qr" ></div></a>
                                 <h1 th:text="|${ast.name}(${ast.id})|"></h1>
                                 <p th:text="'入库单号：'+${ast.rukudanId}"></p>
                             </div>
@@ -104,9 +104,9 @@
                                 <table border="1" width="100%" class="table table-bordered table-hover table-striped">
                                     <tr><th>序号</th><th>申请人</th><th>资产名称</th><th>申请理由</th><th>申请单类型</th><th>开始状态</th><th>结束状态</th><th>申请单状态</th><th>操作项</th></tr>
                                     <tr th:each="app : ${applications}">
-                                        <td th:text="${appStat.index+1}"></td>
+                                        <td th:text="|${appStat.index+1}(ID=${app.id})|"></td>
                                         <td th:text="${app.username}"></td>
-                                        <td th:text="${app.assetName}"></td>
+                                        <td th:text="|${app.assetName}-${app.assetId}|"></td>
                                         <td th:text="${app.content}"></td>
                                         <td th:text="${app.type}"></td>
                                         <td th:text="${app.start}"></td>

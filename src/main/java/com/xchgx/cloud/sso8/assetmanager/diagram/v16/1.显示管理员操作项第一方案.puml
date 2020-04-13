@@ -1,0 +1,20 @@
+@startuml
+scale 2
+title 3.显示管理员操作项
+start
+:经过判定表分析
+得出如下结论;
+if (申请单操作项 == "处理结束")  then (Yes)
+:申请单操作项 = "处理结束";
+else if (申请单处理状态==待处理) then (Yes)
+:显示第1种
+同意、拒绝;
+(No) elseif (资产状态==维修) then (Yes)
+:显示第2种
+维修成功、维修失败;
+else (No)
+:显示第3种
+处理结束;
+endif
+stop
+@enduml
