@@ -34,35 +34,46 @@ public class ApplicationService {
         String operationRepairFail = "<a href=\"/application/repairFail?applicationId={applicationId}\" class=\"btn btn-warning btn-xs\">维修失败</a>";//维修失败
         String operationOver = "处理结束";
         String operationRepairOver = "维修结束";
-
         applications.stream().forEach(application -> {
-            if(!application.getStatus().equals("处理结束")) {
-                long assetId = application.getAssetId();
-                Asset asset = assetRepository.findById(assetId).orElse(null);
-                if (application.getStatus().equals("待处理")) {
-                    System.out.println(operationAgree.replace("{applicationId}", "" + application.getId()));
-                    String operation =
-                            operationAgree.replace("{applicationId}", "" + application.getId()) +
-                                    operationRefuse.replace("{applicationId}", "" + application.getId());
-                    application.setOperation(operation);
-                } else {
-                    if (application.getType().equals("维修")) {
-                        if (asset.getStatus().equals("维修") && application.getStatus().contains("维修")) {
-                            application.setOperation(operationRepairOver);
-                        }else if(asset.getStatus().equals("维修") && ( application.getStatus().contains("同意") || application.getStatus().contains("拒绝") )){
-
-                            String operation =
-                                    operationRepairOk.replace("{applicationId}", "" + application.getId()) +
-                                            operationRepairFail.replace("{applicationId}", "" + application.getId());
-                            application.setOperation(operation);
-                        }  else {
-                            application.setOperation(operationOver);
-                        }
-                    } else {
-                        application.setOperation(operationOver);
-                    }
-                }
+            Asset asset = assetRepository.findById(application.getAssetId()).orElse(null);
+            if (application.getStatus().equals("待处理")) {
+                String op1 = operationAgree.replace("{applicationId}",""+application.getId());
+                String op2 = operationRefuse.replace("{applicationId}",""+application.getId());
+                application.setOperation(op1+op2);
+            }else if(asset.getStatus().equals("维修")){//不是待处理状态
+                String op1=operationRepairOk.replace("{applicationId}",""+application.getId());
+                String op2=operationRepairFail.replace("{applicationId}",""+application.getId());
+                application.setOperation(op1+op2);
+            }else{
+                application.setOperation(operationOver);//处理结束
             }
+//            if(!application.getStatus().equals("处理结束")) {
+//                long assetId = application.getAssetId();
+//                Asset asset = assetRepository.findById(assetId).orElse(null);
+//                if (application.getStatus().equals("待处理")) {
+//                    System.out.println(operationAgree.replace("{applicationId}", "" + application.getId()));
+//                    String operation =
+//                            operationAgree.replace("{applicationId}", "" + application.getId()) +
+//                                    operationRefuse.replace("{applicationId}", "" + application.getId());
+//                    application.setOperation(operation);
+//                } else {
+//                    if (application.getType().equals("维修")) {
+//                        if (asset.getStatus().equals("维修") && application.getStatus().contains("维修")) {
+//                            application.setOperation(operationRepairOver);
+//                        }else if(asset.getStatus().equals("维修") && ( application.getStatus().contains("同意") || application.getStatus().contains("拒绝") )){
+//
+//                            String operation =
+//                                    operationRepairOk.replace("{applicationId}", "" + application.getId()) +
+//                                            operationRepairFail.replace("{applicationId}", "" + application.getId());
+//                            application.setOperation(operation);
+//                        }  else {
+//                            application.setOperation(operationOver);
+//                        }
+//                    } else {
+//                        application.setOperation(operationOver);
+//                    }
+//                }
+//            }
         });
         return applications;
     }
