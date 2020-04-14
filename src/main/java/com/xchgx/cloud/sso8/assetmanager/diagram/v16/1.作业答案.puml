@@ -1,0 +1,35 @@
+@startuml
+scale 2
+title 作业答案
+
+start
+:获得申请单结束状态;
+if (结束状态 == "空闲") then (Yes)
+    if (开始状态=="已使用" 或者 开始状态=="借用") then (Yes)
+    ->合法的申请单，可以进入到控制器;
+    :放行;
+    stop
+    endif
+elseif (结束状态 == "借用") then (Yes)
+    if(开始状态=="空闲" || 开始状态=="维修")then(Yes)
+        ->合法的申请单，可以进入到控制器;
+        :放行;
+    stop
+    endif
+elseif (结束状态 == "领用" || 结束状态 == "已使用") then (Yes)
+    if(开始状态=="空闲" || 开始状态=="维修")then(Yes)
+        ->合法的申请单，可以进入到控制器;
+        :放行;
+    stop
+    endif
+elseif (结束状态 == "报废") then (Yes)
+    if(开始状态=="维修")then(Yes)
+        ->合法的申请单，可以进入到控制器;
+        :放行;
+    stop
+    endif
+endif
+:显示提示网页;
+note right: 申请单不符合规则，3秒后返回首页。
+stop
+@enduml
