@@ -26,6 +26,62 @@
 <!--                    <a th:href="|/asset/set?status=维修&assetId=${asset.id}|" type="button" class="btn btn-success">设置维修</a>-->
 <!--                    <a th:href="|/asset/set?status=报废&assetId=${asset.id}|" type="button" class="btn btn-success">设置报废</a>-->
 <!--                </p>-->
+                <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="headingFive">
+                        <h4 class="panel-title">
+                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseFour">
+                                所有申请记录
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseFive" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingThree">
+                        <div class="panel-body">
+                            <div class="row">
+                                <table border="1" width="100%" class="table table-bordered table-hover table-striped">
+                                    <tr><th>序号</th><th>申请人</th><th>资产名称</th><th>申请理由</th><th>申请单类型</th><th>开始状态</th><th>结束状态</th><th>申请单状态</th></tr>
+                                    <tr th:each="app : ${applications}">
+                                        <td th:text="|${appStat.index+1}(ID=${app.id})|"></td>
+                                        <td th:text="${app.username}"></td>
+                                        <td th:text="|${app.assetName}-${app.assetId}|"></td>
+                                        <td th:text="${app.content}"></td>
+                                        <td th:text="${app.type}"></td>
+                                        <td th:text="${app.start}"></td>
+                                        <td th:text="${app.stop}"></td>
+                                        <td th:text="${app.status}"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="headingOne">
+                        <h4 class="panel-title">
+                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseFour">
+                                使用者变更记录
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingThree">
+                        <div class="panel-body">
+                            <div class="row">
+                                <table border="1" width="100%" class="table table-bordered table-hover table-striped">
+                                    <tr><th>序号</th><th>申请人</th><th>资产名称</th><th>申请理由</th><th>申请单类型</th><th>开始状态</th><th>结束状态</th><th>申请单状态</th></tr>
+                                    <tr th:each="app : ${typeAndStatus}">
+                                        <td th:text="|${appStat.index+1}(ID=${app.id})|"></td>
+                                        <td th:text="${app.username}"></td>
+                                        <td th:text="|${app.assetName}-${app.assetId}|"></td>
+                                        <td th:text="${app.content}"></td>
+                                        <td th:text="${app.type}"></td>
+                                        <td th:text="${app.start}"></td>
+                                        <td th:text="${app.stop}"></td>
+                                        <td th:text="${app.status}"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

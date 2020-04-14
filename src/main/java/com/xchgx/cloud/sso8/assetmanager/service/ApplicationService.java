@@ -22,12 +22,23 @@ public class ApplicationService {
     private AssetRepository assetRepository;
 
     /**
+     * 查询所有维修的申请单
+     * @return
+     */
+    public List<Application> repairApplication(){
+        List<Application> applications = applicationRepository.findAllByType("维修");
+        return addOperation(applications);
+    }
+    /**
      * 版本15.0 新增方法
      * 获得所有带管理员操作项的申请单
      * @return
      */
     public List<Application> allApplication(){
         List<Application> applications = applicationRepository.findAll();
+        return addOperation(applications);
+    }
+    private List<Application> addOperation(List<Application> applications){
         String operationAgree = "<a href=\"/application/agree?applicationId={applicationId}\" class=\"btn btn-success btn-xs\">同意</a>";//同意按钮
         String operationRefuse = "<a href=\"/application/refuse?applicationId={applicationId}\" class=\"btn btn-danger btn-xs\">拒绝</a>";//拒绝按钮
         String operationRepairOk = "<a href=\"/application/repairOk?applicationId={applicationId}\" class=\"btn btn-success btn-xs\">维修成功</a>";//维修成功

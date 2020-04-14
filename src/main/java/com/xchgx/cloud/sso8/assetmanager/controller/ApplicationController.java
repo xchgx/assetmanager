@@ -278,7 +278,7 @@ public class ApplicationController {
      */
     @GetMapping("/findByAsset") //默认访问是 /application
     public List<Application> findByAsset(long assetId){
-        return applicationRepository.findAllByAssetId(assetId);
+        return applicationRepository.findAllByAssetIdOrderByBeginDateDesc(assetId);
     }
 
     /**

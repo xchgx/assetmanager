@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 //@RestController//Rest风格的控制器
 @Controller //Web风格控制器
@@ -82,6 +84,13 @@ public class IndexController {//首页控制器
         //"op"是键值对中的键(key)， list是键值对中的值(value)
         //姓名:张三,年龄:28
         model.addAttribute("op", list);//动态显示操作项,operation=op
+
+        List<Application> applications = applicationRepository.findAllByAssetIdOrderByBeginDateDesc(assetId);
+        model.addAttribute("applications", applications);//
+
+        List<Application> typeAndStatus = applicationRepository.findAllByTypeAndStatus("领用", "同意");
+        model.addAttribute("typeAndStatus", typeAndStatus);//
+
         return "asset";//返回资产asset视图,数据自动进入到视图
     }
 
@@ -123,6 +132,28 @@ public class IndexController {//首页控制器
         //版本15.0 更新内容 end
 
         model.addAttribute("applications", applications);
+
+        //版本17.0 更新内容 begin
+        //查询了所有的申请单
+        List<Application> applicationsRepair = applicationService.repairApplication();
+        //版本17.0 更新内容 end
+        model.addAttribute("applicationsRepair", applicationsRepair);
+
+        List<Application> agreeRepairApplication = applicationRepository.findAllByStopAndStatusNotAndStatusNot("维修", "拒绝","待处理");
+        //版本17.0 获得维修过的资产 begin
+        Set<Long> assetIdSet = new HashSet<>();
+        for (Application application : agreeRepairApplication) {
+            assetIdSet.add(application.getAssetId());
+        }
+        List<Asset> assetRepair = new ArrayList<>();
+        for (Long id : assetIdSet) {
+            Asset asset = assetRepository.findById(id).orElse(null);
+            assetRepair.add(asset);
+        }
+        //版本17.0 获得维修过的资产 end
+        model.addAttribute("assetRepair", assetRepair);
+
+
         return "admin";
     }
 }

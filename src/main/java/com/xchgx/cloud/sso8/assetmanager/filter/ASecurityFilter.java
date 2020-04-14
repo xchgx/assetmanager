@@ -16,8 +16,7 @@ import java.io.IOException;
  *  http://localhost:8080/asset1/add //不检查，因为不匹配
  */
 @WebFilter(filterName = "loginFilter", urlPatterns = {"/rukudan/*","/asset/*","/application/*","/admin","/user"})
-@Order(1)
-public class SecurityFilter implements Filter {
+public class ASecurityFilter implements Filter {
 
     /**
      * 匹配上面的三个规则就执行该过滤器
