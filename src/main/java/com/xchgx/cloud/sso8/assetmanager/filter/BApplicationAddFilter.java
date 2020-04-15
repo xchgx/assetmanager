@@ -14,7 +14,7 @@ import java.io.PrintWriter;
 
 @WebFilter(filterName = "applicationAddFilter",urlPatterns = {"/application/addQuick"})
 @Order(2)//第2个执行的过滤器
-public class ApplicationAddFilter implements Filter {
+public class BApplicationAddFilter implements Filter {
     @Autowired //自动注入资产持久化对象
     private AssetRepository assetRepository;
 

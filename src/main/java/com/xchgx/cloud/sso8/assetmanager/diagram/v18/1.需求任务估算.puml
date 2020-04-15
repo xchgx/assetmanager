@@ -1,0 +1,10 @@
+@startgantt
+printscale weekly
+
+[新增判断登录逻辑] lasts 2 weeks
+[出库时考虑库存量] lasts 2 weeks
+[新增用户退出功能] lasts 1 weeks
+[同一描述，申请单类型和资产状态一致] lasts 3 weeks
+[删除申请单类的amount数量属性] lasts 4 weeks
+
+@endgantt
