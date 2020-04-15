@@ -14,6 +14,12 @@ public interface ApplicationRepository extends JpaRepository<Application,Long> {
     //通过申请单类型查询
     public List<Application> findAllByType(String type);
 
+    //查询所有的维修单，同时你的状态不是待处理，也不是拒绝
+    public List<Application> findAllByTypeAndStatusNotAndStatusNot(String type,String status1,String status2);
+
+    //开始状态=空闲  and  结束状态=已使用   and  申请单状态=同意
+    public List<Application> findAllByStartAndStopAndStatus(String start,String stop,String status);
+
     //通过状态和类型查询
     public List<Application> findAllByTypeAndStatus(String type,String status);
 }

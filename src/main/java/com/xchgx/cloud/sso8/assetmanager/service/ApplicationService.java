@@ -22,16 +22,52 @@ public class ApplicationService {
     @Autowired
     private AssetRepository assetRepository;
 
+
+    /**
+     * 查询资产ID的使用者变更申请单
+     * @param assetId 资产ID
+     * @return 申请单集合
+     */
+    public  List<Application> userChangeApplications(long assetId){
+        //开始状态=空闲  and  结束状态=已使用   and  申请单状态=同意
+        return applicationRepository.findAllByStartAndStopAndStatus("空闲", "已使用", "同意");
+    }
+    /**
+     * //通过资产ID查询申请单
+     * @param assetId 资产ID
+     * @return
+     */
+    public List<Application> assetApplication(long assetId){
+        return applicationRepository.findAllByAssetId(assetId);
+    }
+
+    /**
+     * 获得所有的维修申请单
+     * @return 维修申请单集合
+     */
+    public List<Application> repairApplications(){
+        List<Application> applications = applicationRepository.findAllByTypeAndStatusNotAndStatusNot("维修","待处理","拒绝");
+        return addOperation(applications);
+    }
     /**
      * 版本15.0 新增方法
      * 获得所有带管理员操作项的申请单
-     * @return
+     * @return 申请单集合
      */
     public List<Application> allApplication(){
-
         //从数据库中获得所有的申请单
         List<Application> applications = applicationRepository.findAll();
         //申请单的操作选项， begin
+        return addOperation(applications);
+    }
+
+    /**
+     * 添加申请单后面的操作项
+     * @param applications 原始的申请单集合
+     * @return 添加完操作项之后的集合
+     */
+    private List<Application> addOperation(List<Application> applications){
+
         String operationAgree = "<a href=\"/application/agree?applicationId={applicationId}\" class=\"btn btn-success btn-xs\">同意</a>";//同意按钮
         String operationRefuse = "<a href=\"/application/refuse?applicationId={applicationId}\" class=\"btn btn-danger btn-xs\">拒绝</a>";//拒绝按钮
         String operationRepairOk = "<a href=\"/application/repairOk?applicationId={applicationId}\" class=\"btn btn-success btn-xs\">维修成功</a>";//维修成功
