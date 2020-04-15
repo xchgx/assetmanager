@@ -147,44 +147,6 @@ public class ApplicationController {
 
 
     }
-    //TODO 管理员可以直接修改资产状态
-
-    /**
-     * //同意维修申请，面向使用者的，使用者提出申请，一定是资产是他自己的。
-     * 同意维修申请
-     * @return
-     */
-    @GetMapping("/agreeRepair")
-    public Application applicationAgreeRepair(long applicationId){//申请单号
-        Application application = applicationRepository.findById(applicationId).orElse(null);
-        if (application==null){return null;}//如果没有找到申请单号就返回null
-        long assetId = application.getAssetId();//获得申请单中的资产ID
-        Asset asset = assetRepository.findById(assetId).orElse(null);
-        if (asset == null) {
-            return null;//没有找到资产
-        }
-
-        String status = asset.getStatus();//获得资产状态
-        String type = application.getType();//获得申请单的类型
-        if(type != "维修"){
-            System.out.println("申请单类型不是维修，无法同意维修");
-            return null;
-        }
-        if (status != "已使用"){//TODO 判断资产的使用者是不是申请单的申请人。
-            System.out.println("资产不是已使用状态，无法同意维修");
-            return null;
-        }
-        asset.setStatus("维修"); //设置申请单中的资产状态为 维修
-        assetRepository.save(asset);
-        //以下处理申请单
-        application.setStatus("同意");//设置申请单状态为 同意
-        application.setManager("黄主任");//TODO 应该是当前登录的用户（admin）
-        application.setResultContent("黄主任已同意维修");//TODO 如果没有写处理意见呢？
-        application.setResultDate(new Date());//处理时间为当前时间
-        //把已经处理的申请单保存到数据库中并返回
-        return applicationRepository.save(application);
-    }
-
 
     //refuse拒绝申请单
     /**
@@ -228,48 +190,6 @@ public class ApplicationController {
         return applicationRepository.save(application);
     }
 
-    /**
-     * 拒绝维修申请单
-     * @param applicationId 维修申请单号
-     * @param result 拒绝申请的处理意见
-     * @return
-     */
-    @GetMapping("/refuseRepair")//拒绝维修申请单的URL网址接口
-    public Application applicationRefuseRepair(long applicationId,String result){//参数是维修单号
-        //通过申请单号查找申请单
-        Application application = applicationRepository.findById(applicationId).orElse(null);
-        //假设 资产是已使用状态、借用
-        //拒绝 不修改资产的状态
-        //不对资产做处理，也不查询资产状态,直接处理申请单
-        application.setStatus("拒绝");//设置申请单状态为 同意
-        application.setManager("黄主任");//TODO 应该是当前登录的用户（admin）
-        application.setResultContent(result);//TODO 如果没有写处理意见呢？
-        application.setResultDate(new Date());//处理时间为当前时间
-        //把已经处理的申请单保存到数据库中并返回
-        return applicationRepository.save(application);
-    }
-
-    /**
-     * 同意报废申请
-     * @param applicationId 申请单号
-     * @param result 处理意见
-     * @return
-     */
-    @GetMapping("/agreeScrap")
-    public Application applicationAgreeScrap(long applicationId, String result){
-        Application application = applicationRepository.findById(applicationId).orElse(null);
-        long assetId = application.getAssetId();
-        Asset asset = assetRepository.findById(assetId).orElse(null);
-        if (asset.getStatus() == "已使用") {
-            asset.setStatus("报废");
-            assetRepository.save(asset);
-        }
-        application.setStatus("同意");
-        application.setManager("黄主任");
-        application.setResultDate(new Date());
-        application.setResultContent(result);
-        return applicationRepository.save(application);
-    }
 
     /**
      * 通过资产查询申请单
