@@ -17,7 +17,7 @@ import java.io.IOException;
  */
 @WebFilter(filterName = "loginFilter", urlPatterns = {"/rukudan/*","/asset/*","/application/*","/admin","/user"})
 @Order(1)//优先执行，第一个执行的过滤器
-public class SecurityFilter implements Filter {
+public class ASecurityFilter implements Filter {
 
     /**
      * 匹配上面的三个规则就执行该过滤器
