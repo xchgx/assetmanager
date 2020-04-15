@@ -93,7 +93,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading" role="tab" id="headingFour">
                         <h4 class="panel-title">
-                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFour">
                                 申请单
                             </a>
                         </h4>
@@ -119,6 +119,36 @@
                         </div>
                     </div>
                 </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="headingFive">
+                        <h4 class="panel-title">
+                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFour">
+                                维修申请单
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseFive" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingThree">
+                        <div class="panel-body">
+                            <div class="row">
+                                <table border="1" width="100%" class="table table-bordered table-hover table-striped">
+                                    <tr><th>序号</th><th>申请人</th><th>资产名称</th><th>申请理由</th><th>申请单类型</th><th>开始状态</th><th>结束状态</th><th>申请单状态</th><th>操作项</th></tr>
+                                    <tr th:each="app : ${repairApplications}">
+                                        <td th:text="${appStat.index+1}"></td>
+                                        <td th:text="${app.username}"></td>
+                                        <td th:text="${app.assetName}"></td>
+                                        <td th:text="${app.content}"></td>
+                                        <td th:text="${app.type}"></td>
+                                        <td th:text="${app.start}"></td>
+                                        <td th:text="${app.stop}"></td>
+                                        <td th:text="${app.status}"></td>
+                                        <td th:utext="${app.operation}"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
 
             </div>
         </div>

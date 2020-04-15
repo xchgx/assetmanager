@@ -82,6 +82,14 @@ public class IndexController {//首页控制器
         //"op"是键值对中的键(key)， list是键值对中的值(value)
         //姓名:张三,年龄:28
         model.addAttribute("op", list);//动态显示操作项,operation=op
+
+        //所有关于该资产的申请单要放入到视图模型中
+        //通过资产ID查询申请单
+        List<Application> applications = applicationService.assetApplication(assetId);
+        model.addAttribute("applications", applications);//动态显示操作项,operation=op
+
+        List<Application> userChangeApplications= applicationService.userChangeApplications(assetId);
+        model.addAttribute("userChangeApplications", userChangeApplications);//动态显示操作项,operation=op
         return "asset";//返回资产asset视图,数据自动进入到视图
     }
 
@@ -123,6 +131,11 @@ public class IndexController {//首页控制器
         //版本15.0 更新内容 end
 
         model.addAttribute("applications", applications);
+
+        //版本17.0 begin
+        List<Application> repairApplications = applicationService.repairApplications();
+        model.addAttribute("repairApplications", repairApplications);
+        //版本17.0 end
         return "admin";
     }
 }

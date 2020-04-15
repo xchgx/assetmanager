@@ -426,7 +426,7 @@ public class ApplicationController {
         application.setOperation("维修结束");
         applicationRepository.save(application);
 //留着下一个版本再更新 end
- 
+
         Application repairOkApplication = new Application();
         repairOkApplication.setStart(asset.getStatus());
         repairOkApplication.setStop("报废");
