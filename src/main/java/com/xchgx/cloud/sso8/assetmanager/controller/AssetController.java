@@ -1,9 +1,7 @@
 package com.xchgx.cloud.sso8.assetmanager.controller;
 
 import com.xchgx.cloud.sso8.assetmanager.domain.*;
-import com.xchgx.cloud.sso8.assetmanager.repository.ApplicationRepository;
-import com.xchgx.cloud.sso8.assetmanager.repository.AssetRepository;
-import com.xchgx.cloud.sso8.assetmanager.repository.AssetRuKuDanRepository;
+import com.xchgx.cloud.sso8.assetmanager.service.AssetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,14 +17,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/asset") //访问网址前缀 /asset
 public class AssetController {
-    //导入数据库持久化对象
-    @Autowired //自动注入，理解为自动导入类对象
-    private AssetRepository assetRepository;
-    @Autowired //入库单持久化对象
-    private AssetRuKuDanRepository assetRuKuDanRepository;
-    @Autowired //自动注入 申请单持久化对象
-    private ApplicationRepository applicationRepository;
-
+    @Autowired
+    private AssetService assetService;
 
     @GetMapping("/chuku") //添加资产，资产出库
     public Asset chuku(@RequestParam long rukudanId, HttpServletRequest request){ //从哪一个批次（入库单）的资产中出库1台
@@ -35,56 +26,13 @@ public class AssetController {
         if (user == null) {
             return null;
         }
-        AssetRuKuDan ruKuDan = assetRuKuDanRepository.findById(rukudanId).orElse(null);//通过ID查询入库单对象
-        if(ruKuDan == null){//如果没有找到对应的入库单就返回null
-            System.out.println("无法出库");
-            return null;
-        }
-        System.out.println(ruKuDan.getId());
-
-        Asset asset = new Asset();//创建资产对象
-        asset.setRukudanId(ruKuDan.getId());//设置资产的入库单ID
-        asset.setUsername(null);//设置资产使用者
-        asset.setStatus("空闲");//或者未使用
-
-        //以下为新增部分v2.0 2020年3月31日10:43:03
-        asset.setName(ruKuDan.getName());//设置资产的名称为入库单中的资产名称
-        int remainded = ruKuDan.getRemained();//获得入库单中的剩余数量
-        remainded--;//减少一台
-        ruKuDan.setRemained(remainded);//重新赋值剩余数量
-        assetRuKuDanRepository.save(ruKuDan);//重新保存到数据库中
-        //以上为新增部分v2.0 2020年3月31日10:43:12
-
-        //创建第一张申请单   版本4.0 2020年4月15日23:35:46 begin
-        Application application = new Application();
-        application.setAssetId(asset.getId());
-        application.setAssetName(asset.getName());
-        application.setParentId(0);//没有父级申请单
-        application.setChildId(0);//还没有产生子申请单
-        application.setLast(true);//这也是最后一张最新的申请单
-        String operation1 = "<a href=\"/application/addQuick?type=已使用&assetId="+asset.getId()+"\">提交领用申请</a>";
-        String operation2 = "<a href=\"/application/addQuick?type=维修&assetId="+asset.getId()+"\">提交维修申请</a>";
-        application.setMenu(operation1+operation2);//暂时只支持空闲到领用和借用的操作
-        application.setStop("空闲"); //出库后直接到达空闲，
-        application.setStart("库存");//这是唯一一个没有开始状态的申请单，它来自于入库单
-        application.setBeginDate(new Date()); //设置当前时间为开始时间（创建申请单的时间）
-        application.setUsername(user.getUsername());
-        application.setContent("资产出库");
-        application.setManager(user.getUsername()); // 处理人是同一个人
-        application.setType("出库");//临时添加，实际上没有这种申请
-        application.setStatus("同意");//自动就同意了
-        application.setResultDate(new Date());
-        application.setResultContent("系统自动同意，这是该资产的第一张申请单");
-        application.setOperation("处理结束");
-        applicationRepository.save(application);
-        //创建第一张申请单   版本4.0 2020年4月15日23:35:46 end
-
-        return assetRepository.save(asset);//保存并返回资产对象
+        return assetService.chuku(rukudanId, user.getUsername());
     }
 
     @GetMapping("/list") //访问网址是 http://localhost:8080/list
     public List<Asset> list(){//列出所有资产
-        return assetRepository.findAll();//查询所有资产
+
+        return assetService.list();
     }
 
 
@@ -95,11 +43,7 @@ public class AssetController {
      */
     @GetMapping("/free") //查询资产来自于空闲状态
     public List<Asset> assetFree(long rukudanId){//是不是把所有的空闲资产都查出来？
-        //assetRepository; //TODO 先去解决查询数据库的代码然后过来
-        List<Asset> freeAssets = assetRepository.findAllByRukudanIdAndStatus(rukudanId, "空闲");
-        List<Asset> freeAssets2 = assetRepository.findAllByRukudanIdAndStatus(rukudanId, "预定");
-        freeAssets.addAll(freeAssets2);//将两个集合合并成1个
-        return freeAssets;//返回给前端，让使用者查看并选择哪一个资产作为领用申请单上的资产ID
+        return assetService.assetFree(rukudanId);
     }
 
     /**
@@ -110,7 +54,7 @@ public class AssetController {
      */
     @GetMapping("/findByStatus")
     public List<Asset> findByStatus(String status) {
-        return assetRepository.findAllByStatus(status);
+        return assetService.listByStatus(status);
     }
 
 
@@ -122,13 +66,7 @@ public class AssetController {
      */
     @GetMapping("/set")
     public Asset set(String status, long assetId){
-        Asset asset = assetRepository.findById(assetId).orElse(null); //通过资产ID查询资产对象
-        //TODO 这里应该判断一下是否存在该资产
-        if (asset == null) {
-            return null;//如果不存在该资产，则不进行状态更新操作。
-        }
-        asset.setStatus(status);//设置资产状态为status参数1值
-        return assetRepository.save(asset);//赶紧保存到数据库中
+        return assetService.set(status, assetId);
     }
 
 }

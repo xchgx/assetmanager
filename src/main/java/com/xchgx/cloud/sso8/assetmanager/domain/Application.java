@@ -1,6 +1,7 @@
 package com.xchgx.cloud.sso8.assetmanager.domain;
 
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +10,7 @@ import java.util.Date;
 
 @Entity //数据库实体对象 自动创建数据表
 @Data //自动创建属性的getter方法和setter方法
+@ToString
 public class Application { //申请单类
     @Id   //表示该字段（属性）为主键
     @GeneratedValue //自动递增 整型数字自动保持不重复
@@ -30,10 +32,11 @@ public class Application { //申请单类
     private String stop;//资产停止状态、目标状态
     private String type;//申请单类型 领用申请、维修申请、报废申请、借用申请、归还申请。
     //版本15.0 新增内容 begin
-    private String operation;//管理员操作项
+    private String operation;//管理员操作项，同意、拒绝、维修成功、维修失败、处理结束
     //版本15.0 新增内容 end
     private long parentId;//父级申请单
     private long childId;//子申请单
+
     private boolean last;//最后一张申请单（最新的）申请单链条中最末尾的一张
-    private String menu;//可选操作菜单
+    private String menu;//可选操作菜单,空闲申请、领用申请、维修申请、借用申请、无菜单
 }

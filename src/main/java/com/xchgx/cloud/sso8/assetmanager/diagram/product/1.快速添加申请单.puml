@@ -1,0 +1,16 @@
+@startdot
+
+digraph foo {
+    rankdir=LR;
+    nodesep=.5;
+    node[shape=record,fontname="Microsoft Yahei"];
+    a->z[label="addQuick"];
+    b->z[headlabel="addQuick"];
+    c->z[taillabel="addQuick"];
+
+    a[label="{<f0> type='used' |<f1> assetId=4} | <f2> applicationId=3"]
+    b[label="{<f0> type='agree' |<f1> assetId=4} | <f2> applicationId=3"]
+    c[label="{<f0> type='success' |<f1> assetId=4} | <f2> applicationId=3"]
+ }
+
+@enddot

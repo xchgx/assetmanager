@@ -9,6 +9,7 @@ import com.xchgx.cloud.sso8.assetmanager.repository.AssetRepository;
 import com.xchgx.cloud.sso8.assetmanager.repository.AssetRuKuDanRepository;
 import com.xchgx.cloud.sso8.assetmanager.repository.UserRepository;
 import com.xchgx.cloud.sso8.assetmanager.service.ApplicationService;
+import com.xchgx.cloud.sso8.assetmanager.service.AssetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -24,7 +25,7 @@ public class InitCommand implements CommandLineRunner {
     @Autowired
     private AssetRepository assetRepository;
     @Autowired
-    private AssetController assetController;
+    private AssetService assetService;
     @Autowired
     private ApplicationRepository applicationRepository;
     @Autowired
@@ -87,16 +88,16 @@ public class InitCommand implements CommandLineRunner {
             rukudan3.setType("办公耗材");
             rukudan3.setScrq(new Date(2019,3,1));
             rukudan3.setReadme("A4");
-            rukudan3.setPrice(3000);
+            rukudan3.setPrice(100);
             rukudan3.setBzq("质保1年");
             rukudan3.setName("打印纸");
             rukudan3.setAmount(100);
             rukudan3.setRemained(rukudan3.getAmount());
             ruKuDanRepository.save(rukudan3);
 
-//            Asset chuku1 = assetController.chuku(rukudan.getId());
-//            Asset chuku2 = assetController.chuku(rukudan2.getId());
-//            Asset chuku3 = assetController.chuku(rukudan3.getId());
+            Asset chuku1 = assetService.chuku(rukudan.getId(),"admin");
+            Asset chuku2 = assetService.chuku(rukudan2.getId(),"admin");
+            Asset chuku3 = assetService.chuku(rukudan3.getId(),"admin");
 
             //初始化资产
 //            Asset asset = new Asset();

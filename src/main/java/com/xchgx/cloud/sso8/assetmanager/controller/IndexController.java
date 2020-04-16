@@ -5,6 +5,7 @@ import com.xchgx.cloud.sso8.assetmanager.repository.ApplicationRepository;
 import com.xchgx.cloud.sso8.assetmanager.repository.AssetRepository;
 import com.xchgx.cloud.sso8.assetmanager.repository.AssetRuKuDanRepository;
 import com.xchgx.cloud.sso8.assetmanager.service.ApplicationService;
+import com.xchgx.cloud.sso8.assetmanager.service.AssetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +21,8 @@ public class IndexController {//首页控制器
     //导入数据库持久化对象
     @Autowired //自动注入，理解为自动导入类对象
     private AssetRepository assetRepository;
+    @Autowired //自动注入，理解为自动导入类对象
+    private AssetService assetService;
     @Autowired //入库单持久化对象
     private AssetRuKuDanRepository assetRuKuDanRepository;
     @Autowired //自动注入 申请单持久化对象
@@ -59,31 +62,18 @@ public class IndexController {//首页控制器
             return "asset";//直接显示视图，此时返回时模型中只有资产对象
         }
 
-        Application application = applicationService.assetLastApplication(assetId);
 
-        List<Operation> list = new ArrayList<>();//创建操作项集合
-        if (user.getRole().equals("admin")) {
-//            list.add("报废");
-//            list.add("收回");
-//            list.add("分配");
-            Operation operation1 = new Operation("/asset/set?status=空闲&assetId="+asset.getId(), "收回");
-            Operation operation2 = new Operation("/asset/set?status=维修&assetId="+asset.getId(), "维修");
-            Operation operation3 = new Operation("/asset/set?status=报废&assetId="+asset.getId(), "报废");
-            list.add(operation1);
-            list.add(operation2);
-            list.add(operation3);
-        }else{//user角色权限
-            Operation operation1 = new Operation("/application/addQuick?type=领用&assetId="+asset.getId(), "提交领用申请");//走快速通道，快速提交领用申请
-            Operation operation2 = new Operation("/application/addQuick?type=维修&assetId="+asset.getId(), "提交维修申请");//走快速通道，快速提交维修申请
-            Operation operation3 = new Operation("/application/addQuick?type=报废&assetId="+asset.getId(), "提交报废申请");//走快速通道，快速提交报废申请
-            list.add(operation1);
-            list.add(operation2);
-            list.add(operation3);
-        }
-        //"op"是给视图用的名称，list是后端的java类对象
-        //"op"是键值对中的键(key)， list是键值对中的值(value)
-        //姓名:张三,年龄:28
-        model.addAttribute("op", list);//动态显示操作项,operation=op
+        List<Application> applications = applicationService.assetApplication(assetId);
+        model.addAttribute("applications", applications);
+
+        List<Application> userChangeApplications = applicationService.userChangeApplications(assetId);
+        model.addAttribute("userChangeApplications", userChangeApplications);
+
+        Application application = applicationService.assetLastApplication(assetId);
+        System.out.println("application = "  );
+        System.out.println(  application);
+        model.addAttribute("op", application.getOperation());//动态显示操作项,operation=op
+        model.addAttribute("menu", application.getMenu());//动态显示操作项,operation=op
         return "asset";//返回资产asset视图,数据自动进入到视图
     }
 
@@ -96,7 +86,7 @@ public class IndexController {//首页控制器
     @GetMapping("/user/index")
     public String user(Model model){
 
-        List<Asset> assets = assetRepository.findAllByStatus("空闲");//查询所有的资产
+        List<Asset> assets = assetService.listByStatus("空闲");//查询所有的资产
         model.addAttribute("assets",assets);//在模型中添加数据
 
         return "user/index";

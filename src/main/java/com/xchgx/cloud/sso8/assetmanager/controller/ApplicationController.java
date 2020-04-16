@@ -321,13 +321,33 @@ public class ApplicationController {
      * @param assetId 资产ID,申请单上填写的资产
      * @return 申请单
      */
-    @GetMapping("/addQuick")
-    public Application addQuick(String type, long assetId, HttpServletRequest request) {
-        User user = (User) request.getSession().getAttribute("user"); //获得当前登录用户
-        return applicationService.addQuick(type, assetId,user.getUsername());
+//    @GetMapping("/addQuick")
+//    public Application addQuick(String type, long assetId,long applicationId, HttpServletRequest request) {
+//        User user = (User) request.getSession().getAttribute("user"); //获得当前登录用户，过滤器已经把未登录的拦住了
+//
+//        return applicationService.addQuick(type, assetId,applicationId,user.getUsername());
+//    }
+
+    /**
+     * 快速领用申请
+     * @return
+     */
+    @GetMapping("/usedQuick")
+    public Application usedQuick(long applicationId,HttpServletRequest request){
+        User user = (User) request.getSession().getAttribute("user"); //获得当前登录用户，过滤器已经把未登录的拦住了
+        return applicationService.createUsedApplication(applicationId, user);
     }
 
-
+    /**
+     * 处理同意领用申请单
+     * @param applicationId 领用申请单ID
+     */
+    @GetMapping("/agreeUsed")
+    public Application applicationAgreeUsed(long applicationId,String result,HttpServletRequest request){//处理同意申请单的方法
+        User user = (User) request.getSession().getAttribute("user");
+        return applicationService.agreeUsed(applicationId,user);
+//        return save;
+    }
     /**
      * //点击“维修成功”后进入到这里
      * 处理维修成功。
