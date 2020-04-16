@@ -1,0 +1,66 @@
+@startuml
+scale 1.5
+title 1.出库时考虑库存量思路
+|开发人员|
+start
+note
+出库时考虑库存量的意思是
+没有剩余量的时候，就不能出库了。
+end note
+:“出库”谁负责？;
+
+    |大脑|
+    :哪个控制器负责“出库”;
+    fork
+    :申请单控制器;
+    fork again
+    #afa:资产控制器;
+    fork again
+    :入库单控制器;
+    fork again
+    :登录控制器;
+    fork again
+    :首页控制器;
+    end fork
+    :哪个方法负责“出库”;
+    fork
+    #afa:chuku();
+    fork again
+    :list();
+    fork again
+    :assetFree();
+    fork again
+    :findByStatus();
+    fork again
+    :set();
+    end fork
+    :进入出库方法;
+        |chuku方法|
+        :通过入库单号查询入库单对象;
+        note left:AssetRuKuDan ruKuDan = assetRuKuDanRepository.findById(rukudanId).orElse(null);
+        ->rukudan;
+        fork
+        ->现状;
+        :创建资产对象;
+        note left:Asset asset = new Asset();
+        :入库单资产剩余数量-1;
+        note
+        int remainded = ruKuDan.getRemained();//获得入库单中的剩余数量
+        remainded--;//减少一台
+        ruKuDan.setRemained(remainded);//重新赋值剩余数量
+        end note
+        :更新入库单;
+        fork again
+        ->更新;
+        #afa:获得入库单中的剩余数量;
+        note left #afa:int remainded = ruKuDan.getRemained();
+        #afa:if (remainded>0) then (有货)
+        :创建资产对象;
+        note left:和左边一样，创建对象，剩余量-1，更新入库单
+        else (缺货)
+        :输出“无货可出，缺货，无法出库”;
+        stop
+        endif
+        end fork
+stop
+@enduml

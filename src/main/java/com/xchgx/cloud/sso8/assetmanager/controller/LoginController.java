@@ -56,6 +56,17 @@ public class LoginController {
         //采用重定向之后，模型失效。
     }
 
+    /**
+     * 用户注销退出登录
+     * @param request
+     * @return
+     */
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request){
+        request.getSession().setAttribute("user", null);
+        return "login";
+
+    }
 
 
 }

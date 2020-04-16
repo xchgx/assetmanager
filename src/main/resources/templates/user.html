@@ -37,27 +37,32 @@
 
 
 
-                            <form action="/application/add" method="get" id="addForm">
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1">资产ID</label>
-                                    <select name="assetId" id="exampleInputEmail1">
-                                        <option th:each="ast : ${assets}" th:value="${ast.id}" th:text="|${ast.name}(${ast.id})|"></option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="exampleInputPassword1">申请资产数量</label>
-                                    <input name="amount" id="exampleInputPassword1" value="1">
-                                </div>
-                                <div class="form-group">
-                                    <label for="exampleInputPassword2">申请理由</label>
-                                    <textarea name="content" id="exampleInputPassword2"></textarea>
-                                </div>
-                                <button type="submit" class="btn btn-primary" onclick="addApplication()">提交申请</button>
-                            </form>
+<form action="/application/add" method="post" id="addForm" onsubmit="return addApplication()">
+    <div class="form-group">
+        <label for="exampleInputEmail1">资产ID</label>
+        <select name="assetId" id="exampleInputEmail1">
+            <option th:each="ast : ${assets}" th:value="${ast.id}" th:text="|${ast.name}(${ast.id})|"></option>
+        </select>
+    </div>
+<!--   v19.0 新增申请单类型 begin-->
+<!--    <div class="form-group">-->
+<!--        <label for="exampleInputPassword2">申请单类型</label>-->
+<!--        <select name="type" id="exampleInputPassword2">-->
+<!--            <option value="已使用">领用</option>-->
+<!--            <option value="归还">归还</option>-->
+<!--            <option value="借用">借用</option>-->
+<!--            <option value="维修">维修</option>-->
+<!--            <option value="报废">报废</option>-->
+<!--        </select>-->
+<!--    </div>-->
+    <!--   v19.0 新增申请单类型 end-->
 
-
-
-
+    <div class="form-group">
+        <label for="exampleInputPassword3">申请理由</label>
+        <textarea name="content" id="exampleInputPassword3"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary" >提交申请</button>
+</form>
 
 
 
@@ -96,21 +101,19 @@
 
 <script>
     var qrs = document.getElementsByClassName("qr");
-    var localQr = document.getElementById("localQr");
     if (qrs.length) {
         for(var i in qrs){
             new QRCode(qrs[i],"http://xchgx.vicp.net/assetById?assetId="+qrs[i].id);
         }
     }
-    new QRCode(localQr, location.href);
 
 
-    function addApplication() {
-
-        $.post("/application/add",$("#addForm").serialize(),function (res) {
-            location.href=location.href;
-        });
-    }
+function addApplication() {
+    $.post("/application/add",$("#addForm").serialize(),function (res) {
+        location.href=location.href;
+    });
+    return false;
+}
 </script>
 </body>
 </html>

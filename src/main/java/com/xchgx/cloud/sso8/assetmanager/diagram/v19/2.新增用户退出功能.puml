@@ -1,0 +1,73 @@
+@startuml
+scale 1.5
+title 2.新增用户退出功能
+|开发人员|
+start
+    :我有两个问题;
+    fork
+    :1.在哪里显示“退出登录”;
+    fork again
+    :2.退出登录代码怎么写?;
+    end fork
+
+        |大脑|
+        :在哪里显示退出登录;
+        :一般放在后台页面的 右上角;
+        if (用户已经登录) then (登录中)
+                :
+                {{
+                salt
+                {!
+                  首页| 资产页 | 日志 | 关于我们|  [注销退出]
+                }
+                }}
+                ;
+                note
+                <a
+                href="/login/logout"
+                th:if="${session.get('user')}">注销退出</a>
+                end note
+        else (未登录)
+                :
+                {{
+                salt
+                {!
+                  首页| 资产页 | 日志 | 关于我们|  [请登录]
+                }
+                }}
+                ;
+                note
+                <a href="/login/"
+                   th:unless="${session.get('user')}"
+                  class="text-warning">您没有登录</a>
+                end note
+        endif
+
+
+        :退出代码在哪个类里面写？;
+        :
+        {{
+            autonumber
+            actor 登录用户 as user
+            boundary 过滤器 as filter
+            control 登录控制器 as ctl
+            user->filter: 我要注销 /login/logout
+            filter->ctl: 放行
+            ctl->ctl:执行注销代码
+        }}
+        ;
+
+        :退出代码是什么;
+        partition 退出代码 {
+            :添加网址访问接口;
+            note left:     @GetMapping("/logout")
+            :从request请求对象中获得session会话对象;
+            ->request.getSession();
+            :设置session的user键值为null;
+            note left:request.getSession().setAttribute("user", null);
+            :返回 login 视图;
+        }
+
+
+stop
+@enduml

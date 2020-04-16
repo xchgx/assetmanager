@@ -238,7 +238,7 @@ public class ApplicationController {
         }
 
         Application application = new Application(); //创建新的申请单对象
-        application.setAmount(1);//默认为1个资产
+        application.setAmount(1);//默认为1个资产 删除
         application.setContent("该申请为快速申请，由扫码提交。"); //设置申请内容-申请理由。
         application.setType(type);//设置申请单类型为参数type的值
         application.setBeginDate(new Date());//设置当前时间为申请单的创建时间

@@ -1,0 +1,15 @@
+@startuml
+scale 1.5
+title 3.统一描述，申请单类型和资产状态一致
+|开发人员|
+start
+:要想让申请单类型和资产状态一致
+就要找到哪些地方用过申请单类型;
+:Ctrl+F搜索每个文件;
+if (发现“领用”) then (Yes)
+    :替换为“已使用”;
+    :文本显示依然是“领用”;
+else (No)
+endif
+stop
+@enduml

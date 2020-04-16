@@ -1,0 +1,145 @@
+@startuml
+scale 1
+title 6.提交领用申请后出现错误页面
+start
+    partition 错误重现 {
+        :登录user1用户;
+        :无论怎么修改表单内容，
+        都会得到同一种错误结果;
+        note
+        Whitelabel Error Page
+        This application has no explicit mapping for /error, so you are seeing this as a fallback.
+
+        Thu Apr 16 17:11:37 CST 2020
+        There was an unexpected error (type=Method Not Allowed, status=405).
+        Request method 'GET' not supported
+
+        百度翻译如下：
+
+        出现意外错误（type=Method Not Allowed，status=405）。
+        不支持请求方法“GET”
+        end note
+    }
+
+:错误分析——顺藤摸瓜;
+    partition 问题分析 {
+        :Method Not Allowed 方允许这个方法;
+        :不支持GET方法;
+    }
+    partition 检查表单 {
+         :进入使用者后台视图 user.html;
+         :<form action="/application/add" method="get" id="addForm">;
+         :method="get", action="/application/add"
+         网址提交到/application/add网址
+         提交方法是：get;
+    }
+    ->数据传输到后端;
+    partition 检查控制器 {
+        :ApplicationController控制器访问网址前缀是 /application;
+        :@PostMapping("/add")
+        只接受提交方式是： POST
+        访问接口为：/application/add
+        ;
+    }
+    ->找到原因;
+    :提交方式和后端不一致;
+    ->解决办法;
+    :保留后端方式，修改前端表单提交方式为POST;
+
+    partition 前端表单 {
+        :表单action=/application/add;
+        :表单method="post";
+        :表单id=addForm
+        :表单onsubmit="return addApplication()";
+        :表单提交按钮 "submit";
+        note
+        <form action="/application/add" method="post" id="addForm" onsubmit="return addApplication()">
+            <div class="form-group">
+                <label for="exampleInputEmail1">资产ID</label>
+                <select name="assetId" id="exampleInputEmail1">
+                    <option th:each="ast : ${assets}" th:value="${ast.id}" th:text="|${ast.name}(${ast.id})|"></option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword2">申请理由</label>
+                <textarea name="content" id="exampleInputPassword2"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" >提交申请</button>
+        </form>
+        end note
+        :添加 javascript 函数 addApplication();
+        :调用jquery的post函数提交表单。;
+        note
+        function addApplication() {
+            $.post("/application/add",$("#addForm").serialize(),function (res) {
+                location.href=location.href;
+            });
+            return false;
+        }
+        end note
+    }
+
+    ->测试提交;
+    :后端控制台报错;
+    :java.lang.NullPointerException: null ApplicationController.java:67行;
+    :典型的在null对象上操作属性或方法;
+    partition null异常分析 {
+        :观察67行代码;
+        :application.setStop(application.getType().equals("领用")?"已使用":application.getType());
+        :这里调用了方法的只有两个;
+        fork
+        :application.setStop();
+        fork again
+        :application.getType();
+        fork again
+        :application.getType().equals();
+        end fork
+        :谁有可能是空呢;
+        if (application是空的) then (如果application是null的)
+            :66行的application.setStart(asset.getStatus());就应该出错了;
+            :然而错误出现在67行;
+        else (所以null应该不是application对象)
+            :application不是null的;
+            :那么就是application的属性存在null值;
+            if (是stop吗) then (如果是)
+                :这里并没有调用stop，而是设置stop的值;
+                :如果stop是null，并不影响，我们会给他赋值;
+                :所以这里不是stop属性的问题;
+            elseif (那是type吗) then (如果是type属性为null)
+                :这里调用了获得type的方法 application.getType();
+                :也就是说 application.getType().equals()
+                 等于 null.equals()
+                 结果就是 在null值上调用equals方法。;
+                :就是这里
+                因为getType()是空，所以才会触发异常;
+            endif
+        endif
+        :出错原因是 type 值为空;
+    }
+
+        :为什么type是空呢;
+
+        partition 为什么type是空呢 {
+            :难道是没有传递参数进来？;
+            :检查提交的参数==>申请表单中的字段;
+            fork
+            :资产ID;
+            note
+            <select name="assetId" id="exampleInputEmail1">
+                        <option th:each="ast : ${assets}" th:value="${ast.id}" th:text="|${ast.name}(${ast.id})|"></option>
+            </select>
+            end note
+            fork again
+            :申请理由;
+            note
+            <textarea name="content" id="exampleInputPassword2"></textarea>
+            end note
+            end fork
+            :只有两个参数;
+            :缺少type类型;
+        }
+
+        :找到了原因就可以去解决了;
+        :给表单添加type字段;
+stop
+@enduml
