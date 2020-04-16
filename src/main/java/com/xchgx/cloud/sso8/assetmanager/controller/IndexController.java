@@ -59,6 +59,8 @@ public class IndexController {//首页控制器
             return "asset";//直接显示视图，此时返回时模型中只有资产对象
         }
 
+        Application application = applicationService.assetLastApplication(assetId);
+
         List<Operation> list = new ArrayList<>();//创建操作项集合
         if (user.getRole().equals("admin")) {
 //            list.add("报废");

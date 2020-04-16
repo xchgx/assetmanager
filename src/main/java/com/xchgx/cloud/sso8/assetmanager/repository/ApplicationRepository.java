@@ -8,6 +8,10 @@ import java.util.List;
 public interface ApplicationRepository extends JpaRepository<Application,Long> {
     //查询同一个资产ID的申请单
     public List<Application> findAllByAssetId(long assetId);
+
+    //查找指定资产ID的最新最后的一张申请单
+    public Application findByAssetIdAndLastTrue(long assetId);
+
     //查询同一个资产ID并且状态为待处理的申请单
     public List<Application> findAllByAssetIdAndStatus(long assetId,String status);
 

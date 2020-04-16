@@ -1,7 +1,6 @@
 package com.xchgx.cloud.sso8.assetmanager.controller;
 
-import com.xchgx.cloud.sso8.assetmanager.domain.Asset;
-import com.xchgx.cloud.sso8.assetmanager.domain.AssetRuKuDan;
+import com.xchgx.cloud.sso8.assetmanager.domain.*;
 import com.xchgx.cloud.sso8.assetmanager.repository.ApplicationRepository;
 import com.xchgx.cloud.sso8.assetmanager.repository.AssetRepository;
 import com.xchgx.cloud.sso8.assetmanager.repository.AssetRuKuDanRepository;
@@ -11,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -29,7 +30,11 @@ public class AssetController {
 
 
     @GetMapping("/chuku") //添加资产，资产出库
-    public Asset chuku(@RequestParam long rukudanId){ //从哪一个批次（入库单）的资产中出库1台
+    public Asset chuku(@RequestParam long rukudanId, HttpServletRequest request){ //从哪一个批次（入库单）的资产中出库1台
+        User user = (User) request.getSession().getAttribute("user");
+        if (user == null) {
+            return null;
+        }
         AssetRuKuDan ruKuDan = assetRuKuDanRepository.findById(rukudanId).orElse(null);//通过ID查询入库单对象
         if(ruKuDan == null){//如果没有找到对应的入库单就返回null
             System.out.println("无法出库");
@@ -49,6 +54,30 @@ public class AssetController {
         ruKuDan.setRemained(remainded);//重新赋值剩余数量
         assetRuKuDanRepository.save(ruKuDan);//重新保存到数据库中
         //以上为新增部分v2.0 2020年3月31日10:43:12
+
+        //创建第一张申请单   版本4.0 2020年4月15日23:35:46 begin
+        Application application = new Application();
+        application.setAssetId(asset.getId());
+        application.setAssetName(asset.getName());
+        application.setParentId(0);//没有父级申请单
+        application.setChildId(0);//还没有产生子申请单
+        application.setLast(true);//这也是最后一张最新的申请单
+        String operation1 = "<a href=\"/application/addQuick?type=已使用&assetId="+asset.getId()+"\">提交领用申请</a>";
+        String operation2 = "<a href=\"/application/addQuick?type=维修&assetId="+asset.getId()+"\">提交维修申请</a>";
+        application.setMenu(operation1+operation2);//暂时只支持空闲到领用和借用的操作
+        application.setStop("空闲"); //出库后直接到达空闲，
+        application.setStart("库存");//这是唯一一个没有开始状态的申请单，它来自于入库单
+        application.setBeginDate(new Date()); //设置当前时间为开始时间（创建申请单的时间）
+        application.setUsername(user.getUsername());
+        application.setContent("资产出库");
+        application.setManager(user.getUsername()); // 处理人是同一个人
+        application.setType("出库");//临时添加，实际上没有这种申请
+        application.setStatus("同意");//自动就同意了
+        application.setResultDate(new Date());
+        application.setResultContent("系统自动同意，这是该资产的第一张申请单");
+        application.setOperation("处理结束");
+        applicationRepository.save(application);
+        //创建第一张申请单   版本4.0 2020年4月15日23:35:46 end
 
         return assetRepository.save(asset);//保存并返回资产对象
     }

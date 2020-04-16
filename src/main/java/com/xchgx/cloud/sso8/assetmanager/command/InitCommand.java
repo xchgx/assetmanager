@@ -1,5 +1,6 @@
 package com.xchgx.cloud.sso8.assetmanager.command;
 
+import com.xchgx.cloud.sso8.assetmanager.controller.AssetController;
 import com.xchgx.cloud.sso8.assetmanager.domain.Asset;
 import com.xchgx.cloud.sso8.assetmanager.domain.AssetRuKuDan;
 import com.xchgx.cloud.sso8.assetmanager.domain.User;
@@ -22,6 +23,8 @@ public class InitCommand implements CommandLineRunner {
     private AssetRuKuDanRepository ruKuDanRepository;
     @Autowired
     private AssetRepository assetRepository;
+    @Autowired
+    private AssetController assetController;
     @Autowired
     private ApplicationRepository applicationRepository;
     @Autowired
@@ -90,47 +93,52 @@ public class InitCommand implements CommandLineRunner {
             rukudan3.setAmount(100);
             rukudan3.setRemained(rukudan3.getAmount());
             ruKuDanRepository.save(rukudan3);
+
+//            Asset chuku1 = assetController.chuku(rukudan.getId());
+//            Asset chuku2 = assetController.chuku(rukudan2.getId());
+//            Asset chuku3 = assetController.chuku(rukudan3.getId());
+
             //初始化资产
-            Asset asset = new Asset();
-            asset.setType(rukudan.getType());
-            asset.setReadme(rukudan.getReadme());
-            asset.setScrq(rukudan.getScrq());
-            asset.setBzq(rukudan.getBzq());
-            asset.setPrice(rukudan.getPrice());
-            asset.setRukudanId(rukudan.getId());
-            asset.setName(rukudan.getName());
-            asset.setUsername(null);
-            asset.setStatus("空闲");
-            assetRepository.save(asset);
+//            Asset asset = new Asset();
+//            asset.setType(rukudan.getType());
+//            asset.setReadme(rukudan.getReadme());
+//            asset.setScrq(rukudan.getScrq());
+//            asset.setBzq(rukudan.getBzq());
+//            asset.setPrice(rukudan.getPrice());
+//            asset.setRukudanId(rukudan.getId());
+//            asset.setName(rukudan.getName());
+//            asset.setUsername(null);
+//            asset.setStatus("空闲");
+//            assetRepository.save(asset);
+//
+//            Asset asset2 = new Asset();
+//            asset2.setType(rukudan2.getType());
+//            asset2.setReadme(rukudan2.getReadme());
+//            asset2.setScrq(rukudan2.getScrq());
+//            asset2.setBzq(rukudan2.getBzq());
+//            asset2.setPrice(rukudan2.getPrice());
+//            asset2.setRukudanId(rukudan2.getId());
+//            asset2.setName(rukudan2.getName());
+//            asset2.setUsername(null);
+//            asset2.setStatus("空闲");
+//            assetRepository.save(asset2);
+//
+//            Asset asset3 = new Asset();
+//            asset3.setType(rukudan3.getType());
+//            asset3.setReadme(rukudan3.getReadme());
+//            asset3.setScrq(rukudan3.getScrq());
+//            asset3.setBzq(rukudan3.getBzq());
+//            asset3.setPrice(rukudan3.getPrice());
+//            asset3.setRukudanId(rukudan3.getId());
+//            asset3.setName(rukudan3.getName());
+//            asset3.setUsername(null);
+//            asset3.setStatus("空闲");
+//            assetRepository.save(asset3);
 
-            Asset asset2 = new Asset();
-            asset2.setType(rukudan2.getType());
-            asset2.setReadme(rukudan2.getReadme());
-            asset2.setScrq(rukudan2.getScrq());
-            asset2.setBzq(rukudan2.getBzq());
-            asset2.setPrice(rukudan2.getPrice());
-            asset2.setRukudanId(rukudan2.getId());
-            asset2.setName(rukudan2.getName());
-            asset2.setUsername(null);
-            asset2.setStatus("空闲");
-            assetRepository.save(asset2);
-
-            Asset asset3 = new Asset();
-            asset3.setType(rukudan3.getType());
-            asset3.setReadme(rukudan3.getReadme());
-            asset3.setScrq(rukudan3.getScrq());
-            asset3.setBzq(rukudan3.getBzq());
-            asset3.setPrice(rukudan3.getPrice());
-            asset3.setRukudanId(rukudan3.getId());
-            asset3.setName(rukudan3.getName());
-            asset3.setUsername(null);
-            asset3.setStatus("空闲");
-            assetRepository.save(asset3);
-
-            applicationService.addQuick("使用",asset.getId(),user1.getUsername());
-            applicationService.addQuick("使用",asset.getId(),user2.getUsername());
-            applicationService.addQuick("使用",asset2.getId(),user2.getUsername());
-            applicationService.addQuick("使用",asset3.getId(),user1.getUsername());
+//            applicationService.addQuick("使用",asset.getId(),user1.getUsername());
+//            applicationService.addQuick("使用",asset.getId(),user2.getUsername());
+//            applicationService.addQuick("使用",asset2.getId(),user2.getUsername());
+//            applicationService.addQuick("使用",asset3.getId(),user1.getUsername());
 
         }
 

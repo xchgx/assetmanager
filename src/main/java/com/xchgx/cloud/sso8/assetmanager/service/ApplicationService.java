@@ -40,7 +40,14 @@ public class ApplicationService {
     public List<Application> assetApplication(long assetId){
         return applicationRepository.findAllByAssetId(assetId);
     }
-
+    /**
+     * //通过资产ID查询最后最新的申请单
+     * @param assetId 资产ID
+     * @return
+     */
+    public Application assetLastApplication(long assetId){
+        return applicationRepository.findByAssetIdAndLastTrue(assetId);
+    }
     /**
      * 获得所有的维修申请单
      * @return 维修申请单集合
@@ -113,7 +120,7 @@ public class ApplicationService {
         }
 
         Application application = new Application(); //创建新的申请单对象
-        application.setAmount(1);//默认为1个资产
+//        application.setAmount(1);//默认为1个资产
         application.setContent("该申请为快速申请，由扫码提交。"); //设置申请内容-申请理由。
         application.setType(type);//设置申请单类型为参数type的值
         application.setBeginDate(new Date());//设置当前时间为申请单的创建时间
@@ -124,8 +131,11 @@ public class ApplicationService {
         //版本14.0 新增内容 begin
         application.setStart(asset.getStatus());
 //        application.setStop(type.equals("领用")?"已使用":type);
-        application.setStop("使用");//统一将领用和已使用改为 使用
+        application.setStop(type);//统一将领用和已使用改为 使用
         //版本14.0 新增内容 end
+        application.setOperation("同意、拒绝");
+        application.setMenu("无");
+//        application.setChildId();
 
         application.setManager(null);//这是新提交的申请，肯定是没有处理人的，所以这里要确保处理人为空
         application.setResultDate(null);//同上
