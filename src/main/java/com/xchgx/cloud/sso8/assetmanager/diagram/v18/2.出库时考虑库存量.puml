@@ -1,0 +1,14 @@
+@startuml
+scale 2
+title 出库时考虑库存量
+start
+:出库操作;
+:检查库存剩余量;
+if (库存剩余量<=0) then (Yes)
+:出库失败;
+else (No)
+:出库成功;
+:库存量--;
+endif
+stop
+@enduml
