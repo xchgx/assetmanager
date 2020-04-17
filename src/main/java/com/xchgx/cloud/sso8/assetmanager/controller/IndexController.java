@@ -57,7 +57,6 @@ public class IndexController {//首页控制器
 
         //获得当前登录用户
         User user = (User) request.getSession().getAttribute("user");
-
         if (user == null) {//没有任何用户登录，在session中找不到user
             return "asset";//直接显示视图，此时返回时模型中只有资产对象
         }

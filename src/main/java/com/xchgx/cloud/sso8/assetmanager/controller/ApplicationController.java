@@ -337,6 +337,24 @@ public class ApplicationController {
         User user = (User) request.getSession().getAttribute("user"); //获得当前登录用户，过滤器已经把未登录的拦住了
         return applicationService.createUsedApplication(applicationId, user);
     }
+    /**
+     * 快速借用申请
+     * @return
+     */
+    @GetMapping("/borrowQuick")
+    public Application borrowQuick(long applicationId,HttpServletRequest request){
+        User user = (User) request.getSession().getAttribute("user"); //获得当前登录用户，过滤器已经把未登录的拦住了
+        return applicationService.createBorrowApplication(applicationId, user);
+    }
+    /**
+     * 快速维修申请
+     * @return
+     */
+    @GetMapping("/repairQuick")
+    public Application brepairQuick(long applicationId,HttpServletRequest request){
+        User user = (User) request.getSession().getAttribute("user"); //获得当前登录用户，过滤器已经把未登录的拦住了
+        return applicationService.createRepairApplication(applicationId, user);
+    }
 
     /**
      * 处理同意领用申请单
@@ -348,6 +366,58 @@ public class ApplicationController {
         return applicationService.agreeUsed(applicationId,user);
 //        return save;
     }
+    /**
+     * 处理拒绝领用申请单
+     * @param applicationId 领用申请单ID
+     */
+    @GetMapping("/refuseUsed")
+    public Application applicationRefuseUsed(long applicationId,String result,HttpServletRequest request){//处理同意申请单的方法
+        User user = (User) request.getSession().getAttribute("user");
+        return applicationService.refuseUsed(applicationId,user);
+//        return save;
+    }
+    /**
+     * 处理同意借用申请单
+     * @param applicationId 借用申请单ID
+     */
+    @GetMapping("/agreeBorrow")
+    public Application applicationAgreeBorrow(long applicationId,String result,HttpServletRequest request){//处理同意申请单的方法
+        User user = (User) request.getSession().getAttribute("user");
+        return applicationService.agreeBorrow(applicationId,user);
+//        return save;
+    }
+    /**
+     * 处理拒绝借用申请单
+     * @param applicationId 借用申请单ID
+     */
+    @GetMapping("/refuseBorrow")
+    public Application applicationRefuseBorrow(long applicationId,String result,HttpServletRequest request){//处理同意申请单的方法
+        User user = (User) request.getSession().getAttribute("user");
+        return applicationService.refuseUsed(applicationId,user);
+//        return save;
+    }
+    /**
+     * 处理同意维修申请单
+     * @param applicationId 维修申请单ID
+     */
+    @GetMapping("/agreeRepair")
+    public Application applicationAgreeRepair(long applicationId,String result,HttpServletRequest request){//处理同意申请单的方法
+        User user = (User) request.getSession().getAttribute("user");
+        return applicationService.agreeRepair(applicationId,user);
+//        return save;
+    }
+    /**
+     * 处理拒绝借用申请单
+     * @param applicationId 借用申请单ID
+     */
+    @GetMapping("/refuseRepair")
+    public Application applicationRefuseRepair(long applicationId,String result,HttpServletRequest request){//处理同意申请单的方法
+        User user = (User) request.getSession().getAttribute("user");
+        return applicationService.refuseRepair(applicationId,user);
+//        return save;
+    }
+
+
     /**
      * //点击“维修成功”后进入到这里
      * 处理维修成功。

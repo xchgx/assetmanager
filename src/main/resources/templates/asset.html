@@ -114,6 +114,12 @@
         }
     }
     new QRCode(localQr, location.href);
+    function toUrl(url) {
+        $.getJSON(url,function (res) {
+            location.href=location.href;
+        })
+
+    }
 </script>
 </body>
 </html>

@@ -53,8 +53,8 @@ public class AssetService {
         Asset asset1 = assetRepository.saveAndFlush(asset);
         Application application = toolService.createFirstApplication(asset1,username);
         applicationRepository.save(application);
-        String operation1 = "<a href=\"/application/addQuick?type=已使用&applicationId="+application.getId()+"&assetId="+asset1.getId()+"\">提交领用申请</a>";
-        String operation2 = "<a href=\"/application/addQuick?type=维修&applicationId="+application.getId()+"&assetId="+asset1.getId()+"\">提交维修申请</a>";
+        String operation1 = "<a class=\"btn btn-primary btn-xs\" href=\"javascript:toUrl('/application/usedQuick?type=已使用&applicationId="+application.getId()+"');\">提交领用申请</a>";
+        String operation2 = "<a class=\"btn btn-primary btn-xs\" href=\"javascript:toUrl('/application/borrowQuick?type=借用&applicationId="+application.getId()+"');\">提交借用申请</a>";
         application.setMenu(operation1+operation2);//暂时只支持空闲到领用和借用的操作
         applicationRepository.save(application);
         return assetRepository.save(asset1);//保存并返回资产对象
