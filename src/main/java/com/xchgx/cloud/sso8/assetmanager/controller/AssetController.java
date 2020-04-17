@@ -38,11 +38,11 @@ public class AssetController {
         System.out.println(ruKuDan.getId());
 
         //v19.0 begin
-//        int remaind = ruKuDan.getRemained();//获得入库单中的剩余数量
-//        if(remaind<=0){
-//            System.out.println("无货可出，缺货，不能出库");
-//            return null;
-//        }
+        int remaind = ruKuDan.getRemained();//获得入库单中的剩余数量
+         if(remaind<=0){
+            System.out.println("无货可出，缺货，不能出库");
+            return null;
+        }
         //v19.0 end
 
         Asset asset = new Asset();//创建资产对象

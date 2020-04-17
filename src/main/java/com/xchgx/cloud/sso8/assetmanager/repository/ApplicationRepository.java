@@ -9,6 +9,8 @@ public interface ApplicationRepository extends JpaRepository<Application,Long> {
     //查询同一个资产ID的申请单
     public List<Application> findAllByAssetId(long assetId);
 
+    //查询所有申请单，以id作为排序想，倒序排列
+    public List<Application> findAllByOrderByIdDesc();
     //通过申请单类型查询
     public List<Application> findAllByType(String type);
 
@@ -20,4 +22,8 @@ public interface ApplicationRepository extends JpaRepository<Application,Long> {
 
     //通过状态和类型查询
     public List<Application> findAllByTypeAndStatus(String type,String status);
+
+    //通过资产ID和申请单状态查询
+    public List<Application> findAllByAssetIdAndStatus(long assetId,String status);
+
 }

@@ -1,6 +1,7 @@
 package com.xchgx.cloud.sso8.assetmanager.domain;
 
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +10,7 @@ import java.util.Date;
 
 @Entity //数据库实体对象 自动创建数据表
 @Data //自动创建属性的getter方法和setter方法
+@ToString //覆盖toString()
 public class Application { //申请单类
     @Id   //表示该字段（属性）为主键
     @GeneratedValue //自动递增 整型数字自动保持不重复
@@ -21,7 +23,7 @@ public class Application { //申请单类
     private String assetName;//资产名称
     private Date beginDate; //提交申请的时间,应该由系统自动生成
     private Date resultDate; //处理时间，该申请已经得到管理员的批示
-    private int amount;//申请资产的个数
+    //private int amount;//申请资产的个数
     private String content;//申请单中书写的内容，描述资产用途
     private String manager;//管理员的用户名，具有唯一特性的值
     private String resultContent;//处理结果，处理意见、处理批示，已经没有电脑可用了
@@ -35,4 +37,5 @@ public class Application { //申请单类
     private long parentId;//父级申请单
     private long childId;//子申请单
     private String menu;//可选操作菜单
+
 }

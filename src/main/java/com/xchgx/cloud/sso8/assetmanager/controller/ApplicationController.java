@@ -43,6 +43,11 @@ public class ApplicationController {
         if (user == null) {
             return null;//未登录，则不作处理
         }
+        if (application == null) {
+            return null;//表单无内容
+        }
+        System.out.println(application);//默认调用application.toString();
+
         //版本14.0 新增内容 end
 
 //        //作废
@@ -143,7 +148,17 @@ public class ApplicationController {
         //版本14.0 新增内容 end
         application.setResultDate(new Date());//处理时间为当前时间
         //把已经处理的申请单保存到数据库中并返回
-        return applicationRepository.save(application);
+        Application agreeApplication = applicationRepository.save(application);
+        //上面的是正常流程，已经完工。
+        //寻找其他“待处理”的申请单
+        //查询同一个资产ID和资产状态为待处理的
+        List<Application> daichuliApplication = applicationRepository.findAllByAssetIdAndStatus(assetId, "待处理");
+        for (Application app:daichuliApplication) {
+            app.setStatus("自动拒绝");//同意、拒绝、维修成功、维修失败。
+            app.setOperation("处理结束");//处理结束
+            applicationRepository.save(app);
+        }
+        return agreeApplication;
 
 
     }
@@ -238,7 +253,7 @@ public class ApplicationController {
         }
 
         Application application = new Application(); //创建新的申请单对象
-        application.setAmount(1);//默认为1个资产 删除
+       // application.setAmount(1);//默认为1个资产 删除
         application.setContent("该申请为快速申请，由扫码提交。"); //设置申请内容-申请理由。
         application.setType(type);//设置申请单类型为参数type的值
         application.setBeginDate(new Date());//设置当前时间为申请单的创建时间
@@ -299,7 +314,7 @@ public class ApplicationController {
         repairOkApplication.setBeginDate(new Date());
         repairOkApplication.setStatus("待处理");
 
-        repairOkApplication.setUsername(application.getUsername());
+        repairOkApplication.setUsername(application.getUsername());//申请人，绝对不要写登录用户
         repairOkApplication.setAssetId(application.getAssetId());
         repairOkApplication.setAssetName(application.getAssetName());
         repairOkApplication.setContent(application.getContent());

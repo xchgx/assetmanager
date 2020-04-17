@@ -61,8 +61,8 @@
                             <form id="chukuForm">
                                 <div class="form-group">
                                     <label for="rukudanId">入库单ID</label>
-                                    <select name="rukudanId" id="rukudanId">
-                                        <option th:each="rkd : ${rukudans}" th:value="${rkd.id}" th:text="${rkd.name}"></option>
+                                    <select class="form-control" name="rukudanId" id="rukudanId">
+                                        <option th:each="rkd : ${rukudans}" th:value="${rkd.id}" th:text="|${rkd.name}(${rkd.id})-剩余:${rkd.remained}|"></option>
                                     </select>
                                 </div>
                             </form>
@@ -184,6 +184,11 @@
     }
     function chuku() {//出库
         $.getJSON("/asset/chuku",$("#chukuForm").serialize(), function (res) {
+            location.href = location.href;//刷新
+        })
+    }
+    function toUrl(url) {
+        $.getJSON(url,function (res) {//当成功获得服务器的返回时，执行函数代码
             location.href = location.href;//刷新
         })
     }

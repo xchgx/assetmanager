@@ -55,7 +55,7 @@ public class ApplicationService {
      */
     public List<Application> allApplication(){
         //从数据库中获得所有的申请单
-        List<Application> applications = applicationRepository.findAll();
+        List<Application> applications = applicationRepository.findAllByOrderByIdDesc();
         //申请单的操作选项， begin
         return addOperation(applications);
     }
@@ -67,10 +67,10 @@ public class ApplicationService {
      */
     private List<Application> addOperation(List<Application> applications){
 
-        String operationAgree = "<a href=\"/application/agree?applicationId={applicationId}\" class=\"btn btn-success btn-xs\">同意</a>";//同意按钮
-        String operationRefuse = "<a href=\"/application/refuse?applicationId={applicationId}\" class=\"btn btn-danger btn-xs\">拒绝</a>";//拒绝按钮
-        String operationRepairOk = "<a href=\"/application/repairOk?applicationId={applicationId}\" class=\"btn btn-success btn-xs\">维修成功</a>";//维修成功
-        String operationRepairFail = "<a href=\"/application/repairFail?applicationId={applicationId}\" class=\"btn btn-warning btn-xs\">维修失败</a>";//维修失败
+        String operationAgree = "<a href=\"javascript:toUrl('/application/agree?applicationId={applicationId}');\" class=\"btn btn-success btn-xs\">同意</a>";//同意按钮
+        String operationRefuse = "<a href=\"javascript:toUrl('/application/refuse?applicationId={applicationId}');\" class=\"btn btn-danger btn-xs\">拒绝</a>";//拒绝按钮
+        String operationRepairOk = "<a href=\"javascript:toUrl('/application/repairOk?applicationId={applicationId}');\" class=\"btn btn-success btn-xs\">维修成功</a>";//维修成功
+        String operationRepairFail = "<a href=\"javascript:toUrl('/application/repairFail?applicationId={applicationId}');\" class=\"btn btn-warning btn-xs\">维修失败</a>";//维修失败
         String operationOver = "处理结束";
         String operationRepairOver = "维修结束";
         //申请单的操作选项， end

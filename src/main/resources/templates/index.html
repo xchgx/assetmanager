@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="temp :: head"></head>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh">
+<head th:replace="temp :: head">
+    <title>资产管理系统</title>
+</head>
 <body>
 
 <!-- Fixed navbar -->
@@ -19,7 +21,7 @@
             <div><h2 th:text="'使用者：'+${ast.username}"></h2></div>
             <div><h2 th:text="'入库单号：'+${ast.rukudanId}"></h2></div>
             <div><h2 th:text="'状态：'+${ast.status}"></h2></div>
-            <a th:href="|/application/addQuick?type=领用&assetId=${ast.id}|" type="button" class="btn btn-primary">领用申请</a>
+            <a th:href="|/application/addQuick?type=已使用&assetId=${ast.id}|" type="button" class="btn btn-primary">领用申请</a>
             <a th:href="|/application/addQuick?type=维修&assetId=${ast.id}|" type="button" class="btn btn-primary">维修申请</a>
             <a th:href="|/application/addQuick?type=报废&assetId=${ast.id}|" type="button" class="btn btn-primary">报废申请</a>
             <a th:href="|/application/addQuick?type=空闲&assetId=${ast.id}|" type="button" class="btn btn-primary">归还申请</a>
