@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Component
 public class InitCommand implements CommandLineRunner {
@@ -28,13 +30,14 @@ public class InitCommand implements CommandLineRunner {
     public void run(String... args) throws Exception {
         //初始化用户
         if(userRepository.count() == 0){
+            List<String> usernames = new ArrayList<>();
+
             User user1 = new User();
             user1.setName("张三");
             user1.setUsername("user1");
             user1.setPassword("123456");
             user1.setRole("user");
             userRepository.save(user1);
-            System.out.println("张三 user1 的账号添加完成");
 
             User user2 = new User();
             user2.setName("李四");
@@ -42,7 +45,6 @@ public class InitCommand implements CommandLineRunner {
             user2.setPassword("123456");//123456
             user2.setRole("user");
             userRepository.save(user2);
-            System.out.println("李四 user2 的账号添加完成");
 
             User admin = new User();
             admin.setName("管理员");
@@ -50,8 +52,30 @@ public class InitCommand implements CommandLineRunner {
             admin.setPassword("123456");//123456
             admin.setRole("admin");
             userRepository.save(admin);
-            System.out.println("管理员 admin 的账号添加完成");
-
+            userRepository.save(new User("20182011001","20182011001","李佳燊","user"));
+            userRepository.save(new User("20182011002","20182011002","陈千","user"));
+            userRepository.save(new User("20182011003","20182011003","李启国","user"));
+            userRepository.save(new User("20182011005","20182011005","金刘星","user"));
+            userRepository.save(new User("20182011006","20182011006","吴宇","user"));
+            userRepository.save(new User("20182011007","20182011007","李仁泽","user"));
+            userRepository.save(new User("20182011008","20182011008","王业","user"));
+            userRepository.save(new User("20182011009","20182011009","吴小坤","user"));
+            userRepository.save(new User("20182011010","20182011010","吴鸿韬","user"));
+            userRepository.save(new User("20182011012","20182011012","姚玮","user"));
+            userRepository.save(new User("20182012011","20182012011","张煜锋","user"));
+            userRepository.save(new User("20182011013","20182011013","赖家铭","user"));
+            userRepository.save(new User("20182071001","20182071001","宋嘉诚","user"));
+            userRepository.save(new User("20182071002","20182071002","龚雄伟","user"));
+            userRepository.save(new User("20182071003","20182071003","杨文龙","user"));
+            userRepository.save(new User("20182071004","20182071004","胡奇","user"));
+            userRepository.save(new User("20182071005","20182071005","汪海","user"));
+            userRepository.save(new User("20182071006","20182071006","熊凯","user"));
+            userRepository.save(new User("20182071007","20182071007","赵竟","user"));
+            userRepository.save(new User("20182071008","20182071008","黄淋康","user"));
+            userRepository.save(new User("20182071009","20182071009","陈佳","user"));
+            userRepository.save(new User("20182071011","20182071011","李舒普","user"));
+            userRepository.save(new User("20182072001","20182072001","尹练宇","user"));
+            System.out.println(userRepository.count()+"个用户初始化完毕。");
         }
         //初始化入库单
         if(ruKuDanRepository.count()==0){

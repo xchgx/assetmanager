@@ -64,8 +64,9 @@
                 <li><a href="/login/" th:unless="${session.get('user')}" class="text-warning">您没有登录</a></li>
                 <li>
                     <a th:href="|/${session.get('user')?.role}|" th:text="'当前登录的用户:'+${session.get('user')?.name}" th:if="${session.get('user')}"></a>
-                    <!--                    //19.0 begin-->
-<!--                    <a href="/login/logout" th:if="${session.get('user')}">注销退出</a>-->
+                </li>
+                <li>                    <!--                    //19.0 begin-->
+                    <a href="/login/logout" th:if="${session.get('user')}">注销退出</a>
                     <!--                    //19.0 end-->
                 </li>
                 <!--                <li class="active"><a href="./">Fixed top <span class="sr-only">(current)</span></a></li>-->

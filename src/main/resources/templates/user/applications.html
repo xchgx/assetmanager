@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="temp :: head"></head>
+<body>
+
+<!-- Fixed navbar -->
+<nav class="navbar navbar-default navbar-fixed-top" th:replace="temp::nav"></nav>
+
+<div class="container-fluid" style="margin-top: 100px;">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="alert alert-success" role="alert" th:text="'当前登录用户：'+${session.get('user')}"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="list-group">
+                <a href="/user/user" type="button" class="list-group-item">功能测试</a>
+                <a href="/user/applications" type="button" class="list-group-item active">我的申请单</a>
+                <a href="/user/assets" type="button" class="list-group-item">我拥有的资产</a>
+
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="headingOne">
+                        <h4 class="panel-title">
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                我的申请单
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                        <div class="panel-body">
+
+                            <table class="table table-bordered table-striped table-hover table-responsive">
+                                <tr class="active">
+                                    <th class="active">序号</th>
+                                    <th class="success">申请人</th>
+                                    <th class="warning">资产名称</th>
+                                    <th class="danger">申请理由</th>
+                                    <th class="info">申请单类型</th>
+                                    <th class="info">开始状态</th>
+                                    <th class="info">结束状态</th>
+                                    <th class="info">处理状态</th>
+                                </tr>
+                                <tr th:each="app : ${applications}">
+                                    <td class="active" th:text="${appStat.index+1}">序号</td>
+                                    <td class="success" th:text="${app.username}">申请人</td>
+                                    <td class="warning" th:text="${app.assetName}">资产名称</td>
+                                    <td class="danger" th:text="${app.content}">申请理由</td>
+                                    <td class="info" th:text="${app.type}">申请单类型</td>
+                                    <td class="info" th:text="${app.start}">开始状态</td>
+                                    <td class="info" th:text="${app.stop}">结束状态</td>
+                                    <td class="info" th:text="${app.status}">处理状态</td>
+                                </tr>
+                            </table>
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> <!-- /container -->
+
+
+<div style="height: 100px"></div>
+<footer th:replace="temp :: footer"></footer>
+
+<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+<script src="/js/jquery-1.10.2.min.js"></script>
+<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/qrcode.min.js"></script>
+
+<script>
+    var qrs = document.getElementsByClassName("qr");
+    if (qrs.length) {
+        for(var i in qrs){
+            new QRCode(qrs[i],"http://xchgx.vicp.net/assetById?assetId="+qrs[i].id);
+        }
+    }
+
+
+function addApplication() {
+    $.post("/application/add",$("#addForm").serialize(),function (res) {
+        location.href=location.href;
+    });
+    return false;
+}
+</script>
+</body>
+</html>

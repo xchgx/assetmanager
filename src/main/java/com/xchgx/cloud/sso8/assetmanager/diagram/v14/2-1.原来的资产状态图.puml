@@ -1,6 +1,6 @@
 @startuml
 'scale 350 width
-scale 2
+scale 1
 [*] --> 无状态:资产入库
 note right
 资产入库时只有一张单据，

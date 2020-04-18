@@ -6,7 +6,7 @@
 <!-- Fixed navbar -->
 <nav class="navbar navbar-default navbar-fixed-top" th:replace="temp::nav"></nav>
 
-<div class="container" style="margin-top: 80px;">
+<div class="container-fluid" style="margin-top: 100px;">
     <div class="row">
         <div class="col-xs-12">
             <div class="alert alert-success" role="alert" th:text="'当前登录用户：'+${session.get('user')}"></div>
@@ -15,11 +15,9 @@
     <div class="row">
         <div class="col-md-4">
             <div class="list-group">
-                <button type="button" class="list-group-item active">功能测试</button>
-                <button type="button" class="list-group-item">资产入库</button>
-                <button type="button" class="list-group-item">资产出库</button>
-                <button type="button" class="list-group-item">申请单</button>
-                <button type="button" class="list-group-item">资产</button>
+                <a href="/user/user" type="button" class="list-group-item active">功能测试</a>
+                <a href="/user/applications" type="button" class="list-group-item">我的申请单</a>
+                <a href="/user/assets" type="button" class="list-group-item">我拥有的资产</a>
             </div>
         </div>
         <div class="col-md-8">
@@ -37,7 +35,7 @@
 
 
 
-<form action="/application/add" method="post" id="addForm" onsubmit="return addApplication()">
+<form action="#" method="post" id="addForm" onsubmit="return addApplication();">
     <div class="form-group">
         <label for="exampleInputEmail1">资产ID</label>
         <select name="assetId" id="exampleInputEmail1">
@@ -61,26 +59,12 @@
         <label for="exampleInputPassword3">申请理由</label>
         <textarea name="content" id="exampleInputPassword3"></textarea>
     </div>
-    <button type="submit" class="btn btn-primary" >提交申请</button>
+    <input type="submit" class="btn btn-primary" value="提交申请"></input>
 </form>
 
 
 
 
-                        </div>
-                    </div>
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading" role="tab" id="headingThree">
-                        <h4 class="panel-title">
-                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                Collapsible Group Item #3
-                            </a>
-                        </h4>
-                    </div>
-                    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-                        <div class="panel-body">
-                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
                         </div>
                     </div>
                 </div>
@@ -90,7 +74,7 @@
 </div> <!-- /container -->
 
 
-
+<div style="height: 100px"></div>
 <footer th:replace="temp :: footer"></footer>
 
 <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->

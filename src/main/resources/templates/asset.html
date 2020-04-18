@@ -16,7 +16,17 @@
                 <p th:text="'使用者:'+${asset.username}"></p>
                 <p th:text="'状态:'+${asset.status}"></p>
                 <p>
-                    <a class="btn btn-sm btn-primary item" th:each="o : ${op}" th:text="${o.content}" th:href="${o.url}"></a>
+<!--                    <a class="btn btn-sm btn-primary item" th:each="o : ${op}" th:utext="${o.content}" th:href="${o.url}"></a>-->
+                <div th:if="${session.get('user')}">
+                    <a th:href="|javascript:toUrl('/application/addQuick?type=已使用&assetId=${asset.id}')|" type="button" class="btn btn-primary btn-xs" th:if="${asset.status=='空闲'}" >领用申请 <span class="badge">[[${countUsed}]]</span></a>
+                    <a href="javascript:void 0;" type="button" class="btn btn-primary btn-xs disabled" th:unless="${asset.status=='空闲'}" disabled="true">领用申请</a>
+                    <a th:href="|javascript:toUrl('/application/addQuick?type=借用&assetId=${asset.id}')|" type="button" class="btn btn-warning btn-xs" th:if="${asset.status=='空闲'}">借用申请 <span class="badge">[[${countBorrow}]]</span></a>
+                    <a href="javascript:void 0;" type="button" class="btn btn-warning btn-xs disabled" th:unless="${asset.status == '空闲'}" disabled="true">借用申请</a>
+                    <a th:href="|javascript:toUrl('/application/addQuick?type=维修&assetId=${asset.id}')|" type="button" class="btn btn-warning btn-xs" th:if="${asset.status == '已使用' || asset.status == '借用'}">维修申请<span class="badge">[[${countRepair}]]</span></a>
+                    <a href="javascript:void 0;" type="button" class="btn btn-warning btn-xs disabled" th:unless="${asset.status == '已使用' || asset.status == '借用'}" disabled="true">维修申请</a>
+                    <a th:href="|javascript:toUrl('/application/addQuick?type=空闲&assetId=${asset.id}')|" type="button" class="btn btn-success btn-xs" th:if="${asset.status == '已使用' || asset.status == '借用'}">归还申请<span class="badge">[[${countFree}]]</span></a>
+                    <a href="javascript:void 0;" type="button" class="btn btn-success btn-xs disabled" th:unless="${asset.status == '已使用' || asset.status == '借用'}" disabled="true">归还申请</a>
+                </div>
                 </p>
 <!--                <p>-->
 <!--                    <a th:href="|/application/addQuick?type=领用&assetId=${asset.id}|" type="button" class="btn btn-primary">领用申请</a>-->
@@ -108,6 +118,12 @@
         }
     }
     new QRCode(localQr, location.href);
+
+    function toUrl(url) {
+        $.getJSON(url,function (res) {//当成功获得服务器的返回时，执行函数代码
+            location.href = location.href;//刷新
+        })
+    }
 </script>
 </body>
 </html>

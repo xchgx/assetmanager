@@ -12,4 +12,11 @@ import java.util.List;
 public interface AssetRepository extends JpaRepository<Asset,Long> {//继承数据库的标准操作功能
     public List<Asset> findAllByRukudanIdAndStatus(long rukudanId,String status);
     public List<Asset> findAllByStatus(String status);
+
+    /**
+     * 通过用户名查询资产，查询资产的使用者
+     * @param username 使用者用户名
+     * @return 资产集合
+     */
+    public List<Asset> findAllByUsername(String username);
 }

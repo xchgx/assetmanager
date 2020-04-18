@@ -15,7 +15,7 @@ import java.io.IOException;
  *  http://localhost:8080/asset/add
  *  http://localhost:8080/asset1/add //不检查，因为不匹配
  */
-@WebFilter(filterName = "loginFilter", urlPatterns = {"/rukudan/*","/asset/*","/application/*","/admin","/user"})
+@WebFilter(filterName = "loginFilter", urlPatterns = {"/rukudan/*","/asset/*","/application/*","/admin/*","/user/*"})
 @Order(1)//优先执行，第一个执行的过滤器
 public class ASecurityFilter implements Filter {
 

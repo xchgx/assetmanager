@@ -4,6 +4,7 @@ import com.xchgx.cloud.sso8.assetmanager.domain.*;
 import com.xchgx.cloud.sso8.assetmanager.repository.ApplicationRepository;
 import com.xchgx.cloud.sso8.assetmanager.repository.AssetRepository;
 import com.xchgx.cloud.sso8.assetmanager.repository.AssetRuKuDanRepository;
+import com.xchgx.cloud.sso8.assetmanager.repository.LogRepository;
 import com.xchgx.cloud.sso8.assetmanager.service.ApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,6 +31,8 @@ public class IndexController {//首页控制器
     @Autowired
     private ApplicationService applicationService;
     //版本15.0 新增内容 end
+    @Autowired
+    private LogRepository logRepository;
 
     //相当于我们之前分析资产管理系统时候，出现的 网页界面类
     @GetMapping({"/index","/"})//设置访问url网址
@@ -37,6 +40,7 @@ public class IndexController {//首页控制器
         //返回视图名称
         List<Asset> assets = assetRepository.findAll();
         model.addAttribute("assets",assets);//在模型中添加数据
+
         return "index";//这了返回的视图名称为index
     }
 
@@ -58,30 +62,45 @@ public class IndexController {//首页控制器
         if (user == null) {//没有任何用户登录，在session中找不到user
             return "asset";//直接显示视图，此时返回时模型中只有资产对象
         }
+        long countUsed = applicationRepository.countByAssetIdAndStatusAndType(assetId, "待处理","已使用");
+        long countBorrow = applicationRepository.countByAssetIdAndStatusAndType(assetId, "待处理","借用");
+        long countRepair = applicationRepository.countByAssetIdAndStatusAndType(assetId, "待处理","维修");
+        long countFree = applicationRepository.countByAssetIdAndStatusAndType(assetId, "待处理","空闲");
+        model.addAttribute("countUsed", countUsed);//
+        model.addAttribute("countBorrow", countBorrow);//
+        model.addAttribute("countRepair", countRepair);//
+        model.addAttribute("countFree", countFree);//
 
-        List<Operation> list = new ArrayList<>();//创建操作项集合
-        if (user.getRole().equals("admin")) {
-//            list.add("报废");
-//            list.add("收回");
-//            list.add("分配");
-            Operation operation1 = new Operation("/asset/set?status=空闲&assetId="+asset.getId(), "收回");
-            Operation operation2 = new Operation("/asset/set?status=维修&assetId="+asset.getId(), "维修");
-            Operation operation3 = new Operation("/asset/set?status=报废&assetId="+asset.getId(), "报废");
-            list.add(operation1);
-            list.add(operation2);
-            list.add(operation3);
-        }else{//user角色权限
-            Operation operation1 = new Operation("/application/addQuick?type=领用&assetId="+asset.getId(), "提交领用申请");//走快速通道，快速提交领用申请
-            Operation operation2 = new Operation("/application/addQuick?type=维修&assetId="+asset.getId(), "提交维修申请");//走快速通道，快速提交维修申请
-            Operation operation3 = new Operation("/application/addQuick?type=报废&assetId="+asset.getId(), "提交报废申请");//走快速通道，快速提交报废申请
-            list.add(operation1);
-            list.add(operation2);
-            list.add(operation3);
-        }
+//        List<Operation> list = new ArrayList<>();//创建操作项集合
+//
+//        Operation operation1 = new Operation("javascript:toUrl('/asset/set?status=空闲&assetId="+asset.getId()+"');", "收回");
+//        Operation operation2 = new Operation("javascript:toUrl('/asset/set?status=维修&assetId="+asset.getId()+"');", "维修");
+//        Operation operation3 = new Operation("javascript:toUrl('/asset/set?status=报废&assetId="+asset.getId()+"');", "报废");
+//        Operation operation4 = new Operation("javascript:toUrl('/application/addQuick?type=已使用&assetId="+asset.getId()+"');", "提交领用申请 <span class=\"badge\">"+count4+"</span>");//走快速通道，快速提交领用申请
+//        Operation operation5 = new Operation("javascript:toUrl('/application/addQuick?type=借用&assetId="+asset.getId()+"');", "提交借用申请 <span class=\"badge\">"+count5+"</span>");//走快速通道，快速提交领用申请
+//        Operation operation6 = new Operation("javascript:toUrl('/application/addQuick?type=维修&assetId="+asset.getId()+"');", "提交维修申请 <span class=\"badge\">"+count6+"</span>");//走快速通道，快速提交维修申请
+//        Operation operation7 = new Operation("javascript:toUrl('/application/addQuick?type=空闲&assetId="+asset.getId()+"');", "提交归还申请 <span class=\"badge\">"+count7+"</span>");//走快速通道，快速提交维修申请
+//        if (user.getRole().equals("admin")) {
+////            list.add("报废");
+////            list.add("收回");
+////            list.add("分配");
+//            list.add(operation1);
+//            list.add(operation2);
+//            list.add(operation3);
+//            list.add(operation4);
+//            list.add(operation5);
+//            list.add(operation6);
+//            list.add(operation7);
+//        }else{//user角色权限
+//            list.add(operation4);
+//            list.add(operation5);
+//            list.add(operation6);
+//            list.add(operation7);
+//        }
         //"op"是给视图用的名称，list是后端的java类对象
         //"op"是键值对中的键(key)， list是键值对中的值(value)
         //姓名:张三,年龄:28
-        model.addAttribute("op", list);//动态显示操作项,operation=op
+//        model.addAttribute("op", list);//动态显示操作项,operation=op
 
         //所有关于该资产的申请单要放入到视图模型中
         //通过资产ID查询申请单
@@ -99,13 +118,39 @@ public class IndexController {//首页控制器
      * @param model
      * @return
      */
-    @GetMapping("/user")
-    public String user(Model model){
+    @GetMapping("/user/user")
+    public String user( Model model){
 
-        List<Asset> assets = assetRepository.findAll();//查询所有的资产
+        List<Asset> assets = assetRepository.findAllByStatus("空闲");//查询所有的资产
         model.addAttribute("assets",assets);//在模型中添加数据
+        return "user/user";
+    }
 
-        return "user";
+    /**
+     * 使用者后台的申请单
+     * @param model
+     * @return
+     */
+    @GetMapping("/user/applications")
+    public String userApplications(HttpServletRequest request,Model model){
+        User user = (User) request.getSession().getAttribute("user");
+
+        List<Application> myApplications = applicationRepository.findAllByUsername(user.getUsername());
+        model.addAttribute("applications", myApplications);
+        return "user/applications";
+    }
+    /**
+     * 使用者后台的申请单
+     * @param model
+     * @return
+     */
+    @GetMapping("/user/assets")
+    public String userMyAssets(HttpServletRequest request,Model model){
+        User user = (User) request.getSession().getAttribute("user");
+
+        List<Asset> myAssets = assetRepository.findAllByUsername(user.getUsername());
+        model.addAttribute("assets", myAssets);
+        return "user/assets";
     }
 
     /**
@@ -115,7 +160,7 @@ public class IndexController {//首页控制器
      * @param model
      * @return
      */
-    @GetMapping("/admin") //IndexController控制器没有前缀网址
+    @GetMapping("/admin/admin") //IndexController控制器没有前缀网址
     public String admin(Model model){
 
         List<Asset> assets = assetRepository.findAll();//查询了所有的资产
@@ -136,6 +181,13 @@ public class IndexController {//首页控制器
         List<Application> repairApplications = applicationService.repairApplications();
         model.addAttribute("repairApplications", repairApplications);
         //版本17.0 end
-        return "admin";
+        return "admin/admin";
+    }
+
+    @GetMapping("/admin/log")
+    public String logIndex(Model model){
+        List<Log> logs = logRepository.findAll();
+        model.addAttribute("logs", logs);
+        return "admin/log";
     }
 }

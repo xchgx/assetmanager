@@ -46,6 +46,13 @@ public class ApplicationController {
         if (application == null) {
             return null;//表单无内容
         }
+        long existCount = applicationRepository.countByUsernameAndAssetIdAndStatus(user.getUsername(), asset.getId(), "待处理");
+        if (existCount>0){
+            return null;//已经提交过了就不再提交了。
+        }
+
+
+
         System.out.println(application);//默认调用application.toString();
 
         //版本14.0 新增内容 end
@@ -250,6 +257,10 @@ public class ApplicationController {
         Asset asset = assetRepository.findById(assetId).orElse(null); //通过资产ID查询资产对象
         if (asset == null) {//如果资产ID不存在，则直接返回，不处理。
             return null;
+        }
+        long existCount = applicationRepository.countByUsernameAndAssetIdAndStatus(user.getUsername(), assetId, "待处理");
+        if (existCount>0){
+            return null;//已经提交过了就不再提交了。
         }
 
         Application application = new Application(); //创建新的申请单对象
