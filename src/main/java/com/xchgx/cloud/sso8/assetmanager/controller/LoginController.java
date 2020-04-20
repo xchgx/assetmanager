@@ -52,7 +52,7 @@ public class LoginController {
         //返回的视图名称，由用户的权限决定
         //如果用户是user权限（普通用户），那么就返回user视图
         //如果用户是admin权限（管理员），那么就返回admin视图
-        return "redirect:/"+u.getRole();//返回角色视图，准备好user.html视图和admin.html视图
+        return "redirect:/"+u.getRole()+"/"+u.getRole();//返回角色视图，准备好user.html视图和admin.html视图
         //采用重定向之后，模型失效。
     }
 

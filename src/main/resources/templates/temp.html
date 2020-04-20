@@ -63,7 +63,7 @@
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="/login/" th:unless="${session.get('user')}" class="text-warning">您没有登录</a></li>
                 <li>
-                    <a th:href="|/${session.get('user')?.role}|" th:text="'当前登录的用户:'+${session.get('user')?.name}" th:if="${session.get('user')}"></a>
+                    <a th:if="${session.get('user')}" th:href="|/${session.get('user')?.role}|" th:text="'当前登录的用户:'+${session.get('user')?.name}" ></a>
                     <!--                    //19.0 begin-->
 <!--                    <a href="/login/logout" th:if="${session.get('user')}">注销退出</a>-->
                     <!--                    //19.0 end-->

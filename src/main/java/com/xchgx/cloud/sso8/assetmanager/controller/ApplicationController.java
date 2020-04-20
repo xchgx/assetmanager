@@ -383,4 +383,10 @@ public class ApplicationController {
     }
 
 
+    //新增一个功能 —— 查询某某资产（ID）的领用申请个数（一定是待处理）。
+    //@GetMapping("/") // /application/
+    @GetMapping("/countPeoples")//统计人数
+    public int countPeoples(long assetId, String status, String type){
+        return applicationRepository.countByAssetIdAndStatusAndType(assetId, status, type);
+    }
 }

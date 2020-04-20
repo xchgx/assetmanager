@@ -30,6 +30,8 @@ public class IndexController {//首页控制器
     @Autowired
     private ApplicationService applicationService;
     //版本15.0 新增内容 end
+    @Autowired
+    private ApplicationController applicationController;
 
     //相当于我们之前分析资产管理系统时候，出现的 网页界面类
     @GetMapping({"/index","/"})//设置访问url网址
@@ -59,30 +61,8 @@ public class IndexController {//首页控制器
             return "asset";//直接显示视图，此时返回时模型中只有资产对象
         }
 
-        List<Operation> list = new ArrayList<>();//创建操作项集合
-        if (user.getRole().equals("admin")) {
-//            list.add("报废");
-//            list.add("收回");
-//            list.add("分配");
-            Operation operation1 = new Operation("/asset/set?status=空闲&assetId="+asset.getId(), "收回");
-            Operation operation2 = new Operation("/asset/set?status=维修&assetId="+asset.getId(), "维修");
-            Operation operation3 = new Operation("/asset/set?status=报废&assetId="+asset.getId(), "报废");
-            list.add(operation1);
-            list.add(operation2);
-            list.add(operation3);
-        }else{//user角色权限
-            Operation operation1 = new Operation("/application/addQuick?type=领用&assetId="+asset.getId(), "提交领用申请");//走快速通道，快速提交领用申请
-            Operation operation2 = new Operation("/application/addQuick?type=维修&assetId="+asset.getId(), "提交维修申请");//走快速通道，快速提交维修申请
-            Operation operation3 = new Operation("/application/addQuick?type=报废&assetId="+asset.getId(), "提交报废申请");//走快速通道，快速提交报废申请
-            list.add(operation1);
-            list.add(operation2);
-            list.add(operation3);
-        }
-        //"op"是给视图用的名称，list是后端的java类对象
-        //"op"是键值对中的键(key)， list是键值对中的值(value)
-        //姓名:张三,年龄:28
-        model.addAttribute("op", list);//动态显示操作项,operation=op
-
+        int countPeoples = applicationController.countPeoples(assetId, "待处理", "已使用");
+        model.addAttribute("countPeoples",countPeoples);
         //所有关于该资产的申请单要放入到视图模型中
         //通过资产ID查询申请单
         List<Application> applications = applicationService.assetApplication(assetId);
@@ -99,13 +79,16 @@ public class IndexController {//首页控制器
      * @param model
      * @return
      */
-    @GetMapping("/user")
+    @GetMapping("/user/user")
+//    @GetMapping("/user/assets")
     public String user(Model model){
 
         List<Asset> assets = assetRepository.findAll();//查询所有的资产
         model.addAttribute("assets",assets);//在模型中添加数据
 
-        return "user";
+        return "user/user";//在user文件夹中的 user.html 视图文件
+//        return "user/assets";
+//        return "user/applications";
     }
 
     /**
@@ -115,7 +98,7 @@ public class IndexController {//首页控制器
      * @param model
      * @return
      */
-    @GetMapping("/admin") //IndexController控制器没有前缀网址
+    @GetMapping("/admin/admin") //IndexController控制器没有前缀网址
     public String admin(Model model){
 
         List<Asset> assets = assetRepository.findAll();//查询了所有的资产
@@ -136,6 +119,6 @@ public class IndexController {//首页控制器
         List<Application> repairApplications = applicationService.repairApplications();
         model.addAttribute("repairApplications", repairApplications);
         //版本17.0 end
-        return "admin";
+        return "admin/admin";//影射到 /admin/admin.html 视图文件
     }
 }
