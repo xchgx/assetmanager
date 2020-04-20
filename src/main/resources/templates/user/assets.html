@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="temp :: head"></head>
+<body>
+
+<!-- Fixed navbar -->
+<nav class="navbar navbar-default navbar-fixed-top" th:replace="temp::nav"></nav>
+
+<div class="container" style="margin-top: 80px;">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="alert alert-success" role="alert" th:text="'当前登录用户：'+${session.get('user')}"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="list-group">
+                <a href="/user/user" type="button" class="list-group-item">提交申请</a>
+                <a href="/user/applications" type="button" class="list-group-item  ">我的申请单</a>
+                <a href="/user/assets" type="button" class="list-group-item active">我的资产</a>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="headingOne">
+                        <h4 class="panel-title">
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                我的资产
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                        <div class="panel-body">
+
+                            <table class="table table-bordered table-striped table-hover table-responsive">
+                                <tr class="active">
+                                    <th class="active">序号</th>
+                                    <th class="success">使用者</th>
+                                    <th class="warning">资产名称</th>
+                                    <th class="danger">资产类型</th>
+                                    <th class="info">说明书</th>
+                                    <th class="info">单价</th>
+                                    <th class="info">资产状态</th>
+                                    <th class="info">生产日期</th>
+                                    <th class="info">保质期</th>
+                                    <th class="info">入库单ID</th>
+                                </tr>
+                                <tr th:each="ast : ${assets}">
+                                    <td class="active" th:text="${astStat.index+1}">序号</td>
+                                    <td class="success" th:text="${ast.username}">使用者</td>
+                                    <td class="warning" th:text="${ast.name}">资产名称</td>
+                                    <td class="danger" th:text="${ast.type}">资产类型</td>
+                                    <td class="info" th:text="${ast.readme}">说明书</td>
+                                    <td class="info" th:text="${ast.price}">单价</td>
+                                    <td class="info" th:text="${ast.status}">资产状态</td>
+                                    <td class="info" th:text="${ast.scrq}">生产日期</td>
+                                    <td class="info" th:text="${ast.bzq}">保质期</td>
+                                    <td class="info" th:text="${ast.rukudanId}">入库单ID</td>
+                                </tr>
+                            </table>
+
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div> <!-- /container -->
+
+
+
+<footer th:replace="temp :: footer"></footer>
+
+<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+<script src="/js/jquery-1.10.2.min.js"></script>
+<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/qrcode.min.js"></script>
+
+<script>
+    var qrs = document.getElementsByClassName("qr");
+    if (qrs.length) {
+        for(var i in qrs){
+            new QRCode(qrs[i],"http://xchgx.vicp.net/assetById?assetId="+qrs[i].id);
+        }
+    }
+
+
+function addApplication() {
+    $.post("/application/add",$("#addForm").serialize(),function (res) {
+        location.href=location.href;
+    });
+    return false;
+}
+</script>
+</body>
+</html>

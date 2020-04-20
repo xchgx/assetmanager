@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +39,16 @@ public class IndexController {//首页控制器
     public String index(Model model){//定义首页方法
         //返回视图名称
         List<Asset> assets = assetRepository.findAll();
+//        List<Integer> count = applicationController.countPeoples()
+        List<Integer> countList = new ArrayList<>();
+        for (int i = 0; i < assets.size(); i++) {
+            Asset asset = assets.get(i);
+            long id = asset.getId();
+            int countPeoples = applicationController.countPeoples(id, "待处理", "已使用");
+            countList.add(countPeoples);
+        }
         model.addAttribute("assets",assets);//在模型中添加数据
+        model.addAttribute("countList",countList);//在模型中添加数据
         return "index";//这了返回的视图名称为index
     }
 
@@ -89,6 +99,41 @@ public class IndexController {//首页控制器
         return "user/user";//在user文件夹中的 user.html 视图文件
 //        return "user/assets";
 //        return "user/applications";
+    }
+
+    /**
+     * 使用者后台
+     * 显示使用者的申请单
+     * @param model
+     * @return
+     */
+    @GetMapping("/user/applications")
+//    @GetMapping("/user/assets")
+    public String userApplications(Model model, HttpServletRequest request){
+        User user = (User) request.getSession().getAttribute("user");
+
+        List<Application> list = applicationRepository.findAllByUsername(user.getUsername());
+        model.addAttribute("applications", list);
+
+        return "user/applications";//在user文件夹中的 user.html 视图文件
+//        return "user/assets";
+//        return "user/applications";
+    }
+
+    /**
+     * 使用者后台
+     * 显示使用者的资产
+     * @param model
+     * @return
+     */
+    @GetMapping("/user/assets")
+    public String userAssets(Model model, HttpServletRequest request){
+        User user = (User) request.getSession().getAttribute("user");
+
+        List<Asset> list = assetRepository.findAllByUsername(user.getUsername());
+        model.addAttribute("assets", list);
+
+        return "user/assets";
     }
 
     /**
