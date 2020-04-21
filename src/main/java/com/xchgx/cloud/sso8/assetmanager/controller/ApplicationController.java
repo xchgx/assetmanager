@@ -97,7 +97,7 @@ public class ApplicationController {
 //        return applicationRepository.findAll();
         //作废 end
         //版本 15.0 更新内容 begin
-        return applicationService.allApplication();
+        return applicationService.allApplications();
         //版本 15.0 更新内容 end
     }
 
@@ -252,6 +252,10 @@ public class ApplicationController {
             return null;
         }
 
+
+
+
+//        applicationRepository.findAllByUsername()
         Application application = new Application(); //创建新的申请单对象
        // application.setAmount(1);//默认为1个资产 删除
         application.setContent("该申请为快速申请，由扫码提交。"); //设置申请内容-申请理由。

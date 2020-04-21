@@ -5,11 +5,11 @@ import com.xchgx.cloud.sso8.assetmanager.repository.ApplicationRepository;
 import com.xchgx.cloud.sso8.assetmanager.repository.AssetRepository;
 import com.xchgx.cloud.sso8.assetmanager.repository.AssetRuKuDanRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -26,14 +26,41 @@ public class RukudanController {
     @Autowired //自动注入 申请单持久化对象
     private ApplicationRepository applicationRepository;
 
+//    /**
+//     * 添加入库单
+//     * @param name 入库单的资产名称
+//     * @param amount 入库单的资产数量
+//     * @return
+//     */
+//    @GetMapping("/add") //添加资产，资产入库，实际访问地址 /rukudan/add
+//    public AssetRuKuDan add(@RequestParam String name, @RequestParam int amount){ //接收前端传送过来的参数
+//        AssetRuKuDan assetRuKuDan = new AssetRuKuDan(); //创建一个资产对象
+//        assetRuKuDan.setName(name); //设置资产名称-来自参数 name
+//        assetRuKuDan.setAmount(amount);  //设置资产数量-来自参数 number
+//        assetRuKuDan.setRemained(amount);//设置剩余数量为入库数量
+//        AssetRuKuDan resultAsset = assetRuKuDanRepository.save(assetRuKuDan);//保存资产对象到数据库中，然后返回存储后的资产对象
+//        return resultAsset; //返回存储后的资产对象
+//    }
     /**
      * 添加入库单
      * @param name 入库单的资产名称
      * @param amount 入库单的资产数量
      * @return
      */
-    @GetMapping("/add") //添加资产，资产入库，实际访问地址 /rukudan/add
-    public AssetRuKuDan add(@RequestParam String name, @RequestParam int amount){ //接收前端传送过来的参数
+    @PostMapping("/add") //添加资产，资产入库，实际访问地址 /rukudan/add
+    public AssetRuKuDan add(@RequestParam("pic")MultipartFile pic, @RequestParam String name, @RequestParam int amount){ //接收前端传送过来的参数
+        String fileName = System.currentTimeMillis() + pic.getOriginalFilename();//防止重名
+        String destFileName = "D:\\upload\\" + fileName;
+        File destFile = new File(destFileName);
+        destFile.getParentFile().mkdirs();
+        System.out.println(destFile);
+        try {
+            pic.transferTo(destFile);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         AssetRuKuDan assetRuKuDan = new AssetRuKuDan(); //创建一个资产对象
         assetRuKuDan.setName(name); //设置资产名称-来自参数 name
         assetRuKuDan.setAmount(amount);  //设置资产数量-来自参数 number

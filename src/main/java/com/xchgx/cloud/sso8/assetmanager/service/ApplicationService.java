@@ -53,10 +53,34 @@ public class ApplicationService {
      * 获得所有带管理员操作项的申请单
      * @return 申请单集合
      */
-    public List<Application> allApplication(){
+    public List<Application> allApplications(){
         //从数据库中获得所有的申请单
         List<Application> applications = applicationRepository.findAllByOrderByIdDesc();
         //申请单的操作选项， begin
+        return addOperation(applications);
+    }
+    /**
+     * 获得所有待处理的申请单
+     * @return 申请单集合
+     */
+    public List<Application> allTodoApplications(){
+        List<Application> applications = applicationRepository.findAllByStatus("待处理");
+        return addOperation(applications);
+    }
+    /**
+     * 获得所有同意的申请单
+     * @return 申请单集合
+     */
+    public List<Application> allAgreeApplications(){
+        List<Application> applications = applicationRepository.findAllByStatus("同意");
+        return addOperation(applications);
+    }
+    /**
+     * 获得所有拒绝的申请单
+     * @return 申请单集合
+     */
+    public List<Application> allRefuseApplications(){
+        List<Application> applications = applicationRepository.findAllByStatus("拒绝");
         return addOperation(applications);
     }
 

@@ -12,4 +12,6 @@ import java.util.List;
 public interface AssetRepository extends JpaRepository<Asset,Long> {//继承数据库的标准操作功能
     public List<Asset> findAllByRukudanIdAndStatus(long rukudanId,String status);
     public List<Asset> findAllByStatus(String status);
+
+    public List<Asset> findAllByUsername(String username);
 }

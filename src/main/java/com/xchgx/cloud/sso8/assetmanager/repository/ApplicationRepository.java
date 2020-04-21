@@ -14,6 +14,8 @@ public interface ApplicationRepository extends JpaRepository<Application,Long> {
     //通过申请单类型查询
     public List<Application> findAllByType(String type);
 
+    //通过申请单状态查询
+    public List<Application> findAllByStatus(String status);
     //查询所有的维修单，同时你的状态不是待处理，也不是拒绝
     public List<Application> findAllByTypeAndStatusNotAndStatusNot(String type,String status1,String status2);
 
@@ -36,4 +38,14 @@ public interface ApplicationRepository extends JpaRepository<Application,Long> {
      * @return 申请单集合
      */
     public List<Application> findAllByUsername(String username);
+
+    /**
+     * //统计查询同一个用户提交的相同资产的待处理的申请单的数量
+     * @param username 登录用户名
+     * @param assetId 资产ID
+     * @param status 申请单状态
+     * @return 申请单数量
+     */
+    public int countByUsernameAndAssetIdAndStatus(String username, long assetId, String status);
+
 }
