@@ -29,4 +29,11 @@ public interface ApplicationRepository extends JpaRepository<Application,Long> {
     //统计资产ID被申请同时申请单状态为待处理的个数
     public int countByAssetIdAndStatusAndType(long assetId,String status, String type);
             //电脑(assetId)，待处理(status)，领用（类型 type）
+
+    /**
+     * 查询指定用户名的所有申请单
+     * @param username 登录用户名
+     * @return 申请单集合
+     */
+    public List<Application> findAllByUsername(String username);
 }

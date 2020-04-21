@@ -38,7 +38,16 @@ public class IndexController {//首页控制器
     public String index(Model model){//定义首页方法
         //返回视图名称
         List<Asset> assets = assetRepository.findAll();
+        List<Integer> countList = new ArrayList<>();
+        for (int i = 0; i < assets.size(); i++) {
+            Asset asset = assets.get(i);
+            long assetId = asset.getId();
+            //查询该ID的申请数量--
+            int countPeoples = applicationController.countPeoples(assetId, "待处理", "已使用");
+            countList.add(countPeoples);
+        }
         model.addAttribute("assets",assets);//在模型中添加数据
+        model.addAttribute("countList",countList);
         return "index";//这了返回的视图名称为index
     }
 
@@ -80,17 +89,23 @@ public class IndexController {//首页控制器
      * @return
      */
     @GetMapping("/user/user")
-//    @GetMapping("/user/assets")
     public String user(Model model){
-
         List<Asset> assets = assetRepository.findAll();//查询所有的资产
         model.addAttribute("assets",assets);//在模型中添加数据
-
         return "user/user";//在user文件夹中的 user.html 视图文件
-//        return "user/assets";
-//        return "user/applications";
     }
 
+    /**
+     * 进入到使用者的申请单页
+     * @return
+     */
+    @GetMapping("/user/applications")
+    public String userApplications(HttpServletRequest request,Model model){
+        User user = (User) request.getSession().getAttribute("user");
+        List<Application> applications = applicationRepository.findAllByUsername(user.getUsername());
+        model.addAttribute("applications", applications);
+        return "user/applications";//返回user目录下的application.html视图文件
+    }
     /**
      * 管理员者后台
      * 通过登录成功后，跳转（重定向）到 redirect:/admin

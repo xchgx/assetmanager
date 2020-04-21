@@ -52,6 +52,33 @@ public class InitCommand implements CommandLineRunner {
             userRepository.save(admin);
             System.out.println("管理员 admin 的账号添加完成");
 
+            userRepository.save(new User("20182011001","20182011001","李佳燊","user","2018级计算机软件班"));
+            userRepository.save(new User("20182011002","20182011002","陈千","user","2018级计算机软件班"));
+            userRepository.save(new User("20182011003","20182011003","李启国","user","2018级计算机软件班"));
+            userRepository.save(new User("20182011005","20182011005","金刘星","user","2018级计算机软件班"));
+            userRepository.save(new User("20182011006","20182011006","吴宇","user","2018级计算机软件班"));
+            userRepository.save(new User("20182011007","20182011007","李仁泽","user","2018级计算机软件班"));
+            userRepository.save(new User("20182011008","20182011008","王业","user","2018级计算机软件班"));
+            userRepository.save(new User("20182011009","20182011009","吴小坤","user","2018级计算机软件班"));
+            userRepository.save(new User("20182011010","20182011010","吴鸿韬","user","2018级计算机软件班"));
+            userRepository.save(new User("20182011012","20182011012","姚玮","user","2018级计算机软件班"));
+            userRepository.save(new User("20182012011","20182012011","张煜锋","user","2018级计算机软件班"));
+            userRepository.save(new User("20182012012","20182012012","吴禹轩","user","2018级计算机软件班"));
+            userRepository.save(new User("20182012013","20182012013","叶子龙","user","2018级计算机软件班"));
+            userRepository.save(new User("20182011013","20182011013","赖家铭","user","2018级计算机软件班"));
+            userRepository.save(new User("20182071001","20182071001","宋嘉诚","user","2018级计算机软件班"));
+            userRepository.save(new User("20182071002","20182071002","龚雄伟","user","2018级计算机软件班"));
+            userRepository.save(new User("20182071003","20182071003","杨文龙","user","2018级计算机软件班"));
+            userRepository.save(new User("20182071004","20182071004","胡奇","user","2018级计算机软件班"));
+            userRepository.save(new User("20182071005","20182071005","汪海","user","2018级计算机软件班"));
+            userRepository.save(new User("20182071006","20182071006","熊凯","user","2018级计算机软件班"));
+            userRepository.save(new User("20182071007","20182071007","赵竟","user","2018级计算机软件班"));
+            userRepository.save(new User("20182071008","20182071008","黄淋康","user","2018级计算机软件班"));
+            userRepository.save(new User("20182071009","20182071009","陈佳","user","2018级计算机软件班"));
+            userRepository.save(new User("20182071010","20182071010","张轩","user","2018级计算机软件班"));
+            userRepository.save(new User("20182071011","20182071011","李舒普","user","2018级计算机软件班"));
+            userRepository.save(new User("20182072001","20182072001","尹练宇","user","2018级计算机软件班"));
+
         }
         //初始化入库单
         if(ruKuDanRepository.count()==0){
