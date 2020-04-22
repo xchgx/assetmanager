@@ -24,16 +24,16 @@
             <div th:if="${session.get('user')}">
 
                 <a th:href="|javascript:toUrl('/application/addQuick?type=已使用&assetId=${ast.id}')|" type="button" class="btn btn-primary btn-primary btn-sm" th:if="${ast.status=='空闲'}">领用申请 <span class="badge" th:text="${countList.get(astStat.index)}"></span></a>
-                <a href="javascript:void 0;" type="button" class="btn btn-primary btn-primary btn-sm disabled" disabled="true" th:unless="${ast.status=='空闲'}">领用申请</a>
+                <a href="javascript:void 0;" type="button" class="btn btn-primary btn-primary btn-xs disabled" disabled="true" th:unless="${ast.status=='空闲'}">领用申请</a>
 
                 <a th:href="|javascript:toUrl('/application/addQuick?type=借用&assetId=${ast.id}')|" type="button" class="btn btn-primary btn-danger btn-sm" th:if="${ast.status=='空闲'}">借用申请</a>
-                <a href="javascript:void 0;" type="button" class="btn btn-primary btn-danger btn-sm disabled" disabled="disabled" th:unless="${ast.status=='空闲'}">借用申请</a>
+                <a href="javascript:void 0;" type="button" class="btn btn-primary btn-danger btn-xs disabled" disabled="disabled" th:unless="${ast.status=='空闲'}">借用申请</a>
 
-                <a th:href="|javascript:toUrl('/application/addQuick?type=维修&assetId=${ast.id}')|" type="button" class="btn btn-primary btn-warning btn-sm" th:if="${ast.status=='已使用' || ast.status=='借用'}">维修申请</a>
-                <a href="javascript:void 0;" type="button" class="btn btn-primary btn-warning btn-sm disabled" disabled="disabled" th:unless="${ast.status=='已使用' || ast.status=='借用'}">维修申请</a>
+                <a th:href="|javascript:toUrl('/application/addQuick?type=维修&assetId=${ast.id}')|" type="button" class="btn btn-primary btn-warning btn-sm" th:if="${session.get('user').username==ast.username && (ast.status=='已使用' || ast.status=='借用')}">维修申请</a>
+                <a href="javascript:void 0;" type="button" class="btn btn-primary btn-warning btn-xs disabled" disabled="disabled" th:unless="${session.get('user').username==ast.username && (ast.status=='已使用' || ast.status=='借用')}">维修申请</a>
 
-                <a th:href="|javascript:toUrl('/application/addQuick?type=空闲&assetId=${ast.id}')|" type="button" class="btn btn-primary btn-success btn-sm" th:if="${ast.status=='已使用' || ast.status=='借用'}">归还申请</a>
-                <a href="javascript:void 0;" type="button" class="btn btn-primary btn-success btn-sm disabled" disabled="disabled" th:unless="${ast.status=='已使用' || ast.status=='借用'}">归还申请</a>
+                <a th:href="|javascript:toUrl('/application/addQuick?type=空闲&assetId=${ast.id}')|" type="button" class="btn btn-primary btn-success btn-sm" th:if="${session.get('user').username==ast.username && (ast.status=='已使用' || ast.status=='借用')}">归还申请</a>
+                <a href="javascript:void 0;" type="button" class="btn btn-primary btn-success btn-xs disabled" disabled="disabled" th:unless="${session.get('user').username==ast.username && (ast.status=='已使用' || ast.status=='借用')}">归还申请</a>
             </div>
 <!--            <a th:href="|/asset/set?status=空闲&assetId=${ast.id}|" type="button" class="btn btn-success">设置空闲</a>-->
 <!--            <a th:href="|/asset/set?status=维修&assetId=${ast.id}|" type="button" class="btn btn-success">设置维修</a>-->

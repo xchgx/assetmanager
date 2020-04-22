@@ -17,6 +17,7 @@
             <div class="list-group">
                 <a href="/user/user" type="button" class="list-group-item active ">提交申请</a>
                 <a href="/user/applications" type="button" class="list-group-item">我的申请单</a>
+                <a href="/user/assets" type="button" class="list-group-item">我的资产</a>
             </div>
         </div>
         <div class="col-md-8">
@@ -37,7 +38,7 @@
 <form action="#" method="post" id="addForm" onsubmit="return addApplication()">
     <div class="form-group">
         <label for="exampleInputEmail1">资产ID</label>
-        <select name="assetId" id="exampleInputEmail1">
+        <select class="form-control" name="assetId" id="exampleInputEmail1">
             <option th:each="ast : ${assets}" th:value="${ast.id}" th:text="|${ast.name}(${ast.id})|"></option>
         </select>
     </div>
@@ -46,10 +47,10 @@
         <label for="exampleInputPassword2">申请单类型</label>
         <select class="form-control" name="type" id="exampleInputPassword2">
             <option value="已使用">领用</option>
-            <option value="空闲">归还</option>
             <option value="借用">借用</option>
-            <option value="维修">维修</option>
-            <option value="报废">报废</option>
+            <!--            <option value="空闲">归还</option>-->
+            <!--            <option value="维修">维修</option>-->
+
         </select>
     </div>
     <!--   v19.0 新增申请单类型 end-->

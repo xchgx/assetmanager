@@ -15,9 +15,9 @@ import java.io.IOException;
  *  http://localhost:8080/asset/add
  *  http://localhost:8080/asset1/add //不检查，因为不匹配
  */
-@WebFilter(filterName = "loginFilter", urlPatterns = {"/rukudan/*","/asset/*","/application/*","/admin/*","/user/*"})
+@WebFilter(filterName = "adminFilter", urlPatterns = {"/admin/*"})
 @Order(1)//优先执行，第一个执行的过滤器
-public class ASecurityFilter implements Filter {
+public class A3AdminFilter implements Filter {
 
     /**
      * 匹配上面的三个规则就执行该过滤器
@@ -32,8 +32,8 @@ public class ASecurityFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         User user = (User) request.getSession().getAttribute("user");
-        System.out.println("SecurityFilter.doFilter");
-        if(user == null){
+        System.out.println("A3AdminFilter.doFilter");
+        if(user == null || !user.getRole().equals("admin")){
             System.out.println("user = " + user);
             response.sendRedirect("/login/");//进入到登录页
             return;

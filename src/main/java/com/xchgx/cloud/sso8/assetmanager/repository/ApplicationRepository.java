@@ -36,4 +36,6 @@ public interface ApplicationRepository extends JpaRepository<Application,Long> {
      * @return 申请单集合
      */
     public List<Application> findAllByUsername(String username);
+
+    public int countByUsernameAndAssetIdAndType(String username,long assetId,String type);
 }
