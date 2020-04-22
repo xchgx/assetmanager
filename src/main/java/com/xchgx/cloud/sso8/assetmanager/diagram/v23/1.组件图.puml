@@ -1,0 +1,12 @@
+@startuml
+
+package "controller控制器" {
+ [资产管理] --> HTTP
+[入库单管理] --> HTTP
+ [申请单管理]--> HTTP
+  [日志管理]--> HTTP
+ [登录管理]--> HTTP
+ [用户管理]--> HTTP
+}
+
+@enduml

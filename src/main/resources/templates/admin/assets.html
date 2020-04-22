@@ -15,38 +15,36 @@
     <div class="row">
         <div class="col-md-4">
             <div class="list-group">
-                <a href="/admin/admin" type="button" class="list-group-item active">资产入库</a>
+                <a href="/admin/admin" type="button" class="list-group-item">资产入库</a>
                 <a href="/admin/chuku" type="button" class="list-group-item">资产出库</a>
                 <a href="/admin/applications" type="button" class="list-group-item">申请单</a>
-                <a href="/admin/assets" type="button" class="list-group-item">资产</a>
+                <a href="/admin/assets" type="button" class="list-group-item active">资产</a>
             </div>
         </div>
         <div class="col-md-8">
             <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+
                 <div class="panel panel-default">
-                    <div class="panel-heading" role="tab" id="headingOne">
+                    <div class="panel-heading" role="tab" id="headingThree">
                         <h4 class="panel-title">
-                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                资产入库
+                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                资产列表
                             </a>
                         </h4>
                     </div>
-                    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
                         <div class="panel-body">
-                            <form id="rukuForm">
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1">资产名称</label>
-                                    <input type="text" name="name" class="form-control" id="exampleInputEmail1" placeholder="资产名称">
-                                </div>
-                                <div class="form-group">
-                                    <label for="exampleInputPassword1">资产数量</label>
-                                    <input type="number" name="amount" class="form-control" id="exampleInputPassword1" placeholder="">
-                                </div>
-                            </form>
-                            <button type="button" class="btn btn-primary" onclick="ruku()">提交入库</button>
+                            <div class="row">
+                                <div class="col-xs-3" th:each="ast : ${assets}">
+                                <div th:id="${ast.id}" class="qr" ></div>
+                                <h1 th:text="|${ast.name}(${ast.id})|"></h1>
+                                <p th:text="'入库单号：'+${ast.rukudanId}"></p>
+                            </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+
 
             </div>
         </div>

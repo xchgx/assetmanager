@@ -49,6 +49,35 @@ public class ApplicationService {
         return addOperation(applications);
     }
     /**
+     * 获得所有的待处理申请单
+     * @return 维修申请单集合
+     */
+    public List<Application> allTodoApplications(){
+        List<Application> applications = applicationRepository.findAllByStatus("待处理");
+        return addOperation(applications);
+    }
+
+
+    /**
+     * 获得所有的已同意申请单
+     * @return 维修申请单集合
+     */
+    public List<Application> allAgreeApplications(){
+        List<Application> applications = applicationRepository.findAllByStatus("同意");
+        return addOperation(applications);
+    }
+
+    /**
+     * 获得所有的已拒绝申请单
+     * @return 维修申请单集合
+     */
+    public List<Application> allRefuseApplications(){
+        List<Application> applications = applicationRepository.findAllByStatus("拒绝");
+        return addOperation(applications);
+    }
+
+
+    /**
      * 版本15.0 新增方法
      * 获得所有带管理员操作项的申请单
      * @return 申请单集合

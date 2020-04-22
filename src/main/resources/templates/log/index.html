@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh">
+<head th:replace="temp :: head">
+    <title>资产管理系统</title>
+</head>
+<body>
+
+<!-- Fixed navbar -->
+<nav class="navbar navbar-default navbar-fixed-top" th:replace="temp::nav"></nav>
+
+<div class="container-fluid" style="margin-top: 80px;">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="alert alert-success" role="alert" th:text="'当前资产实体数量：'+${#lists.size(logs)}"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="list-group">
+                <a href="/admin/admin" type="button" class="list-group-item">资产入库</a>
+                <a href="/admin/chuku" type="button" class="list-group-item">资产出库</a>
+                <a href="/admin/applications" type="button" class="list-group-item">申请单</a>
+                <a href="/admin/assets" type="button" class="list-group-item active">资产</a>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="headingThree">
+                        <h4 class="panel-title">
+                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                日志列表
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                        <div class="panel-body">
+                            <div class="row">
+                                <table border="1" width="100%" class="table table-bordered table-hover table-striped">
+                                    <tr><th>序号</th><th>访问地址</th><th>IP</th><th>浏览器</th><th>用户</th><th>日期</th><th>方法</th></tr>
+                                    <tr th:each="app : ${logs}">
+                                        <td th:text="${appStat.index+1}"></td>
+                                        <td th:text="${app.url}"></td>
+                                        <td th:text="${app.ip}"></td>
+                                        <td th:text="${app.browser}"></td>
+                                        <td th:text="|${app.username}(${app.name})|"></td>
+                                        <td th:text="${app.date}"></td>
+                                        <td th:text="${app.method}"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div> <!-- /container -->
+
+
+
+<footer th:replace="temp :: footer"></footer>
+
+<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+<script src="/js/jquery-1.10.2.min.js"></script>
+<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/qrcode.min.js"></script>
+
+<script>
+    var qrs = document.getElementsByClassName("qr");
+    var localQr = document.getElementById("localQr");
+    if (qrs.length) {
+        for(var i in qrs){
+            new QRCode(qrs[i],"http://xchgx.vicp.net/assetById?assetId="+qrs[i].id);
+        }
+    }
+    new QRCode(localQr, location.href);
+
+    function toUrl(url) {
+        $.getJSON(url,function (res) {//当成功获得服务器的返回时，执行函数代码
+            location.href = location.href;//刷新
+        })
+    }
+</script>
+</body>
+</html>
