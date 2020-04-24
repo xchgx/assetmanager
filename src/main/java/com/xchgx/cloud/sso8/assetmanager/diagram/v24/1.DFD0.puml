@@ -1,0 +1,12 @@
+@startuml
+digraph dfd0 {
+rankdir=LR
+node[fontname="Microsoft Yahei"]
+a[label=" 请求 ",shape=box]
+b[label=" 日志子系统 "]
+c[label=" 日志 ",shape=box]
+
+a->b
+b->c
+}
+@enduml

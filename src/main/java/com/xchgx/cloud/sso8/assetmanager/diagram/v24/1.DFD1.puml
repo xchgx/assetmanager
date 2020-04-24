@@ -1,0 +1,31 @@
+@startuml
+digraph dfd0 {
+rankdir=LR
+node[fontname="Microsoft Yahei"]
+a1[label=" 请求中的IP地址 ",shape=box]
+a2[label=" 请求中的URL ",shape=box]
+a3[label=" 请求中的浏览器信息 ",shape=box]
+a4[label=" 请求中的session会话信息 ",shape=box]
+b1[label=" 加工IP地址 "]
+b2[label=" 加工URL地址 "]
+b3[label=" 加工浏览器信息地址 "]
+b4[label=" 加工登录用户 "]
+b41[label=" 判断用户 "]
+bb[label=" 合并 "]
+c1[label=" 日志表 ",shape=box]
+s [label=" 日志数据表 ",shape=cylinder]
+a1->b1
+a2->b2
+a3->b3
+a4->b4
+b4->b41
+b1->bb[taillabel=" IP "]
+b2->bb[taillabel=" url "]
+b3 -> bb[taillabel=" 操作系统 "]
+b3 -> bb[taillabel=" 操作系统位数 "]
+b41->bb[taillabel=" 用户名 "]
+b41->bb[taillabel=" 空用户 "]
+bb->c1
+bb->s
+}
+@enduml
