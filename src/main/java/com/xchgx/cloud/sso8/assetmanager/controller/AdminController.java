@@ -1,5 +1,6 @@
 package com.xchgx.cloud.sso8.assetmanager.controller;
 
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import com.xchgx.cloud.sso8.assetmanager.domain.Application;
 import com.xchgx.cloud.sso8.assetmanager.domain.Asset;
 import com.xchgx.cloud.sso8.assetmanager.domain.AssetRuKuDan;
@@ -41,19 +42,16 @@ public class AdminController {
      * 管理员者后台
      * 通过登录成功后，跳转（重定向）到 redirect:/admin
      * 实际上，访问的就是 /admin
-     * @param model
      * @return
      */
     @GetMapping("/admin") //IndexController控制器没有前缀网址
-    public String admin(Model model){
+    public String admin(){
 
-        List<Asset> assets = assetRepository.findAll();//查询了所有的资产
-        model.addAttribute("assets",assets);//在模型中添加数据
+        return "admin/admin";//影射到 /admin/admin.html 视图文件
+    }
 
-        //查询 了所有的入库单
-        List<AssetRuKuDan> assetRuKuDans = assetRuKuDanRepository.findAll();
-        model.addAttribute("rukudans", assetRuKuDans);
-
+    @GetMapping("/applications")
+    public String applications(Model model){
         //版本15.0 更新内容 begin
         //查询了所有的申请单
         List<Application> applications = applicationService.allApplication();
@@ -65,6 +63,29 @@ public class AdminController {
         List<Application> repairApplications = applicationService.repairApplications();
         model.addAttribute("repairApplications", repairApplications);
         //版本17.0 end
-        return "admin/admin";//影射到 /admin/admin.html 视图文件
+
+        //待处理的申请单
+        List<Application> todoApplications = applicationService.allTodoApplication();
+        List<Application> agreeApplications = applicationService.allAgreeApplication();
+        List<Application> refuseApplications = applicationService.allRefuseApplication();
+        model.addAttribute("todoApplications", todoApplications);
+        model.addAttribute("agreeApplications", agreeApplications);
+        model.addAttribute("refuseApplications", refuseApplications);
+        //已同意的申请单
+        //已拒绝的申请单
+        return "admin/applications";
+    }
+    @GetMapping("/assets")
+    public String assets(Model model){
+        List<Asset> assets = assetRepository.findAll();//查询了所有的资产
+        model.addAttribute("assets",assets);//在模型中添加数据
+        return "admin/assets";
+    }
+    @GetMapping("/chuku")
+    public String chuku(Model model){
+        //查询 了所有的入库单
+        List<AssetRuKuDan> assetRuKuDans = assetRuKuDanRepository.findAll();
+        model.addAttribute("rukudans", assetRuKuDans);
+        return "admin/chuku";
     }
 }

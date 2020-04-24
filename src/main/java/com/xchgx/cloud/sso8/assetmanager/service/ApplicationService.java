@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * 版本15.0 新增类
- *
+ * 申请单服务类
  */
 @Service
 public class ApplicationService {
@@ -59,6 +59,20 @@ public class ApplicationService {
         //申请单的操作选项， begin
         return addOperation(applications);
     }
+
+    public List<Application> allTodoApplication(){
+        List<Application> applications = applicationRepository.findAllByStatus("待处理");
+        return addOperation(applications);
+    }
+    public List<Application> allAgreeApplication(){
+        List<Application> applications = applicationRepository.findAllByStatus("同意");
+        return addOperation(applications);
+    }
+    public List<Application> allRefuseApplication(){
+        List<Application> applications = applicationRepository.findAllByStatus("拒绝");
+        return addOperation(applications);
+    }
+
 
     /**
      * 添加申请单后面的操作项

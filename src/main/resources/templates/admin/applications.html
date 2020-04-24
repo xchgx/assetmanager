@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="temp :: head"></head>
+<body>
+
+<!-- Fixed navbar -->
+<nav class="navbar navbar-default navbar-fixed-top" th:replace="temp::nav"></nav>
+
+<div class="container" style="margin-top: 80px;">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="alert alert-success" role="alert" th:text="'当前登录用户：'+${session.get('user')}"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="list-group">
+                <a href="/admin/admin" type="button" class="list-group-item">资产入库</a>
+                <a href="/admin/chuku" type="button" class="list-group-item">资产出库</a>
+                <a href="/admin/applications" type="button" class="list-group-item active">申请单</a>
+                <a href="/admin/assets" type="button" class="list-group-item">资产</a>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="headingOneTodo">
+                        <h4 class="panel-title">
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOneTodo" aria-expanded="true" aria-controls="collapseOne">
+                                待处理申请单
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseOneTodo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                        <div class="panel-body">
+                            <table border="1" width="100%" class="table table-bordered table-hover table-striped">
+                                <tr><th>序号</th><th>申请人</th><th>资产名称</th><th>申请理由</th><th>申请单类型</th><th>开始状态</th><th>结束状态</th><th>申请单状态</th><th>操作项</th></tr>
+                                <tr th:each="app : ${todoApplications}">
+                                    <td th:text="${appStat.index+1}"></td>
+                                    <td th:text="${app.username}"></td>
+                                    <td th:text="${app.assetName}"></td>
+                                    <td th:text="${app.content}"></td>
+                                    <td th:text="${app.type}"></td>
+                                    <td th:text="${app.start}"></td>
+                                    <td th:text="${app.stop}"></td>
+                                    <td th:text="${app.status}"></td>
+                                    <td th:utext="${app.operation}"></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="headingOneAgree">
+                        <h4 class="panel-title">
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOneAgree" aria-expanded="true" aria-controls="collapseOne">
+                                已同意的申请单
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseOneAgree" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                        <div class="panel-body">
+                            <table border="1" width="100%" class="table table-bordered table-hover table-striped">
+                                <tr><th>序号</th><th>申请人</th><th>资产名称</th><th>申请理由</th><th>申请单类型</th><th>开始状态</th><th>结束状态</th><th>申请单状态</th><th>操作项</th></tr>
+                                <tr th:each="app : ${agreeApplications}">
+                                    <td th:text="${appStat.index+1}"></td>
+                                    <td th:text="${app.username}"></td>
+                                    <td th:text="${app.assetName}"></td>
+                                    <td th:text="${app.content}"></td>
+                                    <td th:text="${app.type}"></td>
+                                    <td th:text="${app.start}"></td>
+                                    <td th:text="${app.stop}"></td>
+                                    <td th:text="${app.status}"></td>
+                                    <td th:utext="${app.operation}"></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="headingOneRefuse">
+                        <h4 class="panel-title">
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOneRefuse" aria-expanded="true" aria-controls="collapseOne">
+                                已拒绝的申请单
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseOneRefuse" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                        <div class="panel-body">
+                            <table border="1" width="100%" class="table table-bordered table-hover table-striped">
+                                <tr><th>序号</th><th>申请人</th><th>资产名称</th><th>申请理由</th><th>申请单类型</th><th>开始状态</th><th>结束状态</th><th>申请单状态</th><th>操作项</th></tr>
+                                <tr th:each="app : ${refuseApplications}">
+                                    <td th:text="${appStat.index+1}"></td>
+                                    <td th:text="${app.username}"></td>
+                                    <td th:text="${app.assetName}"></td>
+                                    <td th:text="${app.content}"></td>
+                                    <td th:text="${app.type}"></td>
+                                    <td th:text="${app.start}"></td>
+                                    <td th:text="${app.stop}"></td>
+                                    <td th:text="${app.status}"></td>
+                                    <td th:utext="${app.operation}"></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="headingFour">
+                        <h4 class="panel-title">
+                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                申请单
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseFour" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingThree">
+                        <div class="panel-body">
+                            <div class="row">
+                                <table border="1" width="100%" class="table table-bordered table-hover table-striped">
+                                    <tr><th>序号</th><th>申请人</th><th>资产名称</th><th>申请理由</th><th>申请单类型</th><th>开始状态</th><th>结束状态</th><th>申请单状态</th><th>操作项</th></tr>
+                                    <tr th:each="app : ${applications}">
+                                        <td th:text="${appStat.index+1}"></td>
+                                        <td th:text="${app.username}"></td>
+                                        <td th:text="${app.assetName}"></td>
+                                        <td th:text="${app.content}"></td>
+                                        <td th:text="${app.type}"></td>
+                                        <td th:text="${app.start}"></td>
+                                        <td th:text="${app.stop}"></td>
+                                        <td th:text="${app.status}"></td>
+                                        <td th:utext="${app.operation}"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="headingFive">
+                        <h4 class="panel-title">
+                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFour">
+                                维修申请单
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseFive" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingThree">
+                        <div class="panel-body">
+                            <div class="row">
+                                <table border="1" width="100%" class="table table-bordered table-hover table-striped">
+                                    <tr><th>序号</th><th>申请人</th><th>资产名称</th><th>申请理由</th><th>申请单类型</th><th>开始状态</th><th>结束状态</th><th>申请单状态</th><th>操作项</th></tr>
+                                    <tr th:each="app : ${repairApplications}">
+                                        <td th:text="${appStat.index+1}"></td>
+                                        <td th:text="${app.username}"></td>
+                                        <td th:text="${app.assetName}"></td>
+                                        <td th:text="${app.content}"></td>
+                                        <td th:text="${app.type}"></td>
+                                        <td th:text="${app.start}"></td>
+                                        <td th:text="${app.stop}"></td>
+                                        <td th:text="${app.status}"></td>
+                                        <td th:utext="${app.operation}"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div> <!-- /container -->
+
+
+
+<footer th:replace="temp :: footer"></footer>
+
+<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+<script src="/js/jquery-1.10.2.min.js"></script>
+<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/qrcode.min.js"></script>
+
+<script>
+    var qrs = document.getElementsByClassName("qr");
+    var localQr = document.getElementById("localQr");
+    if (qrs.length) {
+        for(var i in qrs){
+            new QRCode(qrs[i],"http://xchgx.vicp.net/assetById?assetId="+qrs[i].id);
+        }
+    }
+    new QRCode(localQr, location.href);
+    
+    function ruku() { //资产入库
+        console.log($("#rukuForm").serialize());
+        //?name=张三&assetId=4;
+        $.getJSON("/rukudan/add",$("#rukuForm").serialize(), function (res) {
+            location.href = location.href;//刷新
+        })
+    }
+    function chuku() {//出库
+        $.getJSON("/asset/chuku",$("#chukuForm").serialize(), function (res) {
+            location.href = location.href;//刷新
+        })
+    }
+    function toUrl(url) {
+        $.getJSON(url,function (res) {//当成功获得服务器的返回时，执行函数代码
+            location.href = location.href;//刷新
+        })
+    }
+</script>
+</body>
+</html>

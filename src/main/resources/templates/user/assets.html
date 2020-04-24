@@ -54,7 +54,7 @@
                                     <td class="danger" th:text="${ast.readme}">...</td>
                                     <td class="info" th:text="${ast.price}">...</td>
                                     <td class="info" th:text="${ast.status}">...</td>
-                                    <td class="info" th:text="${ast.scrq}">...</td>
+                                    <td class="info" th:text="${#dates.format(ast.scrq,'yyyy-MM-dd')}">...</td>
                                     <td class="info" th:text="${ast.bzq}">...</td>
                                     <td class="info" th:text="${ast.rukudanId}">...</td>
                                     <td class="info" th:text="${ast.username}">...</td>
