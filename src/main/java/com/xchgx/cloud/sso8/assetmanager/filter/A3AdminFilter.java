@@ -1,6 +1,9 @@
 package com.xchgx.cloud.sso8.assetmanager.filter;
 
 import com.xchgx.cloud.sso8.assetmanager.domain.User;
+import com.xchgx.cloud.sso8.assetmanager.domain.VisitLog;
+import com.xchgx.cloud.sso8.assetmanager.repository.VisitLogRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 
 import javax.servlet.*;
@@ -18,6 +21,8 @@ import java.io.IOException;
 @WebFilter(filterName = "adminFilter", urlPatterns = {"/admin/*"})
 @Order(1)//优先执行，第一个执行的过滤器
 public class A3AdminFilter implements Filter {
+    @Autowired
+    private VisitLogRepository visitLogRepository;
 
     /**
      * 匹配上面的三个规则就执行该过滤器
@@ -33,12 +38,17 @@ public class A3AdminFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         User user = (User) request.getSession().getAttribute("user");
         System.out.println("A3AdminFilter.doFilter");
+        VisitLog log = (VisitLog) servletRequest.getAttribute("log");
         if(user == null || !user.getRole().equals("admin")){
             System.out.println("user = " + user);
+            log.setResult("没有管理员权限，返回登录");
+            visitLogRepository.save(log);
             response.sendRedirect("/login/");//进入到登录页
             return;
         }
         System.out.println(user);
+        log.setResult("成功访问");
+        visitLogRepository.save(log);
         filterChain.doFilter(servletRequest, servletResponse);//放行
     }
 

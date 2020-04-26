@@ -1,0 +1,28 @@
+@startuml
+scale 2
+'left to right direction
+node node1[
+<b>日志子系统
+--
+概要设计
+..
+需求并不明确，
+只是一个大概的分类
+]
+node node2[
+日志列表
+..
+重点
+]
+node node3[
+行为分析功能模块
+]
+node node4[
+危险警示功能模块
+]
+
+node1 --> node2
+node1 --> node3
+node1 --> node4
+
+@enduml

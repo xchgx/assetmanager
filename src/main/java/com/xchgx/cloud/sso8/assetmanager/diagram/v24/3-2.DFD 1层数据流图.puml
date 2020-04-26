@@ -1,0 +1,9 @@
+@startuml
+scale 2
+[*] -> 查找字符串: 浏览器信息
+查找字符串:3.1
+查找字符串->[*]:windows
+查找字符串->[*]:linux
+查找字符串->[*]:ios
+查找字符串->[*]:android
+@enduml

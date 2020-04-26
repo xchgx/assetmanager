@@ -1,6 +1,9 @@
 package com.xchgx.cloud.sso8.assetmanager.filter;
 
 import com.xchgx.cloud.sso8.assetmanager.domain.User;
+import com.xchgx.cloud.sso8.assetmanager.domain.VisitLog;
+import com.xchgx.cloud.sso8.assetmanager.repository.VisitLogRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 
 import javax.servlet.*;
@@ -18,7 +21,8 @@ import java.io.IOException;
 @WebFilter(filterName = "userFilter", urlPatterns = {"/user/*"})
 @Order(1)//优先执行，第一个执行的过滤器
 public class A2UserFilter implements Filter {
-
+    @Autowired
+    private VisitLogRepository visitLogRepository;
     /**
      * 匹配上面的三个规则就执行该过滤器
      * @param servletRequest 请求
@@ -33,8 +37,11 @@ public class A2UserFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         User user = (User) request.getSession().getAttribute("user");
         System.out.println("A2UserFilter.doFilter");
+        VisitLog log = (VisitLog) servletRequest.getAttribute("log");
         if(user == null || !user.getRole().equals("user")){
             System.out.println("user = " + user);
+            log.setResult("没有使用者权限，返回登录");
+            visitLogRepository.save(log);
             response.sendRedirect("/login/");//进入到登录页
             return;
         }

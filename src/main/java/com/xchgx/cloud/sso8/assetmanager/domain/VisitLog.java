@@ -34,5 +34,6 @@ public class VisitLog {
     private String method;//访问方式
     @NonNull
     private String os;//客户端端口
+    private String result;//客户端端口
     private Date date = new Date();//浏览器信息
 }

@@ -1,0 +1,19 @@
+@startuml
+scale 2
+left to right direction
+actor node1[
+用户
+]
+
+node 日志子系统{
+    component 过滤器
+    component 视图层
+    component 控制器
+    component 服务层
+    component 持久化层
+    component 域对象
+}
+
+node1 -->   日志子系统
+
+@enduml

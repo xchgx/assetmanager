@@ -38,7 +38,7 @@
                         <div class="panel-body">
                             <div class="row">
                                 <table border="1" width="100%" class="table table-bordered table-hover table-striped">
-                                    <tr><th>序号</th><th>访问地址</th><th>IP</th><th>浏览器</th><th>用户</th><th>日期</th><th>方法</th></tr>
+                                    <tr><th>序号</th><th>访问地址</th><th>IP</th><th>浏览器</th><th>用户</th><th>日期</th><th>方法</th><th>访问结果</th></tr>
                                     <tr th:each="app : ${logs.content}">
                                         <td th:text="${appStat.index+1}"></td>
                                         <td th:text="${app.url}"></td>
@@ -47,6 +47,7 @@
                                         <td th:text="|${app.username}(${app.name})|"></td>
                                         <td th:text="${app.date}"></td>
                                         <td th:text="${app.method}"></td>
+                                        <td th:text="${app.result}"></td>
                                     </tr>
                                     <tr>
                                         <td></td>

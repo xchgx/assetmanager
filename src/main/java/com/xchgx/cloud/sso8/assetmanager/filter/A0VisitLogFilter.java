@@ -49,14 +49,13 @@ public class A0VisitLogFilter implements Filter {
         }else{
             os = "other os";
         }
-
+        VisitLog log= null;
         if (user == null) {
-            VisitLog log = new VisitLog(requestURL.toString(), remoteAddr, header, "未登录", "无名氏",queryString==null?"":queryString,method,os);
-            visitLogRepository.save(log);
+              log = new VisitLog(requestURL.toString(), remoteAddr, header, "未登录", "无名氏",queryString==null?"":queryString,method,os);
         }else{
-            VisitLog log = new VisitLog(requestURL.toString(), remoteAddr, header, user.getUsername(), user.getName(),queryString==null?"":queryString,method,os);
-            visitLogRepository.save(log);
+              log = new VisitLog(requestURL.toString(), remoteAddr, header, user.getUsername(), user.getName(),queryString==null?"":queryString,method,os);
         }
+        VisitLog save = visitLogRepository.save(log);
 
 //        if(user == null){
 //            System.out.println("user = " + user);
@@ -64,6 +63,7 @@ public class A0VisitLogFilter implements Filter {
 //            return;
 //        }
         System.out.println(user);
+        servletRequest.setAttribute("log",save);
         filterChain.doFilter(servletRequest, servletResponse);//放行
     }
 }

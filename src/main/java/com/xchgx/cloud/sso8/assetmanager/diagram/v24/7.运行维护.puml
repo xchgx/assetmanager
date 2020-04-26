@@ -1,0 +1,47 @@
+@startuml
+scale 2
+
+node IBM_Web专用台式机服务器 {
+     node tomcatWeb容器 [
+        自带Web容器
+     ]
+
+    artifact 资产管理系统 [
+        资产管理系统.jar
+        ---
+        资产跟踪管理
+        支持入库、出库
+        支持日志子系统
+    ]
+
+    artifact 二维码 [
+        qrcode.js第三方插件
+        ---
+        生成二维码
+    ]
+
+     database H2 [
+        嵌入式内存数据库H2
+     ]
+
+}
+
+node 不间断电源[
+ 不间断供电系统
+ ---
+ 自动充电，
+ 提供24小时断电续航，
+ 无缝转换
+]
+
+cloud 互联网 [
+    提供互联网远程访问
+]
+
+资产管理系统 -- tomcatWeb容器
+资产管理系统 -- 二维码
+资产管理系统 -- H2
+IBM_Web专用台式机服务器 -- 不间断电源
+IBM_Web专用台式机服务器 -- 互联网
+
+@enduml
