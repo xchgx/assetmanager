@@ -1,0 +1,22 @@
+@startuml
+scale 2
+start
+-[#9f9]->A;
+if (  a > 1 && b == 0  ) then
+-[#9f9]->(  C,   Yes  );
+: x = x / a ;
+-[#9f9]->;
+else (B, No)
+-[#99f]->
+endif
+-[#9f9]->;
+if (a == 2 || x > 1 ) then
+-[#9f9]->( E, Yes );
+: x = x + 1 ;
+-[#9f9]->;
+else ( D, No )
+-[#99f]->
+endif
+-[#9f9]->;
+stop
+@enduml

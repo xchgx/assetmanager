@@ -1,6 +1,9 @@
 package com.xchgx.cloud.sso8.assetmanager.filter;
 
 import com.xchgx.cloud.sso8.assetmanager.domain.User;
+import com.xchgx.cloud.sso8.assetmanager.domain.VisitLog;
+import com.xchgx.cloud.sso8.assetmanager.repository.VisitLogRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 
 import javax.servlet.*;
@@ -18,6 +21,8 @@ import java.io.IOException;
 @WebFilter(filterName = "loginFilter", urlPatterns = {"/rukudan/*","/asset/*","/application/*","/admin/*","/user/*"})
 @Order(1)//优先执行，第一个执行的过滤器
 public class A1SecurityFilter implements Filter {
+    @Autowired
+    private VisitLogRepository visitLogRepository;
 
     /**
      * 匹配上面的三个规则就执行该过滤器
@@ -35,6 +40,9 @@ public class A1SecurityFilter implements Filter {
         System.out.println("A1SecurityFilter.doFilter");
         if(user == null){
             System.out.println("user = " + user);
+            VisitLog log = (VisitLog) servletRequest.getAttribute("log");
+            log.setResult("你没有登录，已返回登录页 /login/");
+            visitLogRepository.save(log);
             response.sendRedirect("/login/");//进入到登录页
             return;
         }

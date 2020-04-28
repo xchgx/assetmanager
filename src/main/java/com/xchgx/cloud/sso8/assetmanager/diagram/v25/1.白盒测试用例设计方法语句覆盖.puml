@@ -1,0 +1,14 @@
+@startuml
+scale 2
+start
+->A;
+#ff0:if (  a > 1 && b == 0  ) then (  C,   Yes  )
+#ff0: x = x / a ;
+else (B, No)
+endif
+#ff0:if (a == 2 || x > 1 ) then ( E, Yes )
+#ff0:: x = x + 1 ;
+else ( D, No )
+endif
+stop
+@enduml
