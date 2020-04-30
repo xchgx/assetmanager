@@ -38,22 +38,18 @@ public class LoginController {
      * @return
      */
     @PostMapping("/doLogin")
-    public String doLogin(User user, HttpServletRequest request, Model model){
-        User u = userRepository.findByUsername(user.getUsername());
-        if (u == null) {
-            model.addAttribute("error","用户名不存在");
-            return "login";//用户名不存在，还是返回到登录视图。
+    public String doLogin(User user, HttpServletRequest request, Model model){//接收用户对象参数
+        User u = userRepository.findByUsername(user.getUsername());//通过用户的用户名查询用户对象保存在变量u中
+        if (u == null) {//用户对象不存在吗
+            model.addAttribute("error","用户名不存在");//在模型层中加入错误提示"用户名不存在";
+            return "login";//返回到登录视图。
         }
-        if (!u.getPassword().equals(user.getPassword())) {
-            model.addAttribute("error", "密码错误");
-            return "login"; //密码错误，还是返回到登录视图。
+        if (!u.getPassword().equals(user.getPassword())) {//密码不正确吗
+            model.addAttribute("error", "密码错误");//在模型层中加入错误提示“密码错误”
+            return "login"; //返回到登录视图。
         }
-        request.getSession().setAttribute("user",u);//记录下登录成功的标记。
-        //返回的视图名称，由用户的权限决定
-        //如果用户是user权限（普通用户），那么就返回user视图
-        //如果用户是admin权限（管理员），那么就返回admin视图
-        return "redirect:/"+u.getRole()+"/"+u.getRole();//返回角色视图，准备好user.html视图和admin.html视图
-        //采用重定向之后，模型失效。
+        request.getSession().setAttribute("user",u);//将成功登录的用户对象保存在session会话对象中
+        return "redirect:/"+u.getRole()+"/"+u.getRole();//返回登录用户对象的权限视图
     }
 
     /**
